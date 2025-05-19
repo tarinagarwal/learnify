@@ -1,25 +1,24 @@
+import { Button } from "@/components/ui/button";
+import {
+  ArrowLeft,
+  Download,
+  Eraser,
+  History,
+  MessageSquare,
+  Minus,
+  Palette,
+  Plus,
+  Save,
+  X,
+} from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
+import ReactMarkdown from "react-markdown";
 import { useLocation, useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
+import { generateResponse } from "../services/groq";
 import { useBlackboardStore } from "../store/blackboardStore";
 import { AlertDialog } from "./AlertDialog";
 import { ResponseDialog } from "./ResponseDialog";
-import { generateResponse } from "../services/groq";
-import {
-  ArrowLeft,
-  Save,
-  Eraser,
-  MessageSquare,
-  History,
-  Download,
-  X,
-  Palette,
-  Minus,
-  Plus,
-  Sparkles,
-} from "lucide-react";
-import ReactMarkdown from "react-markdown";
-import { Button } from "@/components/ui/button";
 
 interface Point {
   x: number;
@@ -57,6 +56,8 @@ export const Whiteboard: React.FC = () => {
   const [aiResponses, setAiResponses] = useState<AIResponse[]>([]);
   const [showResponseDialog, setShowResponseDialog] = useState(false);
   const [currentResponse, setCurrentResponse] = useState<string>("");
+  const [notebookId, setNotebookId] = useState<string | null>(null);
+  const [whiteboards, setWhiteboards] = useState<any[]>([]);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -72,7 +73,10 @@ export const Whiteboard: React.FC = () => {
 
     loadWhiteboardData();
     loadAIResponses();
-  }, [whiteboardId, navigate]);
+    if (notebookId) {
+      loadNotebookWhiteboards(notebookId);
+    }
+  }, [whiteboardId, navigate, notebookId]);
 
   const loadWhiteboardData = async () => {
     if (!whiteboardId) return;
@@ -80,12 +84,13 @@ export const Whiteboard: React.FC = () => {
     try {
       const { data, error } = await supabase
         .from("whiteboards")
-        .select("drawing_data")
+        .select("*")
         .eq("id", whiteboardId)
         .single();
 
       if (error) throw error;
       if (data) {
+        setNotebookId(data.notebook_id);
         clearDrawing();
         data.drawing_data.forEach((stroke: DrawingData) => {
           addStroke(stroke);
@@ -96,6 +101,20 @@ export const Whiteboard: React.FC = () => {
     }
   };
 
+  const loadNotebookWhiteboards = async (notebookId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from("whiteboards")
+        .select("*")
+        .eq("notebook_id", notebookId)
+        .order("order_index", { ascending: true });
+
+      if (error) throw error;
+      setWhiteboards(data || []);
+    } catch (error) {
+      console.error("Error loading notebook whiteboards:", error);
+    }
+  };
   const loadAIResponses = async () => {
     if (!whiteboardId) return;
 
@@ -449,8 +468,8 @@ export const Whiteboard: React.FC = () => {
         </div>
 
         <div className="bg-gray-900 rounded-xl shadow-lg border border-gray-800 p-6 mb-6">
-          <div className="mb-6 flex flex-wrap items-center gap-4">
-            <div className="flex items-center gap-2 bg-gray-800 py-2 rounded-lg">
+          <div className="mb-6 flex flex-wrap items-center gap-4 md:justify-between">
+            <div className="flex items-center gap-2 bg-gray-800 py-2 rounded-lg ">
               <Palette className="w-5 h-5 text-purple-400" />
               <div className="flex gap-2">
                 {colorOptions.map((color) => (
@@ -475,7 +494,6 @@ export const Whiteboard: React.FC = () => {
                 />
               </div>
             </div>
-
             <div className="flex items-center gap-2 bg-gray-800 p-2 rounded-lg">
               <button
                 onClick={() => setCurrentWidth(Math.max(1, currentWidth - 1))}
@@ -505,8 +523,82 @@ export const Whiteboard: React.FC = () => {
                 {currentWidth}px
               </span>
             </div>
-          </div>
 
+            <div className="flex items-center gap-2 bg-gray-800 p-2 rounded-lg">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  saveWhiteboard();
+                  if (whiteboards.length > 0) {
+                    const currentIndex = whiteboards.findIndex(
+                      (wb) => wb.title === whiteboardTitle
+                    );
+                    if (currentIndex > 0) {
+                      const prevWhiteboard = whiteboards[currentIndex - 1];
+                      navigate(
+                        `/whiteboard?id=${
+                          prevWhiteboard.id
+                        }&title=${encodeURIComponent(prevWhiteboard.title)}${
+                          searchParams.get("notebook_id")
+                            ? `&notebook_id=${searchParams.get("notebook_id")}`
+                            : ""
+                        }`
+                      );
+                    }
+                  }
+                }}
+                className="flex items-center gap-2 border-gray-700 text-gray-900"
+                disabled={
+                  whiteboards.findIndex((wb) => wb.title === whiteboardTitle) <=
+                    0 ||
+                  loading ||
+                  whiteboards.length === 0
+                }
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Previous
+              </Button>
+              <span className="text-gray-300 px-2">
+                {whiteboardTitle || "Whiteboard"}
+              </span>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  // Save current canvas and navigate to next whiteboard
+                  saveWhiteboard();
+                  if (whiteboards.length > 0) {
+                    const currentIndex = whiteboards.findIndex(
+                      (wb) => wb.id === whiteboardId
+                    );
+                    if (currentIndex < whiteboards.length - 1) {
+                      const nextWhiteboard = whiteboards[currentIndex + 1];
+                      navigate(
+                        `/whiteboard?id=${
+                          nextWhiteboard.id
+                        }&title=${encodeURIComponent(nextWhiteboard.title)}${
+                          searchParams.get("notebook_id")
+                            ? `&notebook_id=${searchParams.get("notebook_id")}`
+                            : ""
+                        }`
+                      );
+                    }
+                  }
+                }}
+                className="flex items-center gap-2 border-gray-700 text-gray-900"
+                disabled={
+                  whiteboards.findIndex((wb) => wb.id === whiteboardId) >=
+                    whiteboards.length - 1 ||
+                  loading ||
+                  whiteboards.length === 0
+                }
+              >
+                Next
+                <ArrowLeft className="w-4 h-4 rotate-180" />
+              </Button>
+            </div>
+          </div>
           <div className="relative rounded-lg overflow-hidden">
             <div className="absolute inset-0 bg-gray-800 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:20px_20px]"></div>
 
