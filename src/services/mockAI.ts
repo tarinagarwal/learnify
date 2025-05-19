@@ -2,7 +2,6 @@ import { AIResponse, AIFeature } from '../types/aiTypes';
 
 export const mockAI = {
   async call(feature: AIFeature, payload: any): Promise<AIResponse> {
-    // Simulate cached or static responses
     const mockResponses = {
       [AIFeature.QuizGeneration]: {
         success: true,
