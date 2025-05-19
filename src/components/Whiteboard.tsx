@@ -132,6 +132,78 @@ export const Whiteboard: React.FC = () => {
     }
   };
 
+  // handle key press to navigate to next and previous page
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Skip if user is typing in an input field
+      if (
+        document.activeElement?.tagName === "INPUT" ||
+        document.activeElement?.tagName === "TEXTAREA" ||
+        loading
+      ) {
+        return;
+      }
+
+      if (e.key === "ArrowLeft") {
+        // Navigate to previous whiteboard
+        if (
+          whiteboards.length > 0 &&
+          whiteboards.findIndex((wb) => wb.id === whiteboardId) > 0 &&
+          !loading
+        ) {
+          const currentIndex = whiteboards.findIndex(
+            (wb) => wb.id === whiteboardId
+          );
+          if (currentIndex > 0) {
+            e.preventDefault();
+            saveWhiteboard();
+            const prevWhiteboard = whiteboards[currentIndex - 1];
+            navigate(
+              `/whiteboard?id=${prevWhiteboard.id}&title=${encodeURIComponent(
+                prevWhiteboard.title
+              )}${
+                searchParams.get("notebook_id")
+                  ? `&notebook_id=${searchParams.get("notebook_id")}`
+                  : ""
+              }`
+            );
+          }
+        }
+      } else if (e.key === "ArrowRight") {
+        // Navigate to next whiteboard
+        if (
+          whiteboards.length > 0 &&
+          whiteboards.findIndex((wb) => wb.id === whiteboardId) <
+            whiteboards.length - 1 &&
+          !loading
+        ) {
+          const currentIndex = whiteboards.findIndex(
+            (wb) => wb.id === whiteboardId
+          );
+          if (currentIndex < whiteboards.length - 1) {
+            e.preventDefault();
+            saveWhiteboard();
+            const nextWhiteboard = whiteboards[currentIndex + 1];
+            navigate(
+              `/whiteboard?id=${nextWhiteboard.id}&title=${encodeURIComponent(
+                nextWhiteboard.title
+              )}${
+                searchParams.get("notebook_id")
+                  ? `&notebook_id=${searchParams.get("notebook_id")}`
+                  : ""
+              }`
+            );
+          }
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [whiteboards, whiteboardId, loading, navigate, searchParams]);
+
   const getPointFromEvent = (
     e: React.MouseEvent | React.TouchEvent | PointerEvent,
     canvas: HTMLCanvasElement
