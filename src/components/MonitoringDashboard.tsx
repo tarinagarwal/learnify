@@ -1,14 +1,53 @@
 import React, { useEffect, useState } from 'react';
-import { monitoringService } from '../services/monitoringService';
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(
+  import.meta.env.VITE_SUPABASE_URL,
+  import.meta.env.VITE_SUPABASE_ANON_KEY
+);
+
+interface AIMetric {
+  id: number;
+  feature: string;
+  provider: string;
+  duration: number;
+  success: boolean;
+  error?: string;
+  created_at: string;
+}
 
 const MonitoringDashboard: React.FC = () => {
-  const [metrics, setMetrics] = useState<any[]>([]);
+  const [metrics, setMetrics] = useState<AIMetric[]>([]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setMetrics(monitoringService.getMetrics());
-    }, 5000);
-    return () => clearInterval(interval);
+    const fetchMetrics = async () => {
+      const { data, error } = await supabase
+        .from('ai_metrics')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(50);
+      if (error) {
+        console.error('Error fetching metrics:', error);
+      } else {
+        setMetrics(data || []);
+      }
+    };
+    fetchMetrics();
+
+    const channel = supabase
+      .channel('ai-metrics-channel')
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'ai_metrics' },
+        (payload) => {
+          setMetrics((prev) => [payload.new, ...prev].slice(0, 50));
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   return (
@@ -25,8 +64,11 @@ const MonitoringDashboard: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {metrics.map((metric, index) => (
-            <tr key={index} className={metric.success ? 'bg-green-100' : 'bg-red-100'}>
+          {metrics.map((metric) => (
+            <tr
+              key={metric.id}
+              className={metric.success ? 'bg-green-100' : 'bg-red-100'}
+            >
               <td className="border p-2">{metric.feature}</td>
               <td className="border p-2">{metric.provider}</td>
               <td className="border p-2">{metric.duration}</td>
