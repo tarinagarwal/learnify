@@ -3,7 +3,7 @@ import { aiConfig } from '../lib/aiConfig';
 import { logger } from '../utils/logger';
 import { mockAI } from './mockAI';
 import { AIResponse, AIFeature } from '../types/aiTypes';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 export class AIService {
   private primaryBreaker: CircuitBreaker;
@@ -25,7 +25,6 @@ export class AIService {
   async callAI(feature: AIFeature, payload: any): Promise<AIResponse> {
     const startTime = Date.now();
     try {
-      // Try primary AI service
       const response = await this.primaryBreaker.execute(() =>
         this.retryOperation(() => this.makeAICall(aiConfig.primary, feature, payload))
       );
@@ -36,7 +35,6 @@ export class AIService {
     } catch (error) {
       logger.error(`Primary AI call failed for ${feature}`, { error });
       try {
-        // Try fallback AI service
         const response = await this.fallbackBreaker.execute(() =>
           this.retryOperation(() => this.makeAICall(aiConfig.fallback, feature, payload))
         );
@@ -46,7 +44,6 @@ export class AIService {
         return response;
       } catch (fallbackError) {
         logger.error(`Fallback AI call failed for ${feature}`, { fallbackError });
-        // Use mock AI for graceful degradation
         const mockResponse = await mockAI.call(feature, payload);
         logger.info(`Using mock AI for ${feature}`, { duration: Date.now() - startTime });
         return mockResponse;
@@ -62,7 +59,7 @@ export class AIService {
       } catch (error) {
         lastError = error;
         if (attempt < this.maxRetries) {
-          const delay = Math.pow(2, attempt) * 1000; // Exponential backoff
+          const delay = Math.pow(2, attempt) * 1000;
           await new Promise((resolve) => setTimeout(resolve, delay));
         }
       }
@@ -88,9 +85,34 @@ export class AIService {
           },
         }
       );
+
+      if (!response.data || typeof response.data !== 'object') {
+        throw new Error('Invalid response format: Expected JSON object');
+      }
+
       return { success: true, data: response.data };
     } catch (error) {
-      return { success: false, error: error.message };
+      let errorMessage = 'Unknown error';
+      if (error instanceof AxiosError) {
+        if (error.response) {
+          const contentType = error.response.headers['content-type'] || '';
+          if (!contentType.includes('application/json')) {
+            errorMessage = 'Invalid response: Non-JSON content received';
+          } else {
+            errorMessage = error.response.data?.error || error.message;
+          }
+        } else {
+          errorMessage = error.message;
+        }
+      } else if (error instanceof SyntaxError) {
+        errorMessage = 'Malformed JSON response';
+      }
+
+      logger.error(`AI call failed for ${feature} with ${config.provider}`, {
+        error: errorMessage,
+        payload,
+      });
+      return { success: false, error: errorMessage };
     }
   }
 }
