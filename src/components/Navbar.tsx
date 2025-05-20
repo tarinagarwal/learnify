@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import DarkModeToggle from "./DarkModeToggle";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import {
   UserCircle,
@@ -35,6 +36,14 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
+export function Header() {
+  return (
+    <header className="flex justify-between items-center p-4">
+      <h1 className="text-xl font-bold">Learnify</h1>
+      <DarkModeToggle />
+    </header>
+  )
+}
 
 export default function Navbar() {
   const navigate = useNavigate();
