@@ -135,9 +135,9 @@ export default function ChapterContent() {
                   Previous
                 </Button>
                 <span className="text-gray-300 px-2">
-                  {
+                  Chapter {
                     chapters[chapters.findIndex((c) => c.id === chapterId)]
-                      .title
+                      .order_index
                   }
                 </span>
                 <Button
