@@ -62,6 +62,45 @@ export default function ChapterContent() {
     navigate("/quiz");
   };
 
+// handle key press to navigate to next and previous chapter
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Skip if user is typing in an input field
+      if (
+        document.activeElement?.tagName === "INPUT" ||
+        document.activeElement?.tagName === "TEXTAREA" ||
+        loading
+      ) {
+        return;
+      }
+
+      if (e.key === "ArrowLeft" && chapter && chapters.length > 0) {
+        // Navigate to previous chapter
+        const currentIndex = chapters.findIndex((c) => c.id === chapterId);
+        if (currentIndex > 0) {
+          e.preventDefault();
+          navigate(`/courses/${courseId}/chapters/${chapters[currentIndex - 1].id}`);
+        }
+      } else if (e.key === "ArrowRight" && chapter && chapters.length > 0) {
+        // Navigate to next chapter
+        const currentIndex = chapters.findIndex((c) => c.id === chapterId);
+        if (currentIndex < chapters.length - 1) {
+          e.preventDefault();
+          navigate(`/courses/${courseId}/chapters/${chapters[currentIndex + 1].id}`);
+        }
+      }
+    };
+
+    // Add event listener when component mounts
+    window.addEventListener("keydown", handleKeyDown);
+    
+    // Remove event listener when component unmounts
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [chapter, chapters, chapterId, courseId, loading, navigate]);
+
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-950 text-gray-100 flex items-center justify-center">
