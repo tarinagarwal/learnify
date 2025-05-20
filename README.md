@@ -30,6 +30,19 @@ Learnify is a cutting-edge, AI-powered learning platform that revolutionizes edu
 
 ## 🚀 Getting Started
 
+ ## AI Fallback System
+
+ The project includes a robust AI fallback system to handle service disruptions and rate limiting, ensuring reliability for AI-powered features.
+
+ ### Features
+ - **Fallback AI Models**: Uses GROQ as the primary service and OpenAI as fallback for quiz generation, PDF chat, and language tutor features.
+ - **Retry Logic**: Implements exponential backoff for retries (configured via `VITE_AI_RETRY_ATTEMPTS`).
+ - **Circuit Breaker**: Prevents repeated calls to failing services (`src/services/circuitBreaker.ts`).
+ - **Graceful Degradation**: Provides dynamic mock responses (`src/services/mockAI.ts`) when both primary and fallback services fail.
+ - **Real-Time Monitoring**: Displays AI service health (feature, provider, duration, status, error) on the admin dashboard (`/admin`) using Supabase Realtime (`src/components/MonitoringDashboard.tsx`).
+ - **Access Control**: Restricts the admin dashboard to users with the `admin` role (`src/hooks/useAuth.ts`).
+
+
 ### Prerequisites
 
 - Node.js (v18 or higher)
