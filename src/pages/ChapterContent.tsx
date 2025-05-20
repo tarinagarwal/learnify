@@ -38,10 +38,12 @@ export default function ChapterContent() {
         .eq("id", courseId)
         .single();
       if (courseError) throw courseError;
+
       const { data: chaptersData, error: chaptersError } = await supabase
         .from("chapters")
         .select("*")
-        .eq("course_id", courseData.id);
+        .eq("course_id", courseData.id)
+        .order("order_index", { ascending: true });
 
       if (chaptersError) throw chaptersError;
 
@@ -62,7 +64,7 @@ export default function ChapterContent() {
     navigate("/quiz");
   };
 
-// handle key press to navigate to next and previous chapter
+  // handle key press to navigate to next and previous chapter
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       // Skip if user is typing in an input field
@@ -79,27 +81,30 @@ export default function ChapterContent() {
         const currentIndex = chapters.findIndex((c) => c.id === chapterId);
         if (currentIndex > 0) {
           e.preventDefault();
-          navigate(`/courses/${courseId}/chapters/${chapters[currentIndex - 1].id}`);
+          navigate(
+            `/courses/${courseId}/chapters/${chapters[currentIndex - 1].id}`
+          );
         }
       } else if (e.key === "ArrowRight" && chapter && chapters.length > 0) {
         // Navigate to next chapter
         const currentIndex = chapters.findIndex((c) => c.id === chapterId);
         if (currentIndex < chapters.length - 1) {
           e.preventDefault();
-          navigate(`/courses/${courseId}/chapters/${chapters[currentIndex + 1].id}`);
+          navigate(
+            `/courses/${courseId}/chapters/${chapters[currentIndex + 1].id}`
+          );
         }
       }
     };
 
     // Add event listener when component mounts
     window.addEventListener("keydown", handleKeyDown);
-    
+
     // Remove event listener when component unmounts
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [chapter, chapters, chapterId, courseId, loading, navigate]);
-
 
   if (loading) {
     return (
@@ -174,7 +179,8 @@ export default function ChapterContent() {
                   Previous
                 </Button>
                 <span className="text-gray-300 px-2">
-                  Chapter {
+                  Chapter{" "}
+                  {
                     chapters[chapters.findIndex((c) => c.id === chapterId)]
                       .order_index
                   }
