@@ -7,7 +7,7 @@ import ProgressDashboard from "../components/ProgressDashboard";
 
 const Dashboard: React.FC = () => {
   return (
-    <div>
+    <div className="bg-background text-foreground">
       <ProgressDashboard />
     </div>
   );
