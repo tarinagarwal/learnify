@@ -51,8 +51,16 @@ import React, { useState, useEffect, useRef } from "react";
                      {
                        label: "Completion %",
                        data: progressData.map((item) => item.completion_percentage),
-                       backgroundColor: ["#4CAF50", "#2196F3", "#FF9800"],
-                       borderColor: ["#388E3C", "#1976D2", "#F57C00"],
+                       backgroundColor: [
+                         "hsl(var(--chart-1))", // Use Tailwind CSS variable
+                         "hsl(var(--chart-2))",
+                         "hsl(var(--chart-3))",
+                       ],
+                       borderColor: [
+                         "hsl(var(--chart-1))",
+                         "hsl(var(--chart-2))",
+                         "hsl(var(--chart-3))",
+                       ],
                        borderWidth: 1,
                      },
                    ],
@@ -62,11 +70,29 @@ import React, { useState, useEffect, useRef } from "react";
                      y: {
                        beginAtZero: true,
                        max: 100,
-                       title: { display: true, text: "Completion Percentage" },
+                       title: {
+                         display: true,
+                         text: "Completion Percentage",
+                         color: "hsl(var(--foreground))",
+                       },
+                       ticks: {
+                         color: "hsl(var(--foreground))",
+                       },
+                     },
+                     x: {
+                       ticks: {
+                         color: "hsl(var(--foreground))",
+                       },
                      },
                    },
                    plugins: {
-                     legend: { display: true, position: "top" },
+                     legend: {
+                       display: true,
+                       position: "top",
+                       labels: {
+                         color: "hsl(var(--foreground))",
+                       },
+                     },
                    },
                  },
                });
@@ -80,10 +106,10 @@ import React, { useState, useEffect, useRef } from "react";
          }, [progressData]);
 
          return (
-           <div className="container mx-auto p-4">
+           <div className="container mx-auto p-4 bg-background text-foreground">
              <h1 className="text-3xl font-bold mb-4">Progress Dashboard</h1>
              {loading && <p>Loading...</p>}
-             {error && <p className="text-red-500">Error: {error}</p>}
+             {error && <p className="text-destructive">Error: {error}</p>}
              {!loading && !error && (
                <div>
                  <canvas id="progressChart" ref={chartRef} className="w-full h-64" />
