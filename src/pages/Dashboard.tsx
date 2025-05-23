@@ -2,6 +2,19 @@
 
 import type React from "react";
 
+import React from "react";
+import ProgressDashboard from "../components/ProgressDashboard";
+
+const Dashboard: React.FC = () => {
+  return (
+    <div>
+      <ProgressDashboard />
+    </div>
+  );
+};
+
+export default Dashboard;
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
