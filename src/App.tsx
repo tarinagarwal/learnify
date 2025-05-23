@@ -48,8 +48,8 @@ const App: React.FC = () => {
     </Router>
   );
 };
-
 export default App;
+
 function App() {
   return (
     <BrowserRouter>
