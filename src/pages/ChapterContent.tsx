@@ -1,19 +1,21 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { Brain, ArrowLeft, BookOpen, Sparkles } from "lucide-react";
-import { supabase } from "../lib/supabase";
-import type { Chapter, Course } from "../types/course";
-import ReactMarkdown from "react-markdown";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ArrowLeft, BookOpen, Brain, Sparkles } from "lucide-react";
+import { useEffect, useState } from "react";
+import ReactMarkdown from "react-markdown";
+import { useNavigate, useParams } from "react-router-dom";
+import { supabase } from "../lib/supabase";
+import type { Chapter, Course } from "../types/course";
 
 export default function ChapterContent() {
   const { courseId, chapterId } = useParams();
   const navigate = useNavigate();
   const [chapter, setChapter] = useState<Chapter | null>(null);
   const [course, setCourse] = useState<Course | null>(null);
+  const [chapters, setChapters] = useState<any[]>([]);
+
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -35,9 +37,17 @@ export default function ChapterContent() {
         .select("*")
         .eq("id", courseId)
         .single();
-
       if (courseError) throw courseError;
 
+      const { data: chaptersData, error: chaptersError } = await supabase
+        .from("chapters")
+        .select("*")
+        .eq("course_id", courseData.id)
+        .order("order_index", { ascending: true });
+
+      if (chaptersError) throw chaptersError;
+
+      setChapters(chaptersData || []);
       setChapter(chapterData);
       setCourse(courseData);
     } catch (error) {
@@ -53,6 +63,48 @@ export default function ChapterContent() {
     sessionStorage.setItem("quizContent", chapter?.content || "");
     navigate("/quiz");
   };
+
+  // handle key press to navigate to next and previous chapter
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Skip if user is typing in an input field
+      if (
+        document.activeElement?.tagName === "INPUT" ||
+        document.activeElement?.tagName === "TEXTAREA" ||
+        loading
+      ) {
+        return;
+      }
+
+      if (e.key === "ArrowLeft" && chapter && chapters.length > 0) {
+        // Navigate to previous chapter
+        const currentIndex = chapters.findIndex((c) => c.id === chapterId);
+        if (currentIndex > 0) {
+          e.preventDefault();
+          navigate(
+            `/courses/${courseId}/chapters/${chapters[currentIndex - 1].id}`
+          );
+        }
+      } else if (e.key === "ArrowRight" && chapter && chapters.length > 0) {
+        // Navigate to next chapter
+        const currentIndex = chapters.findIndex((c) => c.id === chapterId);
+        if (currentIndex < chapters.length - 1) {
+          e.preventDefault();
+          navigate(
+            `/courses/${courseId}/chapters/${chapters[currentIndex + 1].id}`
+          );
+        }
+      }
+    };
+
+    // Add event listener when component mounts
+    window.addEventListener("keydown", handleKeyDown);
+
+    // Remove event listener when component unmounts
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [chapter, chapters, chapterId, courseId, loading, navigate]);
 
   if (loading) {
     return (
@@ -94,9 +146,73 @@ export default function ChapterContent() {
 
         <Card className="bg-gray-800/30 backdrop-blur-sm border-gray-700 overflow-hidden">
           <CardHeader className="border-b border-gray-700">
-            <div className="flex items-center gap-2 text-sm font-medium text-gray-400 mb-2">
-              <BookOpen className="h-4 w-4 text-purple-400" />
-              <span>{course?.title}</span>
+            <div className="flex items-center gap-2 text-sm font-medium text-gray-400 mb-2 md:justify-between">
+              <div className="flex item-center gap-2 text-sm font-medium mb-2">
+                <BookOpen className=" text-purple-400" />
+                <span>{course?.title}</span>
+              </div>
+              <div className="flex items-center gap-2 bg-gray-800 p-2 rounded-lg">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    if (chapter && course && chapters.length > 0) {
+                      const currentIndex = chapters.findIndex(
+                        (c) => c.id === chapterId
+                      );
+                      if (currentIndex > 0) {
+                        navigate(
+                          `/courses/${courseId}/chapters/${
+                            chapters[currentIndex - 1].id
+                          }`
+                        );
+                      }
+                    }
+                  }}
+                  className="flex items-center gap-2 border-gray-700 text-gray-900"
+                  disabled={
+                    !chapter ||
+                    chapters.findIndex((c) => c.id === chapterId) <= 0
+                  }
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                  Previous
+                </Button>
+                <span className="text-gray-300 px-2">
+                  Chapter{" "}
+                  {
+                    chapters[chapters.findIndex((c) => c.id === chapterId)]
+                      .order_index
+                  }
+                </span>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    if (chapter && course && chapters.length > 0) {
+                      const currentIndex = chapters.findIndex(
+                        (c) => c.id === chapterId
+                      );
+                      if (currentIndex < chapters.length - 1) {
+                        navigate(
+                          `/courses/${courseId}/chapters/${
+                            chapters[currentIndex + 1].id
+                          }`
+                        );
+                      }
+                    }
+                  }}
+                  className="flex items-center gap-2 border-gray-700 text-gray-900"
+                  disabled={
+                    !chapter ||
+                    chapters.findIndex((c) => c.id === chapterId) >=
+                      chapters.length - 1
+                  }
+                >
+                  Next
+                  <ArrowLeft className="w-4 h-4 rotate-180" />
+                </Button>
+              </div>
             </div>
             <CardTitle className="text-2xl font-bold text-gray-100">
               {chapter?.title}
