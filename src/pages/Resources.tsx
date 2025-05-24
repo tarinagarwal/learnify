@@ -684,3 +684,54 @@ export default function Resources() {
     </div>
   );
 }
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { supabase } from '../services/supabase';
+import { PdfThumbnail } from '../components/pdfThumbnail';
+
+interface PdfResource {
+  id: string;
+  name: string;
+  url: string;
+}
+
+export const Resources: React.FC = () => {
+  const [pdfs, setPdfs] = useState<PdfResource[]>([]);
+
+  useEffect(() => {
+    const fetchPdfs = async () => {
+      try {
+        const { data, error } = await supabase.storage.from('pdfs').list('pdfs/');
+        if (error) throw error;
+        const pdfList = await Promise.all(
+          data.map(async (file) => {
+            const { data: urlData } = await supabase.storage
+              .from('pdfs')
+              .getPublicUrl(`pdfs/${file.name}`);
+            return { id: file.name, name: file.name, url: urlData.publicUrl };
+          })
+        );
+        setPdfs(pdfList);
+      } catch (error) {
+        console.error('Error fetching PDFs:', error);
+      }
+    };
+    fetchPdfs();
+  }, []);
+
+  return (
+    <div className="container mx-auto p-4">
+      <h1 className="text-2xl font-bold mb-4">Resources</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        {pdfs.map((pdf) => (
+          <div key={pdf.id} className="p-4 bg-white rounded-md shadow">
+            <Link to={`/pdf-annotate/${pdf.id}`}>
+              <PdfThumbnail pdfUrl={pdf.url} pageNumber={1} width={150} />
+              <p className="mt-2 text-center text-sm">{pdf.name}</p>
+            </Link>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
