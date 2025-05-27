@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 import { AlertDialog } from "../components/AlertDialog";
@@ -13,6 +13,7 @@ export default function Profile() {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [userEmail, setUserEmail] = useState("");
   const [alert, setAlert] = useState<{
     show: boolean;
     title: string;
@@ -20,19 +21,20 @@ export default function Profile() {
     type: "success" | "error" | "info" | "warning";
   }>({ show: false, title: "", message: "", type: "info" });
 
-  useEffect(() => {
-    loadProfile();
-  }, []);
-
-  const loadProfile = async () => {
+  // useCallback to memoize loadProfile and avoid useEffect dependency warning
+  const loadProfile = useCallback(async () => {
     try {
       const {
         data: { user },
+        error: userError,
       } = await supabase.auth.getUser();
-      if (!user) {
+
+      if (userError || !user) {
         navigate("/login");
         return;
       }
+
+      setUserEmail(user.email || "");
 
       const { data: profile, error } = await supabase
         .from("profiles")
@@ -41,13 +43,27 @@ export default function Profile() {
         .single();
 
       if (error) throw error;
-      if (profile) setName(profile.name);
+      if (profile?.name) setName(profile.name);
     } catch (error) {
       console.error("Error loading profile:", error);
     }
-  };
+  }, [navigate]);
+
+  useEffect(() => {
+    loadProfile();
+  }, [loadProfile]); // added loadProfile here to fix react-hooks/exhaustive-deps warning
 
   const updateProfile = async () => {
+    if (!name.trim()) {
+      setAlert({
+        show: true,
+        title: "Error",
+        message: "Name cannot be empty.",
+        type: "error",
+      });
+      return;
+    }
+
     try {
       setLoading(true);
       const {
@@ -68,11 +84,15 @@ export default function Profile() {
         message: "Profile updated successfully!",
         type: "success",
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
+      // Type safe error handling
+      let message = "An unknown error occurred.";
+      if (error instanceof Error) message = error.message;
+
       setAlert({
         show: true,
         title: "Error",
-        message: error.message,
+        message,
         type: "error",
       });
     } finally {
@@ -81,11 +101,31 @@ export default function Profile() {
   };
 
   const updatePassword = async () => {
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      setAlert({
+        show: true,
+        title: "Error",
+        message: "All password fields are required.",
+        type: "error",
+      });
+      return;
+    }
+
+    if (newPassword.length < 6) {
+      setAlert({
+        show: true,
+        title: "Error",
+        message: "Password should be at least 6 characters long.",
+        type: "error",
+      });
+      return;
+    }
+
     if (newPassword !== confirmPassword) {
       setAlert({
         show: true,
         title: "Error",
-        message: "New passwords don't match",
+        message: "New passwords do not match.",
         type: "error",
       });
       return;
@@ -93,6 +133,17 @@ export default function Profile() {
 
     try {
       setLoading(true);
+
+      // Re-authenticate user with current password
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email: userEmail,
+        password: currentPassword,
+      });
+
+      if (signInError) {
+        throw new Error("Current password is incorrect.");
+      }
+
       const { error } = await supabase.auth.updateUser({
         password: newPassword,
       });
@@ -109,11 +160,14 @@ export default function Profile() {
         message: "Password updated successfully!",
         type: "success",
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
+      let message = "An unknown error occurred.";
+      if (error instanceof Error) message = error.message;
+
       setAlert({
         show: true,
         title: "Error",
-        message: error.message,
+        message,
         type: "error",
       });
     } finally {
@@ -139,10 +193,14 @@ export default function Profile() {
             <h2 className="text-xl font-semibold mb-4">Profile Information</h2>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-1">
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-medium text-gray-300 mb-1"
+                >
                   Name
                 </label>
                 <Input
+                  id="name"
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
@@ -167,10 +225,29 @@ export default function Profile() {
             <h2 className="text-xl font-semibold mb-4">Change Password</h2>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-1">
+                <label
+                  htmlFor="currentPassword"
+                  className="block text-sm font-medium text-gray-300 mb-1"
+                >
+                  Current Password
+                </label>
+                <Input
+                  id="currentPassword"
+                  type="password"
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
+                  className="w-full bg-gray-700/50 border-gray-600 text-gray-100"
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="newPassword"
+                  className="block text-sm font-medium text-gray-300 mb-1"
+                >
                   New Password
                 </label>
                 <Input
+                  id="newPassword"
                   type="password"
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
@@ -178,10 +255,14 @@ export default function Profile() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-1">
+                <label
+                  htmlFor="confirmPassword"
+                  className="block text-sm font-medium text-gray-300 mb-1"
+                >
                   Confirm New Password
                 </label>
                 <Input
+                  id="confirmPassword"
                   type="password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
