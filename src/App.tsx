@@ -30,25 +30,6 @@ import Profile from "./pages/Profile";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import EmailConfirmation from "./pages/EmailConfirmation";
-import React from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import ProgressDashboard from "./components/ProgressDashboard";
-import Home from "./pages/Home"; // Example existing page
-import Dashboard from "./pages/Dashboard"; // New page
-import Navbar from "./components/Navbar"; // Example existing component
-
-const App: React.FC = () => {
-  return (
-    <Router>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-      </Routes>
-    </Router>
-  );
-};
-export default App;
 
 function App() {
   return (
