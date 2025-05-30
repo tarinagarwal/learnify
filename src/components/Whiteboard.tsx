@@ -196,6 +196,18 @@ export const Whiteboard: React.FC = () => {
           }
         }
       }
+      // Handle Ctrl+Z / Cmd+Z for undo last stroke
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "z") {
+        e.preventDefault();
+        if (drawingData.length > 0) {
+          const newDrawingData = [...drawingData];
+          newDrawingData.pop();
+          clearDrawing();
+          newDrawingData.forEach((stroke) => {
+            addStroke(stroke);
+          });
+        }
+      }
     };
 
     window.addEventListener("keydown", handleKeyDown);
