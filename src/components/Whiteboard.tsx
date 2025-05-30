@@ -4,6 +4,8 @@ import {
   Download,
   Eraser,
   History,
+  Info,
+  Keyboard,
   MessageSquare,
   Minus,
   Palette,
@@ -58,6 +60,8 @@ export const Whiteboard: React.FC = () => {
   const [showResponseHistory, setShowResponseHistory] = useState(false);
   const [aiResponses, setAiResponses] = useState<AIResponse[]>([]);
   const [showResponseDialog, setShowResponseDialog] = useState(false);
+  const [showShortcutsCard, setShowShortcutsCard] = useState(false);
+
   const [currentResponse, setCurrentResponse] = useState<string>("");
   const [notebookId, setNotebookId] = useState<string | null>(null);
   const [whiteboards, setWhiteboards] = useState<any[]>([]);
@@ -331,6 +335,8 @@ export const Whiteboard: React.FC = () => {
 
       if (error) throw error;
 
+      setUndoHistory([]);
+
       setAlert({
         show: true,
         title: "Success",
@@ -530,6 +536,16 @@ export const Whiteboard: React.FC = () => {
           <div className="flex flex-col gap-3 sm:flex-row sm:gap-3">
             <Button
               variant="outline"
+              onClick={() => setShowShortcutsCard(true)}
+              className="flex items-center gap-2 border-gray-700 text-gray-900"
+              title="Keyboard Shortcuts"
+            >
+              <Keyboard className="w-4 h-4" />
+              Shortcuts
+            </Button>
+
+            <Button
+              variant="outline"
               onClick={clearDrawing}
               className="flex items-center gap-2 border-gray-700 text-gray-900"
               disabled={loading}
@@ -629,49 +645,47 @@ export const Whiteboard: React.FC = () => {
               </span>
             </div>
 
-
-
             <div className="flex items-center gap-2 bg-gray-800 p-2 rounded-lg">
               <Button
-              variant="outline"
-              size="sm"
-              onClick={() => {
-                if (drawingData.length > 0) {
-                const newDrawingData = [...drawingData];
-                const lastStroke = newDrawingData.pop();
-                if (lastStroke) {
-                  setUndoHistory((prev) => [...prev, lastStroke]);
-                }
-                clearDrawing();
-                newDrawingData.forEach((stroke) => {
-                  addStroke(stroke);
-                });
-                }
-              }}
-              className="flex items-center gap-2 border-gray-700 text-gray-900"
-              disabled={drawingData.length === 0}
-              title="Undo (Ctrl+Z)"
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  if (drawingData.length > 0) {
+                    const newDrawingData = [...drawingData];
+                    const lastStroke = newDrawingData.pop();
+                    if (lastStroke) {
+                      setUndoHistory((prev) => [...prev, lastStroke]);
+                    }
+                    clearDrawing();
+                    newDrawingData.forEach((stroke) => {
+                      addStroke(stroke);
+                    });
+                  }
+                }}
+                className="flex items-center gap-2 border-gray-700 text-gray-900"
+                disabled={drawingData.length === 0}
+                title="Undo (Ctrl+Z)"
               >
-              <Undo className="w-4 h-4" />
+                <Undo className="w-4 h-4" />
               </Button>
               <Button
-              variant="outline"
-              size="sm"
-              onClick={() => {
-                if (undoHistory.length > 0) {
-                const newUndoHistory = [...undoHistory];
-                const strokeToRestore = newUndoHistory.pop();
-                if (strokeToRestore) {
-                  addStroke(strokeToRestore);
-                  setUndoHistory(newUndoHistory);
-                }
-                }
-              }}
-              className="flex items-center gap-2 border-gray-700 text-gray-900"
-              disabled={undoHistory.length === 0}
-              title="Redo (Ctrl+Y)"
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  if (undoHistory.length > 0) {
+                    const newUndoHistory = [...undoHistory];
+                    const strokeToRestore = newUndoHistory.pop();
+                    if (strokeToRestore) {
+                      addStroke(strokeToRestore);
+                      setUndoHistory(newUndoHistory);
+                    }
+                  }
+                }}
+                className="flex items-center gap-2 border-gray-700 text-gray-900"
+                disabled={undoHistory.length === 0}
+                title="Redo (Ctrl+Y)"
               >
-              <Redo className="w-4 h-4" />
+                <Redo className="w-4 h-4" />
               </Button>
             </div>
 
@@ -765,6 +779,91 @@ export const Whiteboard: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Keyboard Shortcuts Dialog */}
+      {showShortcutsCard && (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-gray-800 border border-gray-700 rounded-xl shadow-xl max-w-md w-full mx-4 p-6">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-2">
+                <Keyboard className="w-5 h-5 text-purple-400" />
+                <h3 className="text-xl font-medium text-gray-100">
+                  Keyboard Shortcuts
+                </h3>
+              </div>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setShowShortcutsCard(false)}
+                className="text-gray-400 hover:text-gray-300"
+              >
+                <X className="w-5 h-5" />
+              </Button>
+            </div>
+
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-3">
+                <div className="bg-gray-900/50 rounded-lg p-3 border border-gray-700">
+                  <h4 className="text-sm font-medium text-purple-400 mb-2">
+                    Navigation
+                  </h4>
+                  <ul className="space-y-2">
+                    <li className="flex justify-between">
+                      <span className="text-gray-300">Previous Page</span>
+                      <kbd className="px-2 py-1 bg-gray-900 rounded text-xs text-gray-300 border border-gray-700">
+                        ←
+                      </kbd>
+                    </li>
+                    <li className="flex justify-between">
+                      <span className="text-gray-300">Next Page</span>
+                      <kbd className="px-2 py-1 bg-gray-900 rounded text-xs text-gray-300 border border-gray-700">
+                        →
+                      </kbd>
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="bg-gray-900/50 rounded-lg p-3 border border-gray-700">
+                  <h4 className="text-sm font-medium text-purple-400 mb-2">
+                    Editing
+                  </h4>
+                  <ul className="space-y-2">
+                    <li className="flex justify-between">
+                      <span className="text-gray-300">Undo</span>
+                      <kbd className="px-2 py-1 bg-gray-900 rounded text-xs text-gray-300 border border-gray-700">
+                        Ctrl+Z
+                      </kbd>
+                    </li>
+                    <li className="flex justify-between">
+                      <span className="text-gray-300">Redo</span>
+                      <kbd className="px-2 py-1 bg-gray-900 rounded text-xs text-gray-300 border border-gray-700">
+                        Ctrl+Y
+                      </kbd>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="mt-4 text-xs text-gray-400">
+                <div className="flex items-center gap-1 mb-1">
+                  <Info className="w-3 h-3" />
+                  <span>Tips:</span>
+                </div>
+                <ul className="list-disc pl-4 space-y-1">
+                  <li>
+                    Arrow keys navigate between pages while automatically saving
+                    your work
+                  </li>
+                  <li>
+                    Keyboard shortcuts won't work when typing in text fields
+                  </li>
+                  <li>For Mac users, use Command (⌘) instead of Ctrl</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {showResponseHistory && (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50">
