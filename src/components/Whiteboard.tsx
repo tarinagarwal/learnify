@@ -8,7 +8,9 @@ import {
   Minus,
   Palette,
   Plus,
+  Redo,
   Save,
+  Undo,
   X,
 } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
@@ -625,6 +627,52 @@ export const Whiteboard: React.FC = () => {
               <span className="text-sm text-gray-300 min-w-[24px] text-center">
                 {currentWidth}px
               </span>
+            </div>
+
+
+
+            <div className="flex items-center gap-2 bg-gray-800 p-2 rounded-lg">
+              <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                if (drawingData.length > 0) {
+                const newDrawingData = [...drawingData];
+                const lastStroke = newDrawingData.pop();
+                if (lastStroke) {
+                  setUndoHistory((prev) => [...prev, lastStroke]);
+                }
+                clearDrawing();
+                newDrawingData.forEach((stroke) => {
+                  addStroke(stroke);
+                });
+                }
+              }}
+              className="flex items-center gap-2 border-gray-700 text-gray-900"
+              disabled={drawingData.length === 0}
+              title="Undo (Ctrl+Z)"
+              >
+              <Undo className="w-4 h-4" />
+              </Button>
+              <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                if (undoHistory.length > 0) {
+                const newUndoHistory = [...undoHistory];
+                const strokeToRestore = newUndoHistory.pop();
+                if (strokeToRestore) {
+                  addStroke(strokeToRestore);
+                  setUndoHistory(newUndoHistory);
+                }
+                }
+              }}
+              className="flex items-center gap-2 border-gray-700 text-gray-900"
+              disabled={undoHistory.length === 0}
+              title="Redo (Ctrl+Y)"
+              >
+              <Redo className="w-4 h-4" />
+              </Button>
             </div>
 
             <div className="flex items-center gap-2 bg-gray-800 p-2 rounded-lg">
