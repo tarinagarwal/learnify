@@ -457,7 +457,7 @@ export const Whiteboard: React.FC = () => {
     if (!ctx) return;
 
     ctx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-    ctx.fillStyle = "white";
+    ctx.fillStyle = "#1f2937";
     ctx.fillRect(0, 0, canvasElement.width, canvasElement.height);
 
     data.forEach((path) => {
