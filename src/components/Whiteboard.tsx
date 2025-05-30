@@ -45,6 +45,7 @@ export const Whiteboard: React.FC = () => {
   const [currentWidth, setCurrentWidth] = useState(2);
   const [currentPoints, setCurrentPoints] = useState<Point[]>([]);
   const { drawingData, addStroke, clearDrawing } = useBlackboardStore();
+  const [undoHistory, setUndoHistory] = useState<DrawingData[]>([]);
   const [alert, setAlert] = useState<{
     show: boolean;
     title: string;
@@ -201,11 +202,27 @@ export const Whiteboard: React.FC = () => {
         e.preventDefault();
         if (drawingData.length > 0) {
           const newDrawingData = [...drawingData];
-          newDrawingData.pop();
+          const lastStroke = newDrawingData.pop();
+          if (lastStroke) {
+            setUndoHistory((prev) => [...prev, lastStroke]);
+          }
           clearDrawing();
           newDrawingData.forEach((stroke) => {
             addStroke(stroke);
           });
+        }
+      }
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "y") {
+        e.preventDefault();
+        // Handle Ctrl+Y / Cmd+Y for redo
+        if (undoHistory.length > 0) {
+          e.preventDefault();
+          const newUndoHistory = [...undoHistory];
+          const strokeToRestore = newUndoHistory.pop();
+          if (strokeToRestore) {
+            addStroke(strokeToRestore);
+            setUndoHistory(newUndoHistory);
+          }
         }
       }
     };
@@ -294,6 +311,8 @@ export const Whiteboard: React.FC = () => {
         color: currentColor,
         width: currentWidth,
       });
+      // Clear the undo history when a new stroke is added
+      setUndoHistory([]);
     }
     setCurrentPoints([]);
   };
