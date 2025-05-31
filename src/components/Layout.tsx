@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import Navbar from "./Navbar";
+import ScrollToTopButton from "./ScrollToTop";
 
-// ScrollToTop component remains unchanged.
-function ScrollToTop() {
+// ScrollToTop component for route changes
+function ScrollToTopOnRoute() {
   const { pathname } = useLocation();
 
   useEffect(() => {
@@ -44,13 +45,15 @@ function ZapierChatBot() {
 
 export default function Layout() {
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
-      <ScrollToTop />
+    <div className="min-h-screen flex flex-col">      <Navbar />
+      <ScrollToTopOnRoute />
 
       <main className="flex-grow pt-16">
         <Outlet />
       </main>
+      
+      {/* Floating scroll to top button */}
+      <ScrollToTopButton scrollDistance={300} position="bottom-right" size="md" />
 
       {/* You can include the Zapier chatbot component anywhere in the layout.
           Here, it is placed just before the footer so that it will be loaded on every page. */}
