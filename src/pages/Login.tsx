@@ -4,9 +4,11 @@ import type React from "react";
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "../lib/supabase";
-import { LogIn, CheckCircle } from "lucide-react";
+import { LogIn, CheckCircle, Eye, EyeOff } from "lucide-react";
 
 export default function Login() {
+  const [showPassword, setShowPassword] = useState(false);
+
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -84,7 +86,7 @@ export default function Login() {
                 />
               </div>
 
-              <div>
+              <div className="relative">
                 <label
                   htmlFor="password"
                   className="block text-sm font-medium text-gray-300"
@@ -93,13 +95,20 @@ export default function Login() {
                 </label>
                 <input
                   id="password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="mt-1 block w-full bg-gray-700/50 border border-gray-600 rounded-lg shadow-sm py-2 px-3 text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="mt-1 block w-full bg-gray-700/50 border border-gray-600 rounded-lg shadow-sm py-2 px-3 pr-10 text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 />
+                <div
+                  className="absolute right-3 top-[37px] cursor-pointer text-gray-400 hover:text-gray-200"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </div>
               </div>
+
 
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
@@ -181,14 +190,11 @@ export default function Login() {
                 height: `${Math.random() * 6 + 2}px`,
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
-                backgroundColor: `rgba(${Math.random() * 100 + 155}, ${
-                  Math.random() * 100 + 155
-                }, 255, ${Math.random() * 0.5 + 0.5})`,
-                boxShadow: `0 0 ${Math.random() * 10 + 5}px rgba(${
-                  Math.random() * 100 + 155
-                }, ${Math.random() * 100 + 155}, 255, ${
-                  Math.random() * 0.5 + 0.5
-                })`,
+                backgroundColor: `rgba(${Math.random() * 100 + 155}, ${Math.random() * 100 + 155
+                  }, 255, ${Math.random() * 0.5 + 0.5})`,
+                boxShadow: `0 0 ${Math.random() * 10 + 5}px rgba(${Math.random() * 100 + 155
+                  }, ${Math.random() * 100 + 155}, 255, ${Math.random() * 0.5 + 0.5
+                  })`,
                 animation: `float ${Math.random() * 10 + 20}s linear infinite`,
                 animationDelay: `${Math.random() * 10}s`,
               }}

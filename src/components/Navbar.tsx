@@ -16,9 +16,9 @@ import {
   LucideMessageCircleQuestion,
   Route,
   ChevronDown,
-  Search,
-  Bell,
-  Settings,
+  // Search,
+  // Bell,
+  // Settings,
   Users,
   Languages,
 } from "lucide-react";
@@ -121,10 +121,12 @@ export default function Navbar() {
     children,
   }: {
     to: string;
-    icon?: any;
-    children: any;
+    icon?: React.ElementType;
+    children: React.ReactNode;
   }) => {
-    const isActive = location.pathname === to;
+    const isActive =
+      to === "/" ? location.pathname === "/" : location.pathname.startsWith(to);
+
     return (
       <Link
         to={to}
@@ -137,11 +139,12 @@ export default function Navbar() {
         {Icon && <Icon className="h-4 w-4" />}
         <span>{children}</span>
         {isActive && (
-          <span className="absolute bottom-0 left-0 w-full h-0.5 bg-purple-400 scale-x-100 transition-transform duration-300 ease-out" />
+          <span className="absolute bottom-0 left-1 w-[75%] h-0.5 bg-purple-400 scale-x-100 transition-transform duration-300 ease-out" />
         )}
       </Link>
     );
   };
+
 
   // Mobile nav link with more padding and larger icons
   const MobileNavLink = ({
@@ -150,10 +153,12 @@ export default function Navbar() {
     children,
   }: {
     to: string;
-    icon?: any;
-    children: any;
+    icon?: React.ElementType;
+    children: React.ReactNode;
   }) => {
-    const isActive = location.pathname === to;
+    const isActive =
+      to === "/" ? location.pathname === "/" : location.pathname.startsWith(to);
+
     return (
       <Link
         to={to}
@@ -223,39 +228,67 @@ export default function Navbar() {
                   Home
                 </NavLink>
 
+
                 {/* Group navigation links into categories with dropdowns */}
-                {navGroups.map((group) => (
-                  <DropdownMenu key={group.title}>
-                    <DropdownMenuTrigger asChild>
-                      <div className="flex items-center space-x-1 text-gray-300 hover:text-purple-400 transition-colors relative group py-2 px-3 rounded-md  cursor-pointer">
-                        <span>{group.title}</span>
-                        <ChevronDown className="h-4 w-4 opacity-70" />
-                      </div>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className="bg-gray-900 border border-gray-800">
-                      <DropdownMenuLabel className="text-xs text-gray-500">
-                        {group.title}
-                      </DropdownMenuLabel>
-                      <DropdownMenuSeparator className="bg-gray-800" />
-                      {group.links.map((link) => (
-                        <DropdownMenuItem
-                          key={link.to}
-                          asChild
-                          className="focus:bg-gray-800 focus:text-purple-400 cursor-pointer"
-                        >
-                          <Link
-                            to={link.to}
-                            className="flex items-center space-x-2 text-gray-300 hover:text-purple-400"
-                            onClick={() => setIsOpen(false)}
-                          >
-                            {link.icon && <link.icon className="h-4 w-4" />}
-                            <span>{link.label}</span>
-                          </Link>
-                        </DropdownMenuItem>
-                      ))}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                ))}
+                {navGroups.map((group) => {
+  // Is any link inside this group active?
+  const isGroupActive = group.links.some(link =>
+    location.pathname.startsWith(link.to)
+  );
+
+  return (
+    <DropdownMenu key={group.title}>
+      <DropdownMenuTrigger asChild>
+        <div
+          className={cn(
+            "flex items-center space-x-1 hover:text-purple-400 transition-colors relative group py-2 px-3 rounded-md cursor-pointer",
+            isGroupActive ? "text-purple-400 font-medium" : "text-gray-300"
+          )}
+        >
+          <span>{group.title}</span>
+          <ChevronDown className="h-4 w-4 opacity-70" />
+          {isGroupActive && (
+            <span className="absolute bottom-0 left-1 w-[75%] h-0.5 bg-purple-400 scale-x-100 transition-transform duration-300 ease-out" />
+          )}
+        </div>
+      </DropdownMenuTrigger>
+
+      <DropdownMenuContent
+        className={cn(
+          "border border-gray-800 transition-colors",
+          isGroupActive ? "bg-gray-800 text-purple-400" : "bg-gray-900 text-gray-300"
+        )}
+      >
+        <DropdownMenuLabel className="text-xs text-gray-500">{group.title}</DropdownMenuLabel>
+        <DropdownMenuSeparator className="bg-gray-800" />
+        {group.links.map((link) => {
+          const isLinkActive = location.pathname.startsWith(link.to);
+          return (
+            <DropdownMenuItem
+              key={link.to}
+              asChild
+              className={cn(
+                "cursor-pointer",
+                isLinkActive ? "bg-gray-700 text-purple-400" : "text-gray-300",
+                "focus:bg-gray-800 focus:text-purple-400"
+              )}
+            >
+              <Link
+                to={link.to}
+                className="flex items-center space-x-2 hover:text-purple-400"
+                onClick={() => setIsOpen(false)}
+              >
+                {link.icon && <link.icon className="h-4 w-4" />}
+                <span>{link.label}</span>
+              </Link>
+            </DropdownMenuItem>
+          );
+        })}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+})}
+
               </div>
 
               {/* USER ACTIONS & MOBILE MENU TOGGLE */}
