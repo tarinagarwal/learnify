@@ -2,33 +2,197 @@ import Groq from "groq-sdk";
 import type { QuizConfig, Question } from "../types/quiz";
 import type { CourseOutline, Chapter } from "../types/course";
 
-// Ensure GROQ API key is configured
-if (!import.meta.env.VITE_GROQ_API_KEY) {
-  throw new Error("GROQ API key is not configured");
+// DEBUG: Enhanced logging for API key validation
+console.log('🔧 GROQ DEBUG: Checking API key configuration...');
+const apiKey = import.meta.env.VITE_GROQ_API_KEY;
+
+if (!apiKey) {
+  console.error("❌ GROQ API key is not configured in environment variables");
+  console.log("Available env vars:", Object.keys(import.meta.env));
+} else {
+  console.log("✅ GROQ API key found, length:", apiKey.length);
+  console.log("✅ API key starts with:", apiKey.substring(0, 8) + "...");
 }
 
-// Initialize GROQ SDK with proper configuration
-const groq = new Groq({
-  apiKey: import.meta.env.VITE_GROQ_API_KEY,
-  dangerouslyAllowBrowser: true,
-});
+// Initialize GROQ SDK with debug logging
+let groq: Groq;
+try {
+  groq = new Groq({
+    apiKey: apiKey,
+    dangerouslyAllowBrowser: true,
+  });
+  console.log("✅ GROQ SDK initialized successfully");
+} catch (error) {
+  console.error("❌ Failed to initialize GROQ SDK:", error);
+}
 
 const MAX_RETRIES = 3;
-const RETRY_DELAY = 1000; // 1 second
+const RETRY_DELAY = 1000;
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 /**
+ * DEBUG VERSION: Generate AI response with enhanced error logging
+ */
+
+export async function generateGroqResponse(
+  userQuery: string, 
+  systemPrompt: string,
+  retryCount = 0
+): Promise<string> {
+  try {
+    const apiKey = import.meta.env.VITE_GROQ_API_KEY;
+    
+    if (!apiKey) {
+      console.warn('⚠️ GROQ API key not configured - using fallback response');
+      throw new Error('GROQ API key not configured');
+    }
+
+    console.log('🤖 Generating GROQ response...');
+
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'llama3-8b-8192',
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: userQuery }
+        ],
+        max_tokens: 500,
+        temperature: 0.3
+      })
+    });
+
+    console.log(`📊 GROQ API response: ${response.status}`);
+    
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error(`❌ GROQ API error (${response.status}):`, errorText);
+      throw new Error(`Groq API error: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    console.log('✅ GROQ response generated successfully');
+    return data.choices[0]?.message?.content?.trim() || '';
+    
+  } catch (error: any) {
+    console.error('❌ GROQ error:', error.message);
+    throw error;
+  }
+}
+
+export async function streamGroqResponse(
+  userQuery: string, 
+  systemPrompt: string, 
+  onChunk: (chunk: string) => void
+): Promise<void> {
+  console.log('🌊 DEBUG: Starting streaming with working pattern...');
+  
+  try {
+    if (!import.meta.env.VITE_GROQ_API_KEY) {
+      throw new Error('GROQ API key not configured for streaming');
+    }
+
+    console.log('📡 DEBUG: Making streaming fetch request...');
+
+    // Use fetch with streaming instead of SDK
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${import.meta.env.VITE_GROQ_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'llama3-8b-8192',
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: userQuery }
+        ],
+        max_tokens: 500,
+        temperature: 0.3,
+        stream: true // Enable streaming
+      })
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('❌ DEBUG: Streaming error:', errorText);
+      throw new Error(`Groq streaming error: ${response.status}`);
+    }
+
+    // Handle streaming response
+    const reader = response.body?.getReader();
+    if (!reader) {
+      throw new Error('No response body available for streaming');
+    }
+
+    const decoder = new TextDecoder();
+    let buffer = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      
+      if (done) break;
+      
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop() || '';
+      
+      for (const line of lines) {
+        if (line.trim() === '') continue;
+        if (line.startsWith('data: ')) {
+          const data = line.slice(6);
+          if (data === '[DONE]') return;
+          
+          try {
+            const parsed = JSON.parse(data);
+            const content = parsed.choices?.[0]?.delta?.content;
+            if (content) {
+              onChunk(content);
+              await new Promise(resolve => setTimeout(resolve, 30));
+            }
+          } catch (parseError) {
+            // Ignore parsing errors for malformed chunks
+            continue;
+          }
+        }
+      }
+    }
+
+    console.log('✅ DEBUG: Streaming completed successfully');
+    
+  } catch (error: any) {
+    console.error('❌ DEBUG: Streaming error:', error);
+    
+    // Fallback to non-streaming
+    console.log('🔄 DEBUG: Falling back to non-streaming...');
+    try {
+      const response = await generateGroqResponse(userQuery, systemPrompt);
+      
+      // Simulate streaming by sending word by word
+      const words = response.split(' ');
+      for (const word of words) {
+        onChunk(word + ' ');
+        await new Promise(resolve => setTimeout(resolve, 60));
+      }
+      
+    } catch (fallbackError) {
+      throw new Error(`GROQ streaming error: ${error.message}`);
+    }
+  }
+}
+/**
  * Generate multiple-choice questions based on either a topic or provided content.
- * @param {QuizConfig} config - Configuration for quiz generation.
- * @returns {Promise<Question[]>} - List of generated questions.
  */
 export async function generateQuestions(
   config: QuizConfig,
   retryCount = 0
 ): Promise<Question[]> {
   try {
-    // Determine prompt based on config structure
     const prompt =
       "pdfContent" in config
         ? `Based on the following content, generate ${config.numQuestions} multiple choice questions at ${config.difficulty} difficulty level. Make sure the questions are directly related to the content provided.
@@ -61,10 +225,9 @@ Example format:
   }
 ]`;
 
-    // Make API call to generate questions
     const completion = await groq.chat.completions.create({
       messages: [{ role: "user", content: prompt }],
-      model: "llama-3.1-8b-instant",
+      model: "llama-3.1-70b-versatile",
       temperature: 0.7,
       max_tokens: 2048,
     });
@@ -74,10 +237,9 @@ Example format:
   } catch (error: any) {
     console.error("Error generating questions:", error);
 
-    // Retry logic for 503 errors
     if (error?.message?.includes("503") && retryCount < MAX_RETRIES) {
       console.log(`Retrying... Attempt ${retryCount + 1} of ${MAX_RETRIES}`);
-      await sleep(RETRY_DELAY * (retryCount + 1)); // Exponential backoff
+      await sleep(RETRY_DELAY * (retryCount + 1));
       return generateQuestions(config, retryCount + 1);
     }
 
@@ -90,9 +252,6 @@ Example format:
 
 /**
  * Generate a professional response to user queries based on provided PDF content.
- * @param {string} pdfContent - Content extracted from a PDF.
- * @param {string} userQuestion - User's question about the PDF content.
- * @returns {Promise<string>} - Generated response to the user's question.
  */
 export async function generatePdfChat(
   pdfContent: string,
@@ -117,13 +276,12 @@ Format longer responses with appropriate Markdown:
 - Use > for quotes from the document
 - Use ### for section headers if needed`;
 
-    // Make API call to generate chat response
     const completion = await groq.chat.completions.create({
       messages: [
         { role: "system", content: systemPrompt },
         { role: "user", content: userQuestion },
       ],
-      model: "llama-3.1-8b-instant",
+      model: "llama-3.1-70b-versatile",
       temperature: 0.7,
       max_tokens: 2048,
     });
@@ -167,7 +325,7 @@ Make sure the outline is:
 
     const completion = await groq.chat.completions.create({
       messages: [{ role: "user", content: prompt }],
-      model: "llama-3.1-8b-instant",
+      model: "llama-3.1-70b-versatile",
       temperature: 0.7,
       max_tokens: 2048,
       stream: false,
@@ -175,7 +333,6 @@ Make sure the outline is:
 
     const response = completion.choices[0]?.message?.content || "{}";
 
-    // Handle retry for invalid JSON
     try {
       return JSON.parse(response);
     } catch (parseError) {
@@ -187,7 +344,6 @@ Make sure the outline is:
       throw parseError;
     }
   } catch (error: any) {
-    // Handle API errors with retry
     if (error?.message?.includes("405") && retryCount < MAX_RETRIES) {
       console.log(`Retrying... Attempt ${retryCount + 1} of ${MAX_RETRIES}`);
       await sleep(RETRY_DELAY * (retryCount + 1));
@@ -230,7 +386,7 @@ Use appropriate Markdown formatting:
 
     const completion = await groq.chat.completions.create({
       messages: [{ role: "user", content: prompt }],
-      model: "llama-3.1-8b-instant",
+      model: "llama-3.1-70b-versatile",
       temperature: 0.7,
       max_tokens: 4096,
     });
@@ -361,13 +517,13 @@ Format:
 
     const completion = await groq.chat.completions.create({
       messages: [{ role: "user", content: prompt }],
-      model: "llama-3.1-8b-instant",
+      model: "llama-3.1-70b-versatile",
       temperature: 0.7,
       max_tokens: 4096,
       top_p: 0.9,
       frequency_penalty: 0.3,
       presence_penalty: 0.3,
-      response_format: { type: "json_object" }, // Enforce JSON response
+      response_format: { type: "json_object" },
     });
 
     const response = completion.choices[0]?.message?.content || "{}";
@@ -375,7 +531,6 @@ Format:
     try {
       const parsedResponse = JSON.parse(response);
 
-      // Validate the required structure
       if (!parsedResponse.stages || !Array.isArray(parsedResponse.stages)) {
         throw new Error(
           "Invalid roadmap structure: missing or invalid stages array"
@@ -385,7 +540,6 @@ Format:
       return parsedResponse;
     } catch (parseError) {
       console.error("Error parsing roadmap JSON:", parseError);
-      // Return a minimal valid structure
       return {
         title: topic,
         description: "Unable to generate detailed roadmap at this time.",
@@ -409,24 +563,19 @@ Format:
 export const generateResponse = async (imageData: string): Promise<string> => {
   try {
     const completion = await groq.chat.completions.create({
-      messages: [
-        {
-          role: "user",
-          content: [
-            {
-              type: "image_url",
-              image_url: {
-                url: imageData,
+            messages: [
+              {
+                role: "user",
+                content: `Analyze this whiteboard drawing (image URL: ${imageData}) and provide a response in a standard markdown format which looks professional. Your tone should be like a teacher. If it contains:
+      
+      - Mathematical equations: Show the solution steps
+      - Code: Explain the logic and suggest improvements
+      - Diagrams/flowcharts: Describe the structure and relationships
+      
+      Focus only on the content visible in the drawing. If there is any question, answer it. Do not provide the information on what's on the whiteboard. Just the question and the answer.`,
               },
-            },
-            {
-              type: "text",
-              text: "Analyze this whiteboard drawing and provide a response in a standard markdown format which looks professional You tone should be like a teacher. If it contains:\n\n- Mathematical equations: Show the solution steps\n- Code: Explain the logic and suggest improvements\n- Diagrams/flowcharts: Describe the structure and relationships\n\nFocus only on the content visible in the drawing. If there is any question, answer it. Do not provide the information on whats on the whiteboard. Just the question and the answer.",
-            },
-          ],
-        },
-      ],
-      model: "meta-llama/llama-4-scout-17b-16e-instruct",
+            ],
+      model: "llama-3.1-70b-versatile",
       temperature: 0.7,
       max_tokens: 2048,
       top_p: 1,
@@ -445,7 +594,6 @@ export async function generateQuizAnalytics(
   userAnswers: string[]
 ): Promise<string> {
   try {
-    // Calculate score
     const score = questions.reduce(
       (acc, q, idx) => (q.correctAnswer === userAnswers[idx] ? acc + 1 : acc),
       0
@@ -596,7 +744,7 @@ Ensure all analysis is based on the verified score of ${score}/${
 
     const completion = await groq.chat.completions.create({
       messages: [{ role: "user", content: prompt }],
-      model: "llama-3.1-8b-instant",
+      model: "llama-3.1-70b-versatile",
       temperature: 0.7,
       max_tokens: 4096,
       top_p: 0.9,
