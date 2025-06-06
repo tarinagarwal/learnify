@@ -2,9 +2,11 @@ import React, { useEffect } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import Navbar from "./Navbar";
 import AIKnowledgeBot from "./AIKnowledgeBot";
+import ScrollToTopButton from "./ScrollToTop";
 
-// ScrollToTop component remains unchanged.
-function ScrollToTop() {
+
+// ScrollToTop component for route changes
+function ScrollToTopOnRoute() {
   const { pathname } = useLocation();
 
   useEffect(() => {
@@ -20,13 +22,15 @@ function ScrollToTop() {
 
 export default function Layout() {
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
-      <ScrollToTop />
+    <div className="min-h-screen flex flex-col">      <Navbar />
+      <ScrollToTopOnRoute />
 
       <main className="flex-grow pt-16">
         <Outlet />
       </main>
+      
+      {/* Floating scroll to top button */}
+      <ScrollToTopButton scrollDistance={300} position="bottom-right" size="md" />
 
       {/* AI Knowledge Bot - Replaces the Zapier chatbot */}
       <AIKnowledgeBot />

@@ -170,7 +170,7 @@ function analyzeUserEngagement(userMessages: ConversationMessage[]) {
     const hasExclamations = lastMessage.includes("!");
     const isShort = lastMessage.length < 20;
     const isVeryLong = lastMessage.length > 100;
-    const hasGreeting = lastMessage.match(/\b(hi|hello|hey)\b/i);
+    // const hasGreeting = lastMessage.match(/\b(hi|hello|hey)\b/i);
     const hasNegative = lastMessage.match(
       /\b(don't|cant|wrong|difficult|hard)\b/i
     );

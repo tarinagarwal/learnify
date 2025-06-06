@@ -1,12 +1,18 @@
-import  { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 import { AlertDialog } from "../components/AlertDialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { UserCircle, Key, Loader2 } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
+
 
 export default function Profile() {
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
@@ -224,7 +230,7 @@ export default function Profile() {
           <div className="bg-gray-800/30 backdrop-blur-sm border border-gray-700 rounded-xl p-6">
             <h2 className="text-xl font-semibold mb-4">Change Password</h2>
             <div className="space-y-4">
-              <div>
+              <div className="relative">
                 <label
                   htmlFor="currentPassword"
                   className="block text-sm font-medium text-gray-300 mb-1"
@@ -233,13 +239,20 @@ export default function Profile() {
                 </label>
                 <Input
                   id="currentPassword"
-                  type="password"
+                  type={showCurrentPassword ? "text" : "password"}
                   value={currentPassword}
                   onChange={(e) => setCurrentPassword(e.target.value)}
-                  className="w-full bg-gray-700/50 border-gray-600 text-gray-100"
+                  className="w-full bg-gray-700/50 border-gray-600 text-gray-100 pr-10"
                 />
+                <div
+                  className="absolute right-2 top-[33px] cursor-pointer text-gray-400 hover:text-gray-200"
+                  onClick={() => setShowCurrentPassword((prev) => !prev)}
+                >
+                  {showCurrentPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </div>
               </div>
-              <div>
+
+              <div className="relative">
                 <label
                   htmlFor="newPassword"
                   className="block text-sm font-medium text-gray-300 mb-1"
@@ -248,13 +261,20 @@ export default function Profile() {
                 </label>
                 <Input
                   id="newPassword"
-                  type="password"
+                  type={showNewPassword ? "text" : "password"}
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
-                  className="w-full bg-gray-700/50 border-gray-600 text-gray-100"
+                  className="w-full bg-gray-700/50 border-gray-600 text-gray-100 pr-10"
                 />
+                <div
+                  className="absolute right-2 top-[33px] cursor-pointer text-gray-400 hover:text-gray-200"
+                  onClick={() => setShowNewPassword((prev) => !prev)}
+                >
+                  {showNewPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </div>
               </div>
-              <div>
+
+              <div className="relative">
                 <label
                   htmlFor="confirmPassword"
                   className="block text-sm font-medium text-gray-300 mb-1"
@@ -263,12 +283,19 @@ export default function Profile() {
                 </label>
                 <Input
                   id="confirmPassword"
-                  type="password"
+                  type={showConfirmPassword ? "text" : "password"}
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full bg-gray-700/50 border-gray-600 text-gray-100"
+                  className="w-full bg-gray-700/50 border-gray-600 text-gray-100 pr-10"
                 />
+                <div
+                  className="absolute right-2 top-[33px] cursor-pointer text-gray-400 hover:text-gray-200"
+                  onClick={() => setShowConfirmPassword((prev) => !prev)}
+                >
+                  {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </div>
               </div>
+
               <Button
                 onClick={updatePassword}
                 disabled={loading}
