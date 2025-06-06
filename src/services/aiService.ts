@@ -23,7 +23,7 @@ import { CircuitBreaker } from './circuitBreaker';
          this.maxRetries = Number(import.meta.env.VITE_AI_RETRY_ATTEMPTS) || 3;
        }
 
-       async callAI(payload: AIPayload): Promise<AIResponse> {
+       async callAI(payload: AIPayload, p0: { topic: string; }): Promise<AIResponse> {
          const { feature, data } = payload;
          const startTime = Date.now();
          try {
