@@ -1,19 +1,25 @@
 "use client";
 
 import type React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 import { LogIn, CheckCircle, Eye, EyeOff } from "lucide-react";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
-
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  // Optional: Redirect if already logged in
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) navigate("/");
+    });
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,6 +39,15 @@ export default function Login() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleOAuthLogin = async (provider: "google" | "github") => {
+    await supabase.auth.signInWithOAuth({
+      provider,
+      options: {
+        redirectTo: "http://localhost:5173/", // Replace with your hosted URL
+      },
+    });
   };
 
   const highlights = [
@@ -70,10 +85,7 @@ export default function Login() {
               )}
 
               <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium text-gray-300"
-                >
+                <label htmlFor="email" className="block text-sm font-medium text-gray-300">
                   Email address
                 </label>
                 <input
@@ -87,10 +99,7 @@ export default function Login() {
               </div>
 
               <div className="relative">
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium text-gray-300"
-                >
+                <label htmlFor="password" className="block text-sm font-medium text-gray-300">
                   Password
                 </label>
                 <input
@@ -109,7 +118,6 @@ export default function Login() {
                 </div>
               </div>
 
-
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
                   <input
@@ -118,19 +126,13 @@ export default function Login() {
                     type="checkbox"
                     className="h-4 w-4 bg-gray-700 border-gray-600 rounded text-purple-600 focus:ring-purple-500"
                   />
-                  <label
-                    htmlFor="remember-me"
-                    className="ml-2 block text-sm text-gray-300"
-                  >
+                  <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-300">
                     Remember me
                   </label>
                 </div>
 
                 <div className="text-sm">
-                  <Link
-                    to="forgot-password"
-                    className="font-medium text-purple-400 hover:text-purple-300"
-                  >
+                  <Link to="forgot-password" className="font-medium text-purple-400 hover:text-purple-300">
                     Forgot password?
                   </Link>
                 </div>
@@ -147,6 +149,49 @@ export default function Login() {
               </div>
             </form>
 
+            {/* OAuth separator */}
+            <div className="relative my-6">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-600" />
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-gray-800/30 backdrop-blur-sm text-gray-400">
+                  or continue with
+                </span>
+              </div>
+            </div>
+
+            {/* Google and GitHub Sign-In */}
+            <div className="flex flex-col sm:flex-row gap-3">
+              <button
+                onClick={() => handleOAuthLogin("google")}
+                type="button"
+                className="w-full sm:w-1/2 flex items-center justify-center gap-2 py-2 px-4 border border-gray-600 rounded-lg shadow-sm text-sm font-medium text-white bg-gray-900 hover:bg-gray-800 transition-colors duration-200"
+              >
+                <img
+                  src="https://www.svgrepo.com/show/475656/google-color.svg"
+                  alt="Google"
+                  className="w-5 h-5"
+                />
+                Google
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleOAuthLogin("github")}
+                className="flex-1 flex items-center justify-center gap-2 py-2 px-4 border border-gray-600 rounded-lg shadow-sm text-sm font-medium text-white bg-gray-900 hover:bg-gray-800 transition"
+              >
+                <img
+                  src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+                  alt="GitHub"
+                  className="w-5 h-5 bg-white rounded-full"
+                />
+                <span>GitHub</span>
+              </button>
+            </div>
+
+
+            {/* Signup link */}
             <div className="mt-6">
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
@@ -174,12 +219,11 @@ export default function Login() {
 
       {/* Right side - Illustration/Info */}
       <div className="hidden lg:block lg:w-1/2 relative overflow-hidden">
-        {/* Animated background */}
         <div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-gray-800">
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff0a_1px,transparent_1px),linear-gradient(to_bottom,#ffffff0a_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
         </div>
 
-        {/* Animated particles */}
+        {/* Floating particles */}
         <div className="absolute inset-0 opacity-30">
           {[...Array(15)].map((_, i) => (
             <div
@@ -190,11 +234,8 @@ export default function Login() {
                 height: `${Math.random() * 6 + 2}px`,
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
-                backgroundColor: `rgba(${Math.random() * 100 + 155}, ${Math.random() * 100 + 155
-                  }, 255, ${Math.random() * 0.5 + 0.5})`,
-                boxShadow: `0 0 ${Math.random() * 10 + 5}px rgba(${Math.random() * 100 + 155
-                  }, ${Math.random() * 100 + 155}, 255, ${Math.random() * 0.5 + 0.5
-                  })`,
+                backgroundColor: `rgba(${Math.random() * 100 + 155}, ${Math.random() * 100 + 155}, 255, ${Math.random() * 0.5 + 0.5})`,
+                boxShadow: `0 0 ${Math.random() * 10 + 5}px rgba(${Math.random() * 100 + 155}, ${Math.random() * 100 + 155}, 255, ${Math.random() * 0.5 + 0.5})`,
                 animation: `float ${Math.random() * 10 + 20}s linear infinite`,
                 animationDelay: `${Math.random() * 10}s`,
               }}
@@ -214,10 +255,7 @@ export default function Login() {
 
             <div className="space-y-4">
               {highlights.map((highlight, index) => (
-                <div
-                  key={index}
-                  className="flex items-center gap-2 text-gray-300"
-                >
+                <div key={index} className="flex items-center gap-2 text-gray-300">
                   <CheckCircle className="w-5 h-5 text-purple-400 shrink-0" />
                   <span>{highlight}</span>
                 </div>
@@ -227,11 +265,7 @@ export default function Login() {
         </div>
       </div>
 
-      {/* Animation keyframes */}
-      <style
-        //@ts-ignore
-        jsx
-      >{`
+      <style jsx>{`
         @keyframes float {
           0% {
             transform: translateY(0) translateX(0);
