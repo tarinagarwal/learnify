@@ -4,11 +4,11 @@ import type React from "react";
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "../lib/supabase";
-import { UserPlus, Brain, Sparkles, Zap, Target, Award, Eye, EyeOff } from "lucide-react";
+import { UserPlus, Brain, Sparkles, Zap, Target, Award } from "lucide-react";
 import PasswordInput from "../components/ui/passwordinput";
 
 export default function Signup() {
-  const [showPassword, setShowPassword] = useState(false);
+  
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -43,7 +43,7 @@ export default function Signup() {
       if (profileError) throw profileError;
 
       navigate("/email-confirmation");
-    } catch (error: any) {
+    } catch (error: unknown) {
       setError(error.message);
     } finally {
       setLoading(false);
@@ -264,7 +264,7 @@ export default function Signup() {
 
       {/* Animation keyframes */}
       <style
-        //@ts-ignore
+        // @ts-expect-error: 'jsx' prop not recognized by TypeScript for style tag, but needed for styled-jsx
         jsx
       >{`
         @keyframes float {

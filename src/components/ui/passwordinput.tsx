@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Eye, EyeOff, Sparkles, Dice5  } from "lucide-react";
+import { Eye, EyeOff, Sparkles, } from "lucide-react";
 import { motion } from "framer-motion";
 import zxcvbn from "zxcvbn";
 
@@ -19,7 +19,6 @@ const PasswordInput: React.FC<PasswordInputProps> = ({ password, setPassword }) 
   const generatePassword = (
     length: number = 14,
     includeNumbers: boolean = true,
-    includeSymbols: boolean = true
   ) => {
     const charset =
       "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" +

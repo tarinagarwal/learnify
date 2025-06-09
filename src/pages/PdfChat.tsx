@@ -19,7 +19,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/components/ui/use-toast";
 
 // Set worker path
-//@ts-ignore
+// @ts-expect-error: Setting workerSrc directly may not be recognized by TypeScript typings of pdfjsLib
 GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
 
 interface Message {
@@ -108,7 +108,7 @@ export default function PdfChat() {
         const page = await pdf.getPage(i);
         const textContent = await page.getTextContent();
         const pageText = textContent.items
-          .map((item: any) => item.str)
+          .map((item: unknown) => item.str)
           .join(" ");
         fullText += pageText + " ";
       }
@@ -336,25 +336,25 @@ export default function PdfChat() {
                           <ReactMarkdown
                             className="prose prose-sm max-w-none prose-invert"
                             components={{
-                              strong: ({ node, ...props }) => (
+                              strong: ({  ...props }) => (
                                 <span
                                   className="font-semibold text-purple-300"
                                   {...props}
                                 />
                               ),
-                              blockquote: ({ node, ...props }) => (
+                              blockquote: ({ ...props }) => (
                                 <blockquote
                                   className="border-l-4 border-purple-400 pl-4 italic"
                                   {...props}
                                 />
                               ),
-                              ul: ({ node, ...props }) => (
+                              ul: ({  ...props }) => (
                                 <ul
                                   className="list-disc pl-4 space-y-1"
                                   {...props}
                                 />
                               ),
-                              h3: ({ node, ...props }) => (
+                              h3: ({  ...props }) => (
                                 <h3
                                   className="text-lg font-semibold mt-2 mb-1 text-purple-300"
                                   {...props}
@@ -414,7 +414,7 @@ export default function PdfChat() {
 
         {/* Animation keyframes */}
         <style
-          //@ts-ignore
+          // @ts-expect-error: 'jsx' prop not recognized by TypeScript for style tag, but needed for styled-jsx
           jsx
         >{`
           @keyframes float {
