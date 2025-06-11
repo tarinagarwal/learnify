@@ -57,7 +57,7 @@ Learnify is a cutting-edge, AI-powered learning platform that revolutionizes edu
 1. Create your own Supabase project.
 2. Go to `Authentication → Providers` in Supabase dashboard.
 3. Enable **Google** and **GitHub**, and provide Client ID/Secret.
-4. Set the redirect URL to:
+
 
 
 
