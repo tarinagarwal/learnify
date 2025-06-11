@@ -8,6 +8,8 @@ import { UserPlus, Brain, Sparkles, Zap, Target, Award, Eye, EyeOff } from "luci
 
 export default function Signup() {
   
+  const [showPassword, setShowPassword] = useState(false);
+
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
