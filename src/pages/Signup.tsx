@@ -4,10 +4,11 @@ import type React from "react";
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "../lib/supabase";
-import { UserPlus, Brain, Sparkles, Zap, Target, Award, Eye, EyeOff } from "lucide-react";
+import { UserPlus, Brain, Sparkles, Zap, Target, Award } from "lucide-react";
+import PasswordInput from "../components/ui/passwordinput";
 
 export default function Signup() {
-  const [showPassword, setShowPassword] = useState(false);
+  
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -42,7 +43,7 @@ export default function Signup() {
       if (profileError) throw profileError;
 
       navigate("/email-confirmation");
-    } catch (error: any) {
+    } catch (error: unknown) {
       setError(error.message);
     } finally {
       setLoading(false);
@@ -196,27 +197,7 @@ export default function Signup() {
               </div>
 
               <div className="relative">
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium text-gray-300"
-                >
-                  Password
-                </label>
-                <input
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="mt-1 block w-full bg-gray-700/50 border border-gray-600 rounded-lg shadow-sm py-2 px-3 pr-10 text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword((prev) => !prev)}
-                  className="absolute right-3 top-[35px] text-gray-400 hover:text-gray-200 focus:outline-none"
-                >
-                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                </button>
+                <PasswordInput password={password} setPassword={setPassword} />
                 <p className="mt-1 text-xs text-gray-400">
                   Password must be at least 6 characters long
                 </p>
@@ -283,7 +264,7 @@ export default function Signup() {
 
       {/* Animation keyframes */}
       <style
-        //@ts-ignore
+        // @ts-expect-error: 'jsx' prop not recognized by TypeScript for style tag, but needed for styled-jsx
         jsx
       >{`
         @keyframes float {

@@ -1,7 +1,7 @@
 "use client";
 
 import { Link } from "react-router-dom";
-import { Users, Target, Award, Sparkles, ChevronRight } from "lucide-react";
+import { Users, Target, Award, Sparkles} from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function AboutPage() {
@@ -258,7 +258,8 @@ export default function AboutPage() {
 
       {/* Add keyframes for floating animation */}
       <style
-        //@ts-ignore
+        // @ts-expect-error: 'jsx' prop not recognized by TypeScript for style tag, but needed for styled-jsx
+
         jsx
       >{`
         @keyframes float {

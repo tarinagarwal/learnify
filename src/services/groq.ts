@@ -1,6 +1,6 @@
 import Groq from "groq-sdk";
 import type { QuizConfig, Question } from "../types/quiz";
-import type { CourseOutline, Chapter } from "../types/course";
+import type { CourseOutline } from "../types/course";
 
 // DEBUG: Enhanced logging for API key validation
 console.log('🔧 GROQ DEBUG: Checking API key configuration...');
@@ -234,7 +234,7 @@ Example format:
 
     const response = completion.choices[0]?.message?.content || "[]";
     return JSON.parse(response);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error generating questions:", error);
 
     if (error?.message?.includes("503") && retryCount < MAX_RETRIES) {
@@ -343,7 +343,12 @@ Make sure the outline is:
       }
       throw parseError;
     }
+
   } catch (error: any) {
+
+  } catch (error: unknown) {
+    // Handle API errors with retry
+
     if (error?.message?.includes("405") && retryCount < MAX_RETRIES) {
       console.log(`Retrying... Attempt ${retryCount + 1} of ${MAX_RETRIES}`);
       await sleep(RETRY_DELAY * (retryCount + 1));
@@ -403,7 +408,7 @@ Use appropriate Markdown formatting:
 /**
  * Generate a learning roadmap for a given topic with enhanced detail and structure
  */
-export async function generateRoadmap(topic: string): Promise<any> {
+export async function generateRoadmap(topic: string): Promise<unknown> {
   try {
     const prompt = `Create a comprehensive and detailed learning roadmap for "${topic}". The roadmap should be extremely detailed and include:
 

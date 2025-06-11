@@ -64,7 +64,7 @@ export const Whiteboard: React.FC = () => {
 
   const [currentResponse, setCurrentResponse] = useState<string>("");
   const [notebookId, setNotebookId] = useState<string | null>(null);
-  const [whiteboards, setWhiteboards] = useState<any[]>([]);
+  const [whiteboards, setWhiteboards] = useState<unknown[]>([]);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -72,6 +72,7 @@ export const Whiteboard: React.FC = () => {
   const whiteboardId = searchParams.get("id");
   const whiteboardTitle = searchParams.get("title");
 
+  
   useEffect(() => {
     if (!whiteboardId) {
       navigate("/dashboard");
@@ -83,6 +84,7 @@ export const Whiteboard: React.FC = () => {
     if (notebookId) {
       loadNotebookWhiteboards(notebookId);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [whiteboardId, navigate, notebookId]);
 
   const loadWhiteboardData = async () => {
@@ -140,6 +142,7 @@ export const Whiteboard: React.FC = () => {
   };
 
   // handle key press to navigate to next and previous page
+ 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       // Skip if user is typing in an input field
@@ -237,6 +240,7 @@ export const Whiteboard: React.FC = () => {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [whiteboards, whiteboardId, loading, navigate, searchParams]);
 
   const getPointFromEvent = (
@@ -431,30 +435,31 @@ export const Whiteboard: React.FC = () => {
     "#a78bfa",
     "#f472b6",
   ];
-
+  
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    canvas.addEventListener("touchstart", startDrawing as any);
-    canvas.addEventListener("touchmove", draw as any);
+    canvas.addEventListener("touchstart", startDrawing as unknown);
+    canvas.addEventListener("touchmove", draw as unknown);
     canvas.addEventListener("touchend", endDrawing);
-    canvas.addEventListener("pointerdown", startDrawing as any);
-    canvas.addEventListener("pointermove", draw as any);
+    canvas.addEventListener("pointerdown", startDrawing as unknown);
+    canvas.addEventListener("pointermove", draw as unknown);
     canvas.addEventListener("pointerup", endDrawing);
     canvas.addEventListener("pointerout", endDrawing);
     canvas.addEventListener("touchstart", (e) => e.preventDefault());
     canvas.addEventListener("touchmove", (e) => e.preventDefault());
 
     return () => {
-      canvas.removeEventListener("touchstart", startDrawing as any);
-      canvas.removeEventListener("touchmove", draw as any);
+      canvas.removeEventListener("touchstart", startDrawing as unknown);
+      canvas.removeEventListener("touchmove", draw as unknown);
       canvas.removeEventListener("touchend", endDrawing);
-      canvas.removeEventListener("pointerdown", startDrawing as any);
-      canvas.removeEventListener("pointermove", draw as any);
+      canvas.removeEventListener("pointerdown", startDrawing as unknown);
+      canvas.removeEventListener("pointermove", draw as unknown);
       canvas.removeEventListener("pointerup", endDrawing);
       canvas.removeEventListener("pointerout", endDrawing);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDrawing, currentColor, currentWidth, currentPoints]);
 
   useEffect(() => {

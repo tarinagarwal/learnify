@@ -44,7 +44,7 @@ export default function Home() {
         .select("*", { count: "exact", head: true });
       if (profilesError)
         console.error("Error fetching profiles count:", profilesError);
-      //@ts-ignore
+      // @ts-expect-error: Argument type 'profiles' may not match the expected type for setProfilesCount
       setProfilesCount(profiles);
 
       // Fetch count of courses (Courses Created)
@@ -53,7 +53,7 @@ export default function Home() {
         .select("*", { count: "exact", head: true });
       if (coursesError)
         console.error("Error fetching courses count:", coursesError);
-      //@ts-ignore
+      // @ts-expect-error: Argument 'courses' may not exactly match the expected type for setCoursesCount
       setCoursesCount(courses);
 
       // Fetch count of roadmaps (Roadmaps Created)
@@ -62,7 +62,7 @@ export default function Home() {
         .select("*", { count: "exact", head: true });
       if (roadmapsError)
         console.error("Error fetching roadmaps count:", roadmapsError);
-      //@ts-ignore
+      // @ts-expect-error: Argument 'roadmaps' may not exactly match the expected type for setCoursesCount
       setRoadmapsCount(roadmaps);
     };
 
@@ -499,7 +499,8 @@ export default function Home() {
       {/* Add keyframes for floating animation */}
 
       <style
-        //@ts-ignore
+        // @ts-expect-error: 'jsx' prop not recognized by TypeScript for style tag, but needed for styled-jsx
+
         jsx
       >{`
         @keyframes float {

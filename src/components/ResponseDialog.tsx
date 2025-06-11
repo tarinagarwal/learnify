@@ -8,7 +8,7 @@ import ReactMarkdown from "react-markdown";
 interface ResponseDialogProps {
   isOpen: boolean;
   onClose: () => void;
-  drawingData: any[];
+  drawingData: unknown[];
   response?: string;
 }
 
@@ -42,7 +42,7 @@ export const ResponseDialog: React.FC<ResponseDialogProps> = ({
 
         ctx.beginPath();
         ctx.moveTo(path.points[0].x, path.points[0].y);
-        path.points.slice(1).forEach((point: any) => {
+        path.points.slice(1).forEach((point: unknown) => {
           if (typeof point.x === "number" && typeof point.y === "number") {
             ctx.lineTo(point.x, point.y);
           }

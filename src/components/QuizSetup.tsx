@@ -41,6 +41,7 @@ export default function QuizSetup({ onStart, initialConfig }: Props) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  
   useEffect(() => {
     const storedPdfContent = sessionStorage.getItem("pdfContent");
     const storedPdfName = sessionStorage.getItem("pdfName");
@@ -62,6 +63,7 @@ export default function QuizSetup({ onStart, initialConfig }: Props) {
       sessionStorage.removeItem("quizTopic");
       sessionStorage.removeItem("quizContent");
     }
+// eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handlePdfChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -73,7 +75,6 @@ export default function QuizSetup({ onStart, initialConfig }: Props) {
 
     try {
       setLoading(true);
-      const fileUrl = URL.createObjectURL(file);
       setPdfFile(file);
       const pdfText = await extractTextFromPdf(file);
       onStart({
@@ -83,6 +84,7 @@ export default function QuizSetup({ onStart, initialConfig }: Props) {
         pdfContent: pdfText,
       });
     } catch (error) {
+      console.error("Error in processing file",error)
       setError("Error processing PDF file. Please try again.");
     } finally {
       setLoading(false);
@@ -107,6 +109,7 @@ export default function QuizSetup({ onStart, initialConfig }: Props) {
         onStart({ topic, difficulty, numQuestions });
       }
     } catch (error) {
+      console.error("Error in processing file",error)
       setError("Error processing PDF file. Please try again.");
     } finally {
       setLoading(false);

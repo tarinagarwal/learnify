@@ -46,6 +46,7 @@ export default function CommunityChat() {
   const [loading, setLoading] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  
   useEffect(() => {
     if (communityId) {
       fetchCommunity();
@@ -53,6 +54,7 @@ export default function CommunityChat() {
       subscribeToMessages();
       subscribeToVotes();
     }
+   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [communityId]);
 
   useEffect(() => {

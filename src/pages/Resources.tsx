@@ -127,6 +127,7 @@ export default function Resources() {
         }
       }
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resources]);
 
   // Filter resources by search or bookmarked status
@@ -191,11 +192,12 @@ export default function Resources() {
 
   const uploadFile = async (file: File, path: string) => {
     //error fixes-----
-    const { data, error } = await supabase.storage
+    const { error } = await supabase.storage
       .from("resources")
       .upload(path, file);
 
     if (error) throw error;
+
 
     // Get the public URL of the uploaded file
     const { data: urlData } = supabase.storage
@@ -641,7 +643,7 @@ export default function Resources() {
                         if (page === "...") {
                           // Render ellipses
                           return (
-                            //@ts-ignore
+                            // @ts-expect-error: PaginationItem likely lacks full typing support for 'disabled' or 'children'
                             <PaginationItem key={`dots-${index}`} disabled>
                               <span className="px-2 text-gray-400">...</span>
                             </PaginationItem>
@@ -651,7 +653,8 @@ export default function Resources() {
                         return (
                           <PaginationItem key={page}>
                             <PaginationLink
-                              //@ts-ignore
+                              // @ts-expect-error: PaginationLink might not recognize 'onClick' as a valid prop due to type limitations
+
                               onClick={() => goToPage(page)}
                               isActive={currentPage === page}
                               className={

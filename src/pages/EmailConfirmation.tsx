@@ -39,7 +39,7 @@ export default function EmailConfirmation() {
           // Cleanup interval
           return () => clearInterval(interval);
         }
-      } catch (error: any) {
+      } catch (error: unknown) {
         setError(error.message);
         setVerifying(false);
       }
