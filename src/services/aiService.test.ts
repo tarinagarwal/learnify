@@ -2,6 +2,7 @@ import { AIService } from './aiService';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import { AIFeature } from '../types/aiTypes';
+import { afterEach, describe, it } from 'node:test';
 
 describe('AIService', () => {
   let aiService: AIService;
@@ -46,3 +47,11 @@ describe('AIService', () => {
     });
   });
 });
+function beforeEach(arg0: () => void) {
+  throw new Error('Function not implemented.');
+}
+
+function expect(success: boolean) {
+  throw new Error('Function not implemented.');
+}
+
