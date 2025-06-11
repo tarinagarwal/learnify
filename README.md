@@ -52,7 +52,7 @@ Learnify is a cutting-edge, AI-powered learning platform that revolutionizes edu
 - Supabase account
 - GROQ API key
 
-## 🔐 OAuth Setup (Google & GitHub)
+### 🔐 OAuth Setup (Google & GitHub)
 
 1. Create your own Supabase project.
 2. Go to `Authentication → Providers` in Supabase dashboard.
