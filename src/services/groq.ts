@@ -346,7 +346,7 @@ Make sure the outline is:
 
   } catch (error: any) {
 
-  } catch (error: unknown) {
+  // } catch (error: unknown) {
     // Handle API errors with retry
 
     if (error?.message?.includes("405") && retryCount < MAX_RETRIES) {
