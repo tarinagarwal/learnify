@@ -15,8 +15,10 @@ export function useBookmarks(type: "resource" | "course" | "quiz") {
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
   const [loading, setLoading] = useState(true);
 
+  
   useEffect(() => {
     fetchBookmarks();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [type]);
 
   const fetchBookmarks = async () => {

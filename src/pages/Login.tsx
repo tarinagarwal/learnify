@@ -34,7 +34,7 @@ export default function Login() {
 
       if (error) throw error;
       navigate("/");
-    } catch (error: any) {
+    } catch (error: unknown) {
       setError(error.message);
     } finally {
       setLoading(false);
@@ -265,7 +265,11 @@ export default function Login() {
         </div>
       </div>
 
-      <style jsx>{`
+      {/* Animation keyframes */}
+      <style
+        //@ts-ignore
+        jsx
+      >{`
         @keyframes float {
           0% {
             transform: translateY(0) translateX(0);

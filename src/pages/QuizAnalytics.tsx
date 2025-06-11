@@ -7,7 +7,6 @@ import {
   Loader2,
   AlertTriangle,
   Download,
-  Share2,
   Printer,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -24,6 +23,7 @@ export default function QuizAnalytics() {
   const [error, setError] = useState<string | null>(null);
   const contentRef = useRef<HTMLDivElement>(null);
 
+  
   useEffect(() => {
     if (!id) {
       setError("No quiz ID provided");
@@ -31,6 +31,7 @@ export default function QuizAnalytics() {
       return;
     }
     fetchAnalytics();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const fetchAnalytics = async () => {
@@ -68,6 +69,7 @@ export default function QuizAnalytics() {
     window.print();
   };
 
+/*
   const handleShare = async () => {
     try {
       await navigator.share({
@@ -79,7 +81,7 @@ export default function QuizAnalytics() {
       console.error("Error sharing:", error);
     }
   };
-
+*/
   const handleDownload = async () => {
     if (!contentRef.current || !analytics) return;
 
@@ -230,65 +232,65 @@ export default function QuizAnalytics() {
             >
               <ReactMarkdown
                 components={{
-                  h1: ({ node, ...props }) => (
+                  h1: ({ ...props }) => (
                     <h1
                       className="text-4xl font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-300 pb-2"
                       {...props}
                     />
                   ),
-                  h2: ({ node, ...props }) => (
+                  h2: ({ ...props }) => (
                     <h2
                       className="text-2xl font-semibold mt-12 mb-6 text-gray-100 border-b border-gray-700 pb-2"
                       {...props}
                     />
                   ),
-                  h3: ({ node, ...props }) => (
+                  h3: ({  ...props }) => (
                     <h3
                       className="text-xl font-medium mt-8 mb-4 text-purple-300"
                       {...props}
                     />
                   ),
-                  h4: ({ node, ...props }) => (
+                  h4: ({  ...props }) => (
                     <h4
                       className="text-lg font-medium mt-6 mb-3 text-gray-200"
                       {...props}
                     />
                   ),
-                  p: ({ node, ...props }) => (
+                  p: ({  ...props }) => (
                     <p
                       className="mb-4 text-gray-300 leading-relaxed"
                       {...props}
                     />
                   ),
-                  ul: ({ node, ...props }) => (
+                  ul: ({ ...props }) => (
                     <ul
                       className="my-6 ml-6 list-disc [&>li]:mt-2 text-gray-300"
                       {...props}
                     />
                   ),
-                  ol: ({ node, ...props }) => (
+                  ol: ({  ...props }) => (
                     <ol
                       className="my-6 ml-6 list-decimal [&>li]:mt-2 text-gray-300"
                       {...props}
                     />
                   ),
-                  li: ({ node, ...props }) => (
+                  li: ({  ...props }) => (
                     <li className="text-gray-300" {...props} />
                   ),
-                  strong: ({ node, ...props }) => (
+                  strong: ({  ...props }) => (
                     <strong
                       className="font-semibold text-purple-300"
                       {...props}
                     />
                   ),
-                  blockquote: ({ node, ...props }) => (
+                  blockquote: ({  ...props }) => (
                     <blockquote
                       className="mt-6 border-l-4 border-purple-500 pl-6 italic text-gray-300"
                       {...props}
                     />
                   ),
-                  //@ts-ignore
-                  code: ({ node, inline, ...props }) =>
+                  // @ts-expect-error: Custom renderer for <code> block does not match the expected type in ReactMarkdown components
+                  code: ({ inline, ...props }) =>
                     inline ? (
                       <code
                         className="rounded bg-gray-700/50 px-1.5 py-0.5 font-mono text-sm font-semibold text-purple-300"
@@ -299,7 +301,7 @@ export default function QuizAnalytics() {
                         <code className="text-gray-300 text-sm" {...props} />
                       </pre>
                     ),
-                  a: ({ node, ...props }) => (
+                  a: ({  ...props }) => (
                     <a
                       className="font-medium text-purple-400 underline underline-offset-4 hover:text-purple-300 transition-colors"
                       target="_blank"
@@ -307,7 +309,7 @@ export default function QuizAnalytics() {
                       {...props}
                     />
                   ),
-                  table: ({ node, ...props }) => (
+                  table: ({  ...props }) => (
                     <div className="my-6 w-full overflow-y-auto">
                       <table
                         className="w-full border-collapse border border-gray-700"
@@ -315,13 +317,13 @@ export default function QuizAnalytics() {
                       />
                     </div>
                   ),
-                  th: ({ node, ...props }) => (
+                  th: ({ ...props }) => (
                     <th
                       className="border border-gray-700 px-4 py-2 text-left font-medium text-gray-300 bg-gray-800/50"
                       {...props}
                     />
                   ),
-                  td: ({ node, ...props }) => (
+                  td: ({  ...props }) => (
                     <td
                       className="border border-gray-700 px-4 py-2 text-gray-300"
                       {...props}

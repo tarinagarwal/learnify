@@ -24,7 +24,7 @@ interface Whiteboard {
   title: string;
   created_at: string;
   order_index: number;
-  drawing_data: any[];
+  drawing_data: unknown[];
   user_id: string;
   notebook_id: string;
 }
@@ -52,10 +52,12 @@ export const Notebook: React.FC = () => {
   }>({ show: false, title: "", message: "", type: "info" });
   const navigate = useNavigate();
 
+
   useEffect(() => {
     if (id) {
       loadNotebookData();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const loadNotebookData = async () => {
@@ -118,8 +120,8 @@ export const Notebook: React.FC = () => {
         ...whiteboards.map((w) => w.order_index),
         -1
       );
-
-      const { data, error } = await supabase
+      // checking errors hence data is removed as not used
+      const { error } = await supabase
         .from("whiteboards")
         .insert([
           {

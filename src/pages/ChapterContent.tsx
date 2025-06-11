@@ -14,12 +14,14 @@ export default function ChapterContent() {
   const navigate = useNavigate();
   const [chapter, setChapter] = useState<Chapter | null>(null);
   const [course, setCourse] = useState<Course | null>(null);
-  const [chapters, setChapters] = useState<any[]>([]);
+  const [chapters, setChapters] = useState<unknown[]>([]);
 
   const [loading, setLoading] = useState(true);
 
+  
   useEffect(() => {
     fetchContent();
+   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [courseId, chapterId]);
 
   const fetchContent = async () => {
@@ -222,50 +224,50 @@ export default function ChapterContent() {
             <div className="prose prose-invert max-w-none">
               <ReactMarkdown
                 components={{
-                  h1: ({ node, ...props }) => (
+                  h1: ({ ...props }) => (
                     <h1
                       className="text-2xl font-bold mt-6 mb-4 text-gray-100"
                       {...props}
                     />
                   ),
-                  h2: ({ node, ...props }) => (
+                  h2: ({ ...props }) => (
                     <h2
                       className="text-xl font-semibold mt-5 mb-3 text-gray-100"
                       {...props}
                     />
                   ),
-                  h3: ({ node, ...props }) => (
+                  h3: ({ ...props }) => (
                     <h3
                       className="text-lg font-medium mt-4 mb-2 text-gray-100"
                       {...props}
                     />
                   ),
-                  p: ({ node, ...props }) => (
+                  p: ({ ...props }) => (
                     <p className="mb-4 text-gray-300" {...props} />
                   ),
-                  ul: ({ node, ...props }) => (
+                  ul: ({ ...props }) => (
                     <ul
                       className="list-disc pl-6 mb-4 text-gray-300"
                       {...props}
                     />
                   ),
-                  ol: ({ node, ...props }) => (
+                  ol: ({ ...props }) => (
                     <ol
                       className="list-decimal pl-6 mb-4 text-gray-300"
                       {...props}
                     />
                   ),
-                  li: ({ node, ...props }) => (
+                  li: ({  ...props }) => (
                     <li className="mb-1 text-gray-300" {...props} />
                   ),
-                  blockquote: ({ node, ...props }) => (
+                  blockquote: ({  ...props }) => (
                     <blockquote
                       className="border-l-4 border-purple-500 pl-4 italic my-4 text-gray-300"
                       {...props}
                     />
                   ),
-                  //@ts-ignore
-                  code: ({ node, inline, ...props }) =>
+                  // @ts-expect-error: Custom renderer signature not fully compatible with type definitions
+                  code: ({ inline, ...props }) =>
                     inline ? (
                       <code
                         className="bg-gray-800 px-1 py-0.5 rounded text-sm text-purple-300"

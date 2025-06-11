@@ -46,7 +46,7 @@ export default function Quiz() {
       setCurrentQuestion(0);
       setUserAnswers([]);
     } catch (err) {
-      setError("Failed to generate questions. Please try again.");
+      setError(err,"Failed to generate questions. Please try again.");
     }
     setLoading(false);
   };
@@ -185,7 +185,7 @@ export default function Quiz() {
                 questions={questions}
                 userAnswers={userAnswers}
                 onRestart={handleRestart}
-                //@ts-ignore
+                // @ts-expect-error: quizId prop type might not match expected type but is safe here
                 quizId={quizId}
               />
             ) : (
@@ -202,7 +202,7 @@ export default function Quiz() {
 
       {/* Animation keyframes */}
       <style
-        //@ts-ignore
+        // @ts-expect-error: 'jsx' prop not recognized by TypeScript for style tag, but needed for styled-jsx
         jsx
       >{`
         @keyframes float {

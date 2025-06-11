@@ -9,7 +9,6 @@ import {
   Calendar,
   Bookmark,
   BookmarkCheck,
-  Brain,
 } from "lucide-react";
 import QuizResults from "../components/QuizResults";
 import { Button } from "@/components/ui/button";
@@ -38,7 +37,7 @@ interface QuizHistory {
   score: number;
   total_questions: number;
   created_at: string;
-  questions: any[];
+  questions: unknown[];
   answers: string[];
 }
 

@@ -4,19 +4,10 @@ import type React from "react";
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "../lib/supabase";
-import {
-  UserPlus,
-  Brain,
-  Sparkles,
-  Zap,
-  Target,
-  Award,
-  Eye,
-  EyeOff,
-} from "lucide-react";
+import { UserPlus, Brain, Sparkles, Zap, Target, Award, Eye, EyeOff } from "lucide-react";
 
 export default function Signup() {
-  const [showPassword, setShowPassword] = useState(false);
+  
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -51,7 +42,7 @@ export default function Signup() {
       if (profileError) throw profileError;
 
       navigate("/email-confirmation");
-    } catch (error: any) {
+    } catch (error: unknown) {
       setError(error.message);
     } finally {
       setLoading(false);
@@ -211,7 +202,10 @@ export default function Signup() {
               </div>
 
               <div className="relative">
-                <label htmlFor="password" className="block text-sm font-medium text-gray-300">
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-gray-300"
+                >
                   Password
                 </label>
                 <input
@@ -308,8 +302,11 @@ export default function Signup() {
         </div>
       </div>
 
-      {/* Float animation */}
-      <style jsx>{`
+      {/* Animation keyframes */}
+      <style
+        //@ts-ignore
+        jsx
+      >{`
         @keyframes float {
           0% {
             transform: translateY(0) translateX(0);

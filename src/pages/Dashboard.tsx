@@ -31,7 +31,7 @@ interface Whiteboard {
   id: string;
   title: string;
   created_at: string;
-  drawing_data: any[];
+  drawing_data: unknown[];
 }
 
 interface Notebook {
@@ -687,7 +687,7 @@ export const Dashboard: React.FC = () => {
 
       {/* Animation keyframes */}
       <style
-        //@ts-ignore
+       // @ts-expect-error: 'jsx' prop not recognized by TypeScript for style tag, but needed for styled-jsx
         jsx
       >{`
         @keyframes float {
