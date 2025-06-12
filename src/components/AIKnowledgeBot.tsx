@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { MessageCircle, X, Send, Bot, User } from 'lucide-react';
+import {  X, Send, Bot, User } from 'lucide-react';
 import { generateAIResponse, generateStreamingResponse } from '../services/knowledgeBase';
 
 // Markdown Content Renderer Component
@@ -57,9 +57,9 @@ export default function AIKnowledgeBot() {
         timestamp: new Date(),
         confidence: 'high',
       };
-      setMessages([welcomeMessage]);
+      setMessages([welcomeMessage,]);
     }
-  }, [isOpen]);
+  }, [isOpen,messages.length]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });

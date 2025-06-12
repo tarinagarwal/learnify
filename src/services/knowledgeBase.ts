@@ -117,7 +117,7 @@ async function vectorSearch(query: string, matchCount: number = 5): Promise<Know
 
     if (error) throw error;
 
-    return (data || []).map((item: any) => ({
+    return (data || []).map((item: unknown) => ({
       id: item.content_id as string,
       content: item.content_chunk as string,
       type: item.content_type as string,
@@ -148,7 +148,7 @@ async function textSearch(query: string, matchCount: number = 8): Promise<Knowle
 
     if (error) throw error;
 
-    return (data || []).map((item: any) => {
+    return (data || []).map((item: unknown) => {
       let score = 0;
       const titleLower = item.title.toLowerCase();
       const contentLower = item.content_chunk.toLowerCase();
@@ -485,7 +485,8 @@ async function streamGroqResponse(
               await new Promise(resolve => setTimeout(resolve, 30));
             }
           } catch (parseError) {
-            // Ignore parsing errors for malformed chunks
+            // Ignore parsing errors for malformed chunks only console.log for dev purposes
+            console.log(parseError)
             continue;
           }
         }

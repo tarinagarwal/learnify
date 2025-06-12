@@ -38,7 +38,6 @@ const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 export async function generateGroqResponse(
   userQuery: string, 
   systemPrompt: string,
-  retryCount = 0
 ): Promise<string> {
   try {
     const apiKey = import.meta.env.VITE_GROQ_API_KEY;
@@ -79,7 +78,7 @@ export async function generateGroqResponse(
     console.log('✅ GROQ response generated successfully');
     return data.choices[0]?.message?.content?.trim() || '';
     
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('❌ GROQ error:', error.message);
     throw error;
   }
@@ -156,7 +155,8 @@ export async function streamGroqResponse(
               await new Promise(resolve => setTimeout(resolve, 30));
             }
           } catch (parseError) {
-            // Ignore parsing errors for malformed chunks
+            // Ignore parsing errors for malformed chunks only console.log for dev purposes
+            console.log("parsing error",parseError)
             continue;
           }
         }
@@ -165,7 +165,7 @@ export async function streamGroqResponse(
 
     console.log('✅ DEBUG: Streaming completed successfully');
     
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('❌ DEBUG: Streaming error:', error);
     
     // Fallback to non-streaming
@@ -181,7 +181,7 @@ export async function streamGroqResponse(
       }
       
     } catch (fallbackError) {
-      throw new Error(`GROQ streaming error: ${error.message}`);
+      throw new Error(`GROQ streaming error: ${fallbackError}`);
     }
   }
 }
@@ -344,7 +344,6 @@ Make sure the outline is:
       throw parseError;
     }
 
-  } catch (error: any) {
 
   } catch (error: unknown) {
     // Handle API errors with retry
