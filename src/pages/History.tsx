@@ -127,14 +127,14 @@ export default function History() {
 
   if (loading || bookmarksLoading) {
     return (
-      <div className="min-h-screen bg-gray-950 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-background py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
-            <HistoryIcon className="mx-auto h-16 w-16 text-purple-400" />
-            <h2 className="mt-2 text-4xl font-bold text-white">
+            <HistoryIcon className="mx-auto h-16 w-16 text-primary" />
+            <h2 className="mt-2 text-4xl font-bold text-foreground">
               Your Learning Journey
             </h2>
-            <p className="mt-2 text-xl text-gray-300">
+            <p className="mt-2 text-xl text-muted-foreground">
               Track your progress and revisit your quiz experiences
             </p>
           </div>
@@ -143,16 +143,16 @@ export default function History() {
             {Array(6)
               .fill(0)
               .map((_, i) => (
-                <Card key={i} className="animate-pulse bg-gray-800 border-none">
+                <Card key={i} className="animate-pulse bg-card border-border">
                   <CardHeader>
-                    <div className="h-48 bg-gray-700 rounded-md mb-4" />
-                    <div className="h-6 bg-gray-700 rounded w-3/4 mb-2" />
-                    <div className="h-4 bg-gray-700 rounded w-1/2" />
+                    <div className="h-48 bg-muted rounded-md mb-4" />
+                    <div className="h-6 bg-muted rounded w-3/4 mb-2" />
+                    <div className="h-4 bg-muted rounded w-1/2" />
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-2">
-                      <div className="h-8 bg-gray-700 rounded" />
-                      <div className="h-8 bg-gray-700 rounded" />
+                      <div className="h-8 bg-muted rounded" />
+                      <div className="h-8 bg-muted rounded" />
                     </div>
                   </CardContent>
                 </Card>
@@ -164,31 +164,24 @@ export default function History() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-950 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-background py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        <div className="relative py-16 px-4 sm:px-6 lg:px-8 mb-12 rounded-2xl overflow-hidden bg-gradient-to-br from-gray-900 to-purple-900/30">
+        <div className="relative py-16 px-4 sm:px-6 lg:px-8 mb-12 rounded-2xl overflow-hidden bg-gradient-to-br from-muted to-primary/10">
           <div className="absolute inset-0 z-0">
-            <div className="absolute inset-0 bg-[linear-gradient(45deg,#ffffff0a_1px,transparent_1px),linear-gradient(135deg,#ffffff0a_1px,transparent_1px)] bg-[size:40px_40px]" />
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--border))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border))_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
           </div>
 
           <div className="absolute inset-0 opacity-30">
             {[...Array(10)].map((_, i) => (
               <div
                 key={i}
-                className="absolute rounded-full"
+                className="absolute rounded-full bg-primary/20"
                 style={{
                   width: `${Math.random() * 6 + 2}px`,
                   height: `${Math.random() * 6 + 2}px`,
                   left: `${Math.random() * 100}%`,
                   top: `${Math.random() * 100}%`,
-                  backgroundColor: `rgba(${Math.random() * 100 + 155}, ${
-                    Math.random() * 100 + 155
-                  }, 255, ${Math.random() * 0.5 + 0.5})`,
-                  boxShadow: `0 0 ${Math.random() * 10 + 5}px rgba(${
-                    Math.random() * 100 + 155
-                  }, ${Math.random() * 100 + 155}, 255, ${
-                    Math.random() * 0.5 + 0.5
-                  })`,
+                  boxShadow: `0 0 ${Math.random() * 10 + 5}px hsl(var(--primary) / 0.3)`,
                   animation: `float ${
                     Math.random() * 10 + 20
                   }s linear infinite`,
@@ -199,13 +192,13 @@ export default function History() {
           </div>
 
           <div className="relative z-10 text-center">
-            <div className="inline-flex items-center justify-center p-3 bg-purple-500/20 backdrop-blur-sm rounded-full mb-4">
-              <HistoryIcon className="w-12 h-12 text-purple-400" />
+            <div className="inline-flex items-center justify-center p-3 bg-primary/20 backdrop-blur-sm rounded-full mb-4">
+              <HistoryIcon className="w-12 h-12 text-primary" />
             </div>
-            <h2 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-300 to-blue-400">
+            <h2 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary via-accent-foreground to-primary">
               Your Learning Journey
             </h2>
-            <p className="mt-2 text-xl text-gray-300 max-w-2xl mx-auto">
+            <p className="mt-2 text-xl text-muted-foreground max-w-2xl mx-auto">
               Track your progress and revisit your quiz experiences
             </p>
           </div>
@@ -217,7 +210,7 @@ export default function History() {
               value={searchQuery}
               onChange={setSearchQuery}
               placeholder="Search quizzes..."
-              className="bg-gray-800 border-gray-700 text-white placeholder:text-gray-400"
+              className="bg-input border-border text-foreground placeholder:text-muted-foreground"
             />
           </div>
           <Button
@@ -225,8 +218,8 @@ export default function History() {
             onClick={() => setShowBookmarked(!showBookmarked)}
             className={
               showBookmarked
-                ? "bg-purple-600 hover:bg-purple-700"
-                : "border-purple-400 text-purple-400"
+                ? "bg-primary hover:bg-primary/90 text-primary-foreground"
+                : "border-primary text-primary hover:bg-primary/10"
             }
           >
             {showBookmarked ? (
@@ -239,13 +232,13 @@ export default function History() {
         </div>
 
         {selectedQuiz ? (
-          <Card className="mt-8 bg-gray-800/50 border-b border-gray-700 text-white">
+          <Card className="mt-8 bg-card/50 border-border text-card-foreground">
             <CardHeader className="flex flex-row items-center justify-between">
               <div>
-                <CardTitle className="text-2xl text-white">
+                <CardTitle className="text-2xl text-card-foreground">
                   {selectedQuiz.topic}
                 </CardTitle>
-                <CardDescription className="text-gray-300">
+                <CardDescription className="text-muted-foreground">
                   Completed on{" "}
                   {new Date(selectedQuiz.created_at).toLocaleDateString()}
                 </CardDescription>
@@ -253,7 +246,7 @@ export default function History() {
               <Button
                 variant="ghost"
                 onClick={() => setSelectedQuiz(null)}
-                className="text-gray-300 hover:text-white"
+                className="text-muted-foreground hover:text-foreground"
               >
                 <X className="w-6 h-6" />
               </Button>
@@ -269,21 +262,21 @@ export default function History() {
             </CardContent>
           </Card>
         ) : filteredHistory.length === 0 ? (
-          <Card className="text-center p-8 bg-gray-800 border-none text-white">
+          <Card className="text-center p-8 bg-card border-border text-card-foreground">
             <CardContent>
-              <HistoryIcon className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-              <p className="text-xl text-gray-300">
+              <HistoryIcon className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
+              <p className="text-xl text-muted-foreground">
                 {showBookmarked
                   ? "No bookmarked quizzes found"
                   : "Your learning journey is about to begin!"}
               </p>
-              <p className="mt-2 text-gray-400">
+              <p className="mt-2 text-muted-foreground">
                 {showBookmarked
                   ? "Bookmark some quizzes to see them here"
                   : "Take your first quiz to see your progress here."}
               </p>
               <Button
-                className="mt-6 bg-purple-600 hover:bg-purple-700"
+                className="mt-6 bg-primary hover:bg-primary/90 text-primary-foreground"
                 asChild
               >
                 <a href="/quiz">Start a Quiz</a>
@@ -296,18 +289,18 @@ export default function History() {
               {currentItems.map((quiz) => (
                 <Card
                   key={quiz.id}
-                  className=" bg-gray-800/50 border-b border-gray-700 hover:shadow-[0_0_15px_rgba(168,85,247,0.15)] transition-all duration-300 cursor-pointer text-white"
+                  className="bg-card/50 border-border hover:shadow-lg hover:ring-2 hover:ring-primary/20 transition-all duration-300 cursor-pointer text-card-foreground"
                   onClick={() => handleViewQuiz(quiz)}
                 >
                   <CardHeader>
                     <div className="flex justify-between items-start">
-                      <CardTitle className="text-white truncate pr-8">
+                      <CardTitle className="text-card-foreground truncate pr-8">
                         {quiz.topic}
                       </CardTitle>
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-8 w-8 text-purple-400 hover:text-purple-300 hover:bg-gray-700"
+                        className="h-8 w-8 text-primary hover:text-primary/90 hover:bg-muted"
                         onClick={(e) => {
                           e.stopPropagation();
                           toggleBookmark(quiz.id);
@@ -320,7 +313,7 @@ export default function History() {
                         )}
                       </Button>
                     </div>
-                    <CardDescription className="text-gray-400">
+                    <CardDescription className="text-muted-foreground">
                       <div className="flex items-center mt-2">
                         <Calendar className="w-4 h-4 mr-2" />
                         {new Date(quiz.created_at).toLocaleDateString()}
@@ -330,24 +323,24 @@ export default function History() {
                   <CardContent>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center">
-                        <Award className="w-5 h-5 text-purple-400 mr-2" />
-                        <span className="font-semibold text-gray-300">
+                        <Award className="w-5 h-5 text-primary mr-2" />
+                        <span className="font-semibold text-muted-foreground">
                           Score:
                         </span>
                       </div>
-                      <span className="text-lg font-bold text-white">
+                      <span className="text-lg font-bold text-card-foreground">
                         {quiz.score} / {quiz.total_questions}
                       </span>
                     </div>
-                    <div className="mt-4 bg-gray-700 rounded-full h-2">
+                    <div className="mt-4 bg-muted rounded-full h-2">
                       <div
-                        className="bg-purple-500 h-2 rounded-full"
+                        className="bg-primary h-2 rounded-full"
                         style={{
                           width: `${
                             (quiz.score / quiz.total_questions) * 100
                           }%`,
                         }}
-                      ></div>
+                      />
                     </div>
                   </CardContent>
                 </Card>
@@ -361,7 +354,7 @@ export default function History() {
                     <PaginationItem>
                       <PaginationPrevious
                         onClick={previousPage}
-                        className="text-gray-300 hover:text-white border-gray-700 hover:bg-gray-800"
+                        className="text-muted-foreground hover:text-foreground border-border hover:bg-muted"
                       />
                     </PaginationItem>
 
@@ -396,7 +389,7 @@ export default function History() {
                         if (page === "...") {
                           return (
                             <PaginationItem key={`dots-${index}`} disabled>
-                              <span className="px-2 text-gray-400">...</span>
+                              <span className="px-2 text-muted-foreground">...</span>
                             </PaginationItem>
                           );
                         }
@@ -407,8 +400,8 @@ export default function History() {
                               isActive={currentPage === page}
                               className={
                                 currentPage === page
-                                  ? "bg-purple-600 text-white border-purple-600"
-                                  : "text-gray-300 border-gray-700 hover:bg-gray-800"
+                                  ? "bg-primary text-primary-foreground border-primary"
+                                  : "text-muted-foreground border-border hover:bg-muted"
                               }
                             >
                               {page}
@@ -421,7 +414,7 @@ export default function History() {
                     <PaginationItem>
                       <PaginationNext
                         onClick={nextPage}
-                        className="text-gray-300 hover:text-white border-gray-700 hover:bg-gray-800"
+                        className="text-muted-foreground hover:text-foreground border-border hover:bg-muted"
                       />
                     </PaginationItem>
                   </PaginationContent>
@@ -431,6 +424,27 @@ export default function History() {
           </>
         )}
       </div>
+
+      {/* Floating animation keyframes */}
+      <style jsx>{`
+        @keyframes float {
+          0% {
+            transform: translateY(0) translateX(0);
+          }
+          25% {
+            transform: translateY(-10px) translateX(10px);
+          }
+          50% {
+            transform: translateY(0) translateX(20px);
+          }
+          75% {
+            transform: translateY(10px) translateX(10px);
+          }
+          100% {
+            transform: translateY(0) translateX(0);
+          }
+        }
+      `}</style>
     </div>
   );
 }

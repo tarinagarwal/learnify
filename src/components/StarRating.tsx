@@ -1,9 +1,7 @@
 "use client";
 
-import type React from "react";
-
+import React from "react";
 import { Star, Loader2 } from "lucide-react";
-import { motion } from "framer-motion";
 
 interface StarRatingProps {
   rating: number;
@@ -28,10 +26,10 @@ const StarRating: React.FC<StarRatingProps> = ({
     <div className="flex items-center space-x-2">
       <div className="flex">
         {loading ? (
-          <Loader2 className="h-6 w-6 text-purple-400 animate-spin" />
+          <Loader2 className="h-6 w-6 text-primary animate-spin" />
         ) : (
           stars.map((star) => (
-            <motion.button
+            <button
               key={star}
               className={`focus:outline-none ${
                 readonly ? "cursor-default" : "cursor-pointer"
@@ -46,18 +44,18 @@ const StarRating: React.FC<StarRatingProps> = ({
                     ? "text-yellow-400 fill-yellow-400"
                     : star <= rating
                     ? "text-purple-400 fill-purple-400"
-                    : "text-gray-600"
+                    : "text-muted-foreground"
                 }`}
               />
-            </motion.button>
+            </button>
           ))
         )}
       </div>
-      <div className="flex items-center flex-wrap gap-1 text-sm sm:text-base text-gray-300">
-        <span className="font-semibold">({rating.toFixed(1)}</span>
-        <Star className="h-4 w-4 sm:h-5 sm:w-5 text-purple-400 fill-purple-400" />
+      <div className="flex items-center flex-wrap gap-1 text-sm sm:text-base text-muted-foreground">
+        <span className="font-semibold">({rating.toFixed(1)})</span>
+        <Star className="h-4 w-4 sm:h-5 sm:w-5 text-primary fill-primary" />
         <span className="font-semibold">
-          , {totalRatings} {totalRatings === 1 ? "rating" : "ratings"})
+          , {totalRatings} {totalRatings === 1 ? "rating" : "ratings"}
         </span>
       </div>
     </div>

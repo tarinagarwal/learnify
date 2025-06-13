@@ -108,12 +108,12 @@ export default function CookiesPage() {
   ];
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-950 text-gray-100">
+    <div className="flex flex-col min-h-screen bg-background text-foreground">
       {/* Hero Section */}
-      <section className="relative pt-24 py-12 md:py-20 bg-gradient-to-br from-gray-950 to-gray-900 overflow-hidden">
+      <section className="relative pt-24 py-12 md:py-20 bg-gradient-to-br from-muted to-primary/10 overflow-hidden">
         {/* Animated grid background */}
         <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff0a_1px,transparent_1px),linear-gradient(to_bottom,#ffffff0a_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--border))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border))_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
         </div>
 
         {/* Animated particles */}
@@ -121,20 +121,13 @@ export default function CookiesPage() {
           {[...Array(20)].map((_, i) => (
             <div
               key={i}
-              className="absolute rounded-full"
+              className="absolute rounded-full bg-primary/20"
               style={{
                 width: `${Math.random() * 6 + 2}px`,
                 height: `${Math.random() * 6 + 2}px`,
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
-                backgroundColor: `rgba(${Math.random() * 100 + 155}, ${
-                  Math.random() * 100 + 155
-                }, 255, ${Math.random() * 0.5 + 0.5})`,
-                boxShadow: `0 0 ${Math.random() * 10 + 5}px rgba(${
-                  Math.random() * 100 + 155
-                }, ${Math.random() * 100 + 155}, 255, ${
-                  Math.random() * 0.5 + 0.5
-                })`,
+                boxShadow: `0 0 ${Math.random() * 10 + 5}px hsl(var(--primary) / 0.3)`,
                 animation: `float ${Math.random() * 10 + 20}s linear infinite`,
                 animationDelay: `${Math.random() * 10}s`,
               }}
@@ -143,14 +136,14 @@ export default function CookiesPage() {
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-full text-white bg-purple-500/20 backdrop-blur-sm mb-4">
-            <Clock className="w-4 h-4 mr-2" />
+          <div className="inline-flex items-center justify-center px-4 py-2 border border-accent text-sm font-medium rounded-full text-foreground bg-accent/20 backdrop-blur-sm mb-4">
+            <Clock className="w-4 h-4 mr-2 text-primary" />
             Last Updated: {lastUpdated}
           </div>
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-300 to-blue-400 pb-4">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary via-accent-foreground to-primary pb-4">
             Cookie Policy
           </h1>
-          <p className="mt-6 max-w-2xl mx-auto text-xl text-gray-300 leading-relaxed">
+          <p className="mt-6 max-w-2xl mx-auto text-xl text-muted-foreground leading-relaxed">
             This policy explains how we use cookies and similar technologies to
             recognize you when you visit our platform.
           </p>
@@ -158,17 +151,17 @@ export default function CookiesPage() {
       </section>
 
       {/* Cookies Content */}
-      <section className="py-12 px-4 sm:px-6 lg:px-8 bg-gray-950">
+      <section className="py-12 px-4 sm:px-6 lg:px-8 bg-background">
         <div className="max-w-4xl mx-auto">
-          <Card className="mb-8 bg-gray-800 border-none hover:shadow-[0_0_15px_rgba(168,85,247,0.15)] transition-all duration-300">
+          <Card className="mb-8 bg-card/50 backdrop-blur-sm border-border hover:shadow-lg hover:ring-2 hover:ring-primary/20 transition-all duration-300">
             <CardContent className="p-6 sm:p-8">
               <div className="flex items-center mb-4">
-                <Cookie className="h-6 w-6 text-purple-400 mr-3" />
-                <h2 className="text-2xl font-bold text-white">
+                <Cookie className="h-6 w-6 text-primary mr-3" />
+                <h2 className="text-2xl font-bold text-card-foreground">
                   What Are Cookies
                 </h2>
               </div>
-              <div className="space-y-4 text-gray-300">
+              <div className="space-y-4 text-muted-foreground">
                 <p>
                   Cookies are small text files that are placed on your computer
                   or mobile device when you visit a website. They are widely
@@ -186,15 +179,15 @@ export default function CookiesPage() {
             </CardContent>
           </Card>
 
-          <Card className="mb-8 bg-gray-800 border-none hover:shadow-[0_0_15px_rgba(168,85,247,0.15)] transition-all duration-300">
+          <Card className="mb-8 bg-card/50 backdrop-blur-sm border-border hover:shadow-lg hover:ring-2 hover:ring-primary/20 transition-all duration-300">
             <CardContent className="p-6 sm:p-8">
               <div className="flex items-center mb-4">
-                <Shield className="h-6 w-6 text-purple-400 mr-3" />
-                <h2 className="text-2xl font-bold text-white">
+                <Shield className="h-6 w-6 text-primary mr-3" />
+                <h2 className="text-2xl font-bold text-card-foreground">
                   How We Use Cookies
                 </h2>
               </div>
-              <div className="space-y-4 text-gray-300">
+              <div className="space-y-4 text-muted-foreground">
                 <p>We use cookies for a variety of reasons, including:</p>
                 <ul className="list-disc pl-6 space-y-2">
                   <li>To make our platform work as you would expect</li>
@@ -220,32 +213,32 @@ export default function CookiesPage() {
             </CardContent>
           </Card>
 
-          <Card className="mb-8 bg-gray-800 border-none hover:shadow-[0_0_15px_rgba(168,85,247,0.15)] transition-all duration-300">
+          <Card className="mb-8 bg-card/50 backdrop-blur-sm border-border hover:shadow-lg hover:ring-2 hover:ring-primary/20 transition-all duration-300">
             <CardContent className="p-6 sm:p-8">
               <div className="flex items-center mb-4">
-                <FileText className="h-6 w-6 text-purple-400 mr-3" />
-                <h2 className="text-2xl font-bold text-white">
+                <FileText className="h-6 w-6 text-primary mr-3" />
+                <h2 className="text-2xl font-bold text-card-foreground">
                   Types of Cookies We Use
                 </h2>
               </div>
-              <div className="space-y-6 text-gray-300">
+              <div className="space-y-6 text-muted-foreground">
                 {cookieCategories.map((category, index) => (
                   <div key={index} className="space-y-4">
-                    <h3 className="text-xl font-semibold text-white">
+                    <h3 className="text-xl font-semibold text-card-foreground">
                       {category.name} Cookies
                     </h3>
                     <p>{category.description}</p>
-                    <div className="rounded-md border border-gray-700">
+                    <div className="rounded-md border border-border">
                       <Table>
-                        <TableHeader className="bg-gray-800">
-                          <TableRow className="border-b border-gray-700">
-                            <TableHead className="text-white">
+                        <TableHeader className="bg-muted/50">
+                          <TableRow className="border-b border-border">
+                            <TableHead className="text-card-foreground">
                               Cookie Name
                             </TableHead>
-                            <TableHead className="text-white">
+                            <TableHead className="text-card-foreground">
                               Purpose
                             </TableHead>
-                            <TableHead className="text-white">
+                            <TableHead className="text-card-foreground">
                               Duration
                             </TableHead>
                           </TableRow>
@@ -254,15 +247,15 @@ export default function CookiesPage() {
                           {category.examples.map((cookie, cookieIndex) => (
                             <TableRow
                               key={cookieIndex}
-                              className="border-b border-gray-700"
+                              className="border-b border-border"
                             >
-                              <TableCell className="font-medium text-purple-400">
+                              <TableCell className="font-medium text-primary">
                                 {cookie.name}
                               </TableCell>
-                              <TableCell className="text-gray-300">
+                              <TableCell className="text-muted-foreground">
                                 {cookie.purpose}
                               </TableCell>
-                              <TableCell className="text-gray-300">
+                              <TableCell className="text-muted-foreground">
                                 {cookie.duration}
                               </TableCell>
                             </TableRow>
@@ -276,12 +269,12 @@ export default function CookiesPage() {
             </CardContent>
           </Card>
 
-          <Card className="mb-8 bg-gray-800 border-none hover:shadow-[0_0_15px_rgba(168,85,247,0.15)] transition-all duration-300">
+          <Card className="mb-8 bg-card/50 backdrop-blur-sm border-border hover:shadow-lg hover:ring-2 hover:ring-primary/20 transition-all duration-300">
             <CardContent className="p-6 sm:p-8">
-              <h2 className="text-2xl font-bold mb-4 text-white">
+              <h2 className="text-2xl font-bold mb-4 text-card-foreground">
                 Managing Cookies
               </h2>
-              <div className="space-y-4 text-gray-300">
+              <div className="space-y-4 text-muted-foreground">
                 <p>
                   Most web browsers allow you to manage your cookie preferences.
                   You can set your browser to refuse cookies, or to alert you
@@ -292,18 +285,6 @@ export default function CookiesPage() {
                   Please note that if you disable or refuse cookies, some parts
                   of our platform may not function properly.
                 </p>
-                {/* <p>
-                  You can manage your cookie preferences on our platform by
-                  clicking the "Cookie Settings" button below:
-                </p>
-                <div className="mt-4">
-                  <Button
-                    variant="outline"
-                    className="border-purple-400 text-purple-400 hover:bg-purple-400/10 rounded-full"
-                  >
-                    Cookie Settings
-                  </Button>
-                </div> */}
                 <p className="mt-4">
                   Below are links to instructions on how to manage cookies in
                   common web browsers:
@@ -314,7 +295,7 @@ export default function CookiesPage() {
                       href="https://support.google.com/chrome/answer/95647"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-purple-400 hover:underline"
+                      className="text-primary hover:underline"
                     >
                       Google Chrome
                     </a>
@@ -324,7 +305,7 @@ export default function CookiesPage() {
                       href="https://support.mozilla.org/en-US/kb/enhanced-tracking-protection-firefox-desktop"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-purple-400 hover:underline"
+                      className="text-primary hover:underline"
                     >
                       Mozilla Firefox
                     </a>
@@ -334,7 +315,7 @@ export default function CookiesPage() {
                       href="https://support.apple.com/guide/safari/manage-cookies-and-website-data-sfri11471/mac"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-purple-400 hover:underline"
+                      className="text-primary hover:underline"
                     >
                       Safari
                     </a>
@@ -344,7 +325,7 @@ export default function CookiesPage() {
                       href="https://support.microsoft.com/en-us/microsoft-edge/delete-cookies-in-microsoft-edge-63947406-40ac-c3b8-57b9-2a946a29ae09"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-purple-400 hover:underline"
+                      className="text-primary hover:underline"
                     >
                       Microsoft Edge
                     </a>
@@ -354,12 +335,12 @@ export default function CookiesPage() {
             </CardContent>
           </Card>
 
-          <Card className="mb-8 bg-gray-800 border-none hover:shadow-[0_0_15px_rgba(168,85,247,0.15)] transition-all duration-300">
+          <Card className="mb-8 bg-card/50 backdrop-blur-sm border-border hover:shadow-lg hover:ring-2 hover:ring-primary/20 transition-all duration-300">
             <CardContent className="p-6 sm:p-8">
-              <h2 className="text-2xl font-bold mb-4 text-white">
+              <h2 className="text-2xl font-bold mb-4 text-card-foreground">
                 Third-Party Cookies
               </h2>
-              <div className="space-y-4 text-gray-300">
+              <div className="space-y-4 text-muted-foreground">
                 <p>
                   In addition to our own cookies, we may also use various
                   third-party cookies to report usage statistics, deliver
@@ -380,12 +361,12 @@ export default function CookiesPage() {
             </CardContent>
           </Card>
 
-          <Card className="mb-8 bg-gray-800 border-none hover:shadow-[0_0_15px_rgba(168,85,247,0.15)] transition-all duration-300">
+          <Card className="mb-8 bg-card/50 backdrop-blur-sm border-border hover:shadow-lg hover:ring-2 hover:ring-primary/20 transition-all duration-300">
             <CardContent className="p-6 sm:p-8">
-              <h2 className="text-2xl font-bold mb-4 text-white">
+              <h2 className="text-2xl font-bold mb-4 text-card-foreground">
                 Other Tracking Technologies
               </h2>
-              <div className="space-y-4 text-gray-300">
+              <div className="space-y-4 text-muted-foreground">
                 <p>
                   Cookies are not the only way to recognize or track visitors to
                   a website. We may use other, similar technologies from time to
@@ -409,12 +390,12 @@ export default function CookiesPage() {
             </CardContent>
           </Card>
 
-          <Card className="mb-8 bg-gray-800 border-none hover:shadow-[0_0_15px_rgba(168,85,247,0.15)] transition-all duration-300">
+          <Card className="mb-8 bg-card/50 backdrop-blur-sm border-border hover:shadow-lg hover:ring-2 hover:ring-primary/20 transition-all duration-300">
             <CardContent className="p-6 sm:p-8">
-              <h2 className="text-2xl font-bold mb-4 text-white">
+              <h2 className="text-2xl font-bold mb-4 text-card-foreground">
                 Changes to This Cookie Policy
               </h2>
-              <div className="space-y-4 text-gray-300">
+              <div className="space-y-4 text-muted-foreground">
                 <p>
                   We may update this Cookie Policy from time to time in order to
                   reflect changes to the cookies we use or for other
@@ -433,22 +414,22 @@ export default function CookiesPage() {
       </section>
 
       {/* CTA */}
-      <section className="relative py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-purple-900/40 to-gray-900 text-white overflow-hidden">
+      <section className="relative py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-primary/20 to-muted text-foreground overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff0a_1px,transparent_1px),linear-gradient(to_bottom,#ffffff0a_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--border))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border))_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
         </div>
 
         <div className="relative z-10 max-w-4xl mx-auto text-center">
-          <h2 className="text-2xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-300">
+          <h2 className="text-2xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent-foreground">
             Have Questions About Our Cookie Policy?
           </h2>
-          <p className="text-lg text-gray-300 mb-8 max-w-2xl mx-auto">
+          <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
             Our privacy team is here to help you understand how we use cookies
             and answer any questions you may have.
           </p>
           <Button
             size="lg"
-            className="bg-purple-600 hover:bg-purple-700 text-white text-lg px-8 rounded-full"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground text-lg px-8 rounded-full"
           >
             <Link to="/contact" className="flex items-center">
               Contact Us <ChevronRight className="ml-2 h-5 w-5" />
@@ -458,11 +439,7 @@ export default function CookiesPage() {
       </section>
 
       {/* Add keyframes for floating animation */}
-      <style
-        // @ts-expect-error: 'jsx' prop not recognized by TypeScript for style tag, but needed for styled-jsx
-
-        jsx
-      >{`
+      <style jsx>{`
         @keyframes float {
           0% {
             transform: translateY(0) translateX(0);

@@ -44,7 +44,6 @@ export default function Home() {
         .select("*", { count: "exact", head: true });
       if (profilesError)
         console.error("Error fetching profiles count:", profilesError);
-      // @ts-expect-error: Argument type 'profiles' may not match the expected type for setProfilesCount
       setProfilesCount(profiles);
 
       // Fetch count of courses (Courses Created)
@@ -53,7 +52,6 @@ export default function Home() {
         .select("*", { count: "exact", head: true });
       if (coursesError)
         console.error("Error fetching courses count:", coursesError);
-      // @ts-expect-error: Argument 'courses' may not exactly match the expected type for setCoursesCount
       setCoursesCount(courses);
 
       // Fetch count of roadmaps (Roadmaps Created)
@@ -62,64 +60,64 @@ export default function Home() {
         .select("*", { count: "exact", head: true });
       if (roadmapsError)
         console.error("Error fetching roadmaps count:", roadmapsError);
-      // @ts-expect-error: Argument 'roadmaps' may not exactly match the expected type for setCoursesCount
       setRoadmapsCount(roadmaps);
     };
 
     fetchCounts();
   }, []);
+
   const features = [
     {
-      icon: <Brain className="h-10 w-10 text-purple-400" />,
+      icon: <Brain className="h-10 w-10 text-primary" />,
       title: "Interactive Quiz System",
       description:
         "Generate custom quizzes on any topic with adjustable difficulty levels and detailed explanations.",
       link: "/quiz",
     },
     {
-      icon: <BookOpen className="h-10 w-10 text-purple-400" />,
+      icon: <BookOpen className="h-10 w-10 text-primary" />,
       title: "Course Management",
       description:
         "Create and manage structured courses with chapter-based content and progress tracking.",
       link: "/courses",
     },
     {
-      icon: <FileText className="h-10 w-10 text-purple-400" />,
+      icon: <FileText className="h-10 w-10 text-primary" />,
       title: "Advanced PDF Tools",
       description:
         "Analyze PDFs interactively, generate quizzes from content, and manage your document library.",
       link: "/resources",
     },
     {
-      icon: <MessageSquare className="h-10 w-10 text-purple-400" />,
+      icon: <MessageSquare className="h-10 w-10 text-primary" />,
       title: "PDF Chat",
       description:
         "Have interactive conversations with your PDF documents and get instant answers to your questions.",
       link: "/pdf-chat",
     },
     {
-      icon: <Route className="h-10 w-10 text-purple-400" />,
+      icon: <Route className="h-10 w-10 text-primary" />,
       title: "Learning Roadmaps",
       description:
         "Follow structured learning paths with detailed guides for any technology or skill.",
       link: "/roadmaps",
     },
     {
-      icon: <PencilRuler className="h-10 w-10 text-purple-400" />,
+      icon: <PencilRuler className="h-10 w-10 text-primary" />,
       title: "Interactive Notebooks",
       description:
         "Create and organize your notes with our interactive whiteboard system.",
       link: "/dashboard",
     },
     {
-      icon: <Users className="h-10 w-10 text-purple-400" />,
+      icon: <Users className="h-10 w-10 text-primary" />,
       title: "Community Learning",
       description:
         "Connect with other learners, share knowledge, and learn together in our community.",
       link: "/community",
     },
     {
-      icon: <GraduationCap className="h-10 w-10 text-purple-400" />,
+      icon: <GraduationCap className="h-10 w-10 text-primary" />,
       title: "Expert Guidance",
       description: "Get help from our community experts when you need it most.",
       link: "/community",
@@ -128,25 +126,25 @@ export default function Home() {
 
   const benefits = [
     {
-      icon: <Sparkles className="h-6 w-6 text-purple-400" />,
+      icon: <Sparkles className="h-6 w-6 text-primary" />,
       title: "AI-Powered Learning",
       description:
         "Leverage advanced AI to generate quizzes, analyze documents, and create personalized learning paths.",
     },
     {
-      icon: <Zap className="h-6 w-6 text-purple-400" />,
+      icon: <Zap className="h-6 w-6 text-primary" />,
       title: "Learn Faster",
       description:
         "Interactive tools and immediate feedback help you grasp concepts more quickly and effectively.",
     },
     {
-      icon: <Target className="h-6 w-6 text-purple-400" />,
+      icon: <Target className="h-6 w-6 text-primary" />,
       title: "Stay Focused",
       description:
         "Structured courses and roadmaps keep you on track towards your learning goals.",
     },
     {
-      icon: <Award className="h-6 w-6 text-purple-400" />,
+      icon: <Award className="h-6 w-6 text-primary" />,
       title: "Track Progress",
       description:
         "Monitor your learning journey with detailed progress tracking and analytics.",
@@ -189,12 +187,12 @@ export default function Home() {
   ];
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-950 text-gray-100">
+    <div className="flex flex-col min-h-screen bg-background text-foreground">
       {/* Hero Section with Animated Background */}
-      <section className="relative min-h-[90vh] flex items-center justify-center bg-gradient-to-br from-gray-950 to-gray-900 text-white overflow-hidden">
+      <section className="relative min-h-[90vh] flex items-center justify-center bg-gradient-to-br from-muted to-primary/10 text-foreground overflow-hidden">
         {/* Animated grid background */}
         <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff0a_1px,transparent_1px),linear-gradient(to_bottom,#ffffff0a_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--border))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border))_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
         </div>
 
         {/* Animated particles */}
@@ -202,20 +200,13 @@ export default function Home() {
           {[...Array(20)].map((_, i) => (
             <div
               key={i}
-              className="absolute rounded-full"
+              className="absolute rounded-full bg-primary/20"
               style={{
                 width: `${Math.random() * 6 + 2}px`,
                 height: `${Math.random() * 6 + 2}px`,
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
-                backgroundColor: `rgba(${Math.random() * 100 + 155}, ${
-                  Math.random() * 100 + 155
-                }, 255, ${Math.random() * 0.5 + 0.5})`,
-                boxShadow: `0 0 ${Math.random() * 10 + 5}px rgba(${
-                  Math.random() * 100 + 155
-                }, ${Math.random() * 100 + 155}, 255, ${
-                  Math.random() * 0.5 + 0.5
-                })`,
+                boxShadow: `0 0 ${Math.random() * 10 + 5}px hsl(var(--primary) / 0.3)`,
                 animation: `float ${Math.random() * 10 + 20}s linear infinite`,
                 animationDelay: `${Math.random() * 10}s`,
               }}
@@ -225,18 +216,18 @@ export default function Home() {
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 text-center">
           <div className="space-y-8">
-            <div className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-full text-white bg-purple-500/20 backdrop-blur-sm">
+            <div className="inline-flex items-center justify-center px-4 py-2 border border-accent text-sm font-medium rounded-full text-foreground bg-accent/20 backdrop-blur-sm">
               <span className="flex items-center">
-                <Brain className="w-4 h-4 mr-2" />
+                <Brain className="w-4 h-4 mr-2 text-primary" />
                 Welcome to the Future of Learning
               </span>
             </div>
 
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-300 to-blue-400 pb-4">
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary via-accent-foreground to-primary pb-4">
               Transform Your Learning Journey
             </h1>
 
-            <p className="max-w-2xl mx-auto text-xl sm:text-2xl text-gray-300 leading-relaxed">
+            <p className="max-w-2xl mx-auto text-xl sm:text-2xl text-muted-foreground leading-relaxed">
               Experience the power of AI-driven education with interactive
               courses, smart tools, and a supportive community.
             </p>
@@ -246,14 +237,14 @@ export default function Home() {
                 <>
                   <Button
                     size="lg"
-                    className="bg-purple-600 hover:bg-purple-700 text-white text-lg px-8 rounded-full"
+                    className="bg-primary hover:bg-primary/90 text-primary-foreground text-lg px-8 rounded-full"
                   >
                     <Link to="/roadmaps">Explore Roadmaps</Link>
                   </Button>
                   <Button
                     size="lg"
                     variant="outline"
-                    className="text-lg px-8 border-purple-400 text-purple-400  rounded-full"
+                    className="text-lg px-8 border-primary text-primary rounded-full hover:bg-primary/10"
                   >
                     <Link to="/courses">Explore Courses</Link>
                   </Button>
@@ -262,14 +253,14 @@ export default function Home() {
                 <>
                   <Button
                     size="lg"
-                    className="bg-purple-600 hover:bg-purple-700 text-white text-lg px-8 rounded-full"
+                    className="bg-primary hover:bg-primary/90 text-primary-foreground text-lg px-8 rounded-full"
                   >
                     <Link to="/signup">Get Started</Link>
                   </Button>
                   <Button
                     size="lg"
                     variant="outline"
-                    className="text-lg px-8 border-purple-400 text-purple-400  rounded-full"
+                    className="text-lg px-8 border-primary text-primary rounded-full hover:bg-primary/10"
                   >
                     <Link to="/login">Sign In</Link>
                   </Button>
@@ -282,9 +273,9 @@ export default function Home() {
               {highlights.map((highlight, index) => (
                 <div
                   key={index}
-                  className="flex items-center gap-2 text-sm sm:text-base text-gray-300"
+                  className="flex items-center gap-2 text-sm sm:text-base text-muted-foreground"
                 >
-                  <CheckCircle className="w-5 h-5 text-purple-400 shrink-0" />
+                  <CheckCircle className="w-5 h-5 text-primary shrink-0" />
                   <span>{highlight}</span>
                 </div>
               ))}
@@ -293,17 +284,17 @@ export default function Home() {
         </div>
 
         {/* Bottom fade effect */}
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-gray-900 to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent" />
       </section>
 
       {/* Features Grid */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-gray-900">
+      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-secondary">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+            <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
               Everything You Need to Excel
             </h2>
-            <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Discover our comprehensive suite of learning tools designed to
               help you achieve your goals.
             </p>
@@ -313,22 +304,22 @@ export default function Home() {
             {features.map((feature, index) => (
               <Card
                 key={index}
-                className="group bg-gray-800 hover:bg-gray-800/80 transition-all duration-300 border-none hover:shadow-[0_0_15px_rgba(168,85,247,0.15)] overflow-hidden"
+                className="group bg-card hover:bg-card/80 transition-all duration-300 border-border hover:shadow-lg hover:ring-2 hover:ring-primary/20 overflow-hidden"
               >
                 <Link to={feature.link}>
                   <CardHeader>
                     <div className="mb-4 transform group-hover:scale-110 transition-transform duration-300">
                       {feature.icon}
                     </div>
-                    <CardTitle className="text-white group-hover:text-purple-400 transition-colors">
+                    <CardTitle className="text-card-foreground group-hover:text-primary transition-colors">
                       {feature.title}
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <CardDescription className="text-gray-400">
+                    <CardDescription className="text-muted-foreground">
                       {feature.description}
                     </CardDescription>
-                    <div className="mt-4 flex items-center text-purple-400 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="mt-4 flex items-center text-primary opacity-0 group-hover:opacity-100 transition-opacity">
                       Learn more
                       <ArrowRight className="ml-2 h-4 w-4 transform group-hover:translate-x-1 transition-transform" />
                     </div>
@@ -341,17 +332,17 @@ export default function Home() {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-gray-950 relative overflow-hidden">
+      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-background relative overflow-hidden">
         <div className="absolute inset-0 z-0 opacity-10">
-          <div className="absolute inset-0 bg-[linear-gradient(45deg,#ffffff0a_1px,transparent_1px),linear-gradient(135deg,#ffffff0a_1px,transparent_1px)] bg-[size:40px_40px]" />
+          <div className="absolute inset-0 bg-[linear-gradient(45deg,hsl(var(--border))_1px,transparent_1px),linear-gradient(135deg,hsl(var(--border))_1px,transparent_1px)] bg-[size:40px_40px]" />
         </div>
 
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+            <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
               What Our Users Say
             </h2>
-            <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Join thousands of satisfied learners who have transformed their
               education journey.
             </p>
@@ -361,15 +352,15 @@ export default function Home() {
             {testimonials.map((testimonial, index) => (
               <Card
                 key={index}
-                className="bg-gray-800/50 backdrop-blur-sm border-none hover:shadow-[0_0_15px_rgba(168,85,247,0.15)] transition-all duration-300"
+                className="bg-card/50 backdrop-blur-sm border-border hover:shadow-lg hover:ring-2 hover:ring-primary/20 transition-all duration-300"
               >
                 <CardHeader>
                   <div className="flex justify-between items-center">
                     <div>
-                      <CardTitle className="text-white">
+                      <CardTitle className="text-card-foreground">
                         {testimonial.name}
                       </CardTitle>
-                      <CardDescription className="text-gray-400">
+                      <CardDescription className="text-muted-foreground">
                         {testimonial.role}
                       </CardDescription>
                     </div>
@@ -377,14 +368,14 @@ export default function Home() {
                       {[...Array(testimonial.rating)].map((_, i) => (
                         <Star
                           key={i}
-                          className="h-4 w-4 text-yellow-400 fill-yellow-400"
+                          className="h-4 w-4 text-primary fill-primary"
                         />
                       ))}
                     </div>
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-300 italic">
+                  <p className="text-muted-foreground italic">
                     "{testimonial.content}"
                   </p>
                 </CardContent>
@@ -395,13 +386,13 @@ export default function Home() {
       </section>
 
       {/* Benefits Section with Gradient Cards */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-gray-900">
+      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-secondary">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+            <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
               Why Choose Learnify?
             </h2>
-            <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Experience the advantages of our modern learning platform.
             </p>
           </div>
@@ -410,17 +401,17 @@ export default function Home() {
             {benefits.map((benefit, index) => (
               <div
                 key={index}
-                className="relative group p-8 rounded-2xl bg-gradient-to-br from-gray-800 to-gray-900 hover:from-gray-800 hover:to-purple-900/30 transition-all duration-300"
+                className="relative group p-8 rounded-2xl bg-card hover:bg-card/80 border border-border hover:border-primary/20 transition-all duration-300"
               >
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-transparent to-transparent group-hover:from-purple-500/5 group-hover:to-purple-500/10 transition-all duration-300 opacity-0 group-hover:opacity-100" />
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-transparent to-transparent group-hover:from-primary/5 group-hover:to-primary/10 transition-all duration-300 opacity-0 group-hover:opacity-100" />
                 <div className="relative z-10">
-                  <div className="bg-gray-800 rounded-xl p-3 w-fit mb-4 shadow-sm group-hover:shadow-[0_0_15px_rgba(168,85,247,0.2)] transition-shadow">
+                  <div className="bg-muted rounded-xl p-3 w-fit mb-4 shadow-sm group-hover:shadow-lg group-hover:ring-2 group-hover:ring-primary/20 transition-all duration-300">
                     {benefit.icon}
                   </div>
-                  <h3 className="text-xl font-semibold mb-2 text-white">
+                  <h3 className="text-xl font-semibold mb-2 text-card-foreground">
                     {benefit.title}
                   </h3>
-                  <p className="text-gray-400">{benefit.description}</p>
+                  <p className="text-muted-foreground">{benefit.description}</p>
                 </div>
               </div>
             ))}
@@ -429,55 +420,55 @@ export default function Home() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-950">
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-background">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             <div className="p-6">
-              <div className="text-4xl md:text-5xl font-bold text-purple-400 mb-2">
+              <div className="text-4xl md:text-5xl font-bold text-primary mb-2">
                 {profilesCount !== null ? profilesCount : "..."}
               </div>
-              <p className="text-gray-400">Active Learners</p>
+              <p className="text-muted-foreground">Active Learners</p>
             </div>
             <div className="p-6">
-              <div className="text-4xl md:text-5xl font-bold text-purple-400 mb-2">
+              <div className="text-4xl md:text-5xl font-bold text-primary mb-2">
                 {coursesCount !== null ? coursesCount : "..."}
               </div>
-              <p className="text-gray-400">Courses Created</p>
+              <p className="text-muted-foreground">Courses Created</p>
             </div>
             <div className="p-6">
-              <div className="text-4xl md:text-5xl font-bold text-purple-400 mb-2">
+              <div className="text-4xl md:text-5xl font-bold text-primary mb-2">
                 {roadmapsCount !== null ? roadmapsCount : "..."}
               </div>
-              <p className="text-gray-400">Roadmaps Created</p>
+              <p className="text-muted-foreground">Roadmaps Created</p>
             </div>
             <div className="p-6">
-              <div className="text-4xl md:text-5xl font-bold text-purple-400 mb-2">
+              <div className="text-4xl md:text-5xl font-bold text-primary mb-2">
                 24/7
               </div>
-              <p className="text-gray-400">Support Available</p>
+              <p className="text-muted-foreground">Support Available</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="relative py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-purple-900/40 to-gray-900 text-white overflow-hidden">
+      <section className="relative py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-primary/20 to-secondary text-foreground overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff0a_1px,transparent_1px),linear-gradient(to_bottom,#ffffff0a_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--border))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border))_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
         </div>
 
         <div className="relative z-10 max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl sm:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-300">
+          <h2 className="text-3xl sm:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent-foreground">
             Ready to Start Your Learning Journey?
           </h2>
-          <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
             Join thousands of learners who are already transforming their
             education with Learnify.
           </p>
           {user ? (
             <Button
               size="lg"
-              className="bg-purple-600 hover:bg-purple-700 text-white text-lg px-8 rounded-full"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground text-lg px-8 rounded-full"
             >
               <Link to="/dashboard" className="flex items-center">
                 Go to Dashboard <ChevronRight className="ml-2 h-5 w-5" />
@@ -486,7 +477,7 @@ export default function Home() {
           ) : (
             <Button
               size="lg"
-              className="bg-purple-600 hover:bg-purple-700 text-white text-lg px-8 rounded-full"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground text-lg px-8 rounded-full"
             >
               <Link to="/signup" className="flex items-center">
                 Get Started for Free <ChevronRight className="ml-2 h-5 w-5" />
@@ -497,12 +488,7 @@ export default function Home() {
       </section>
 
       {/* Add keyframes for floating animation */}
-
-      <style
-        // @ts-expect-error: 'jsx' prop not recognized by TypeScript for style tag, but needed for styled-jsx
-
-        jsx
-      >{`
+      <style jsx>{`
         @keyframes float {
           0% {
             transform: translateY(0) translateX(0);

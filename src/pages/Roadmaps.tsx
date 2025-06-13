@@ -132,14 +132,14 @@ export default function Roadmaps() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-950 text-gray-100 flex items-center justify-center">
+      <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
         <div className="text-center">
           <div className="relative w-16 h-16 mx-auto">
-            <div className="absolute inset-0 rounded-full border-4 border-purple-400/20 animate-pulse"></div>
-            <div className="absolute inset-0 rounded-full border-t-4 border-purple-400 animate-spin"></div>
-            <Sparkles className="absolute inset-0 m-auto h-8 w-8 text-purple-400" />
+            <div className="absolute inset-0 rounded-full border-4 border-primary/20 animate-pulse"></div>
+            <div className="absolute inset-0 rounded-full border-t-4 border-primary animate-spin"></div>
+            <Sparkles className="absolute inset-0 m-auto h-8 w-8 text-primary" />
           </div>
-          <p className="mt-6 text-xl text-gray-100">Loading Roadmaps...</p>
+          <p className="mt-6 text-xl text-foreground">Loading Roadmaps...</p>
         </div>
       </div>
     );
@@ -148,9 +148,9 @@ export default function Roadmaps() {
   const renderStages = (stages: unknown[] = []) => {
     if (!Array.isArray(stages) || stages.length === 0) {
       return (
-        <Card className="text-center p-8 bg-gray-800/30 backdrop-blur-sm border-gray-700">
+        <Card className="text-center p-8 bg-card border-border">
           <CardContent>
-            <p className="text-gray-400">
+            <p className="text-muted-foreground">
               No stages available for this roadmap.
             </p>
           </CardContent>
@@ -161,7 +161,7 @@ export default function Roadmaps() {
     return stages.map((stage, index) => (
       <div
         key={index}
-        className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-6 border border-gray-700"
+        className="bg-card/50 backdrop-blur-sm rounded-lg p-6 border border-border"
       >
         <div className="flex items-center gap-4 mb-4">
           <span
@@ -175,29 +175,29 @@ export default function Roadmaps() {
           >
             {stage.level}
           </span>
-          <h2 className="text-xl font-semibold text-gray-100">{stage.title}</h2>
+          <h2 className="text-xl font-semibold text-card-foreground">{stage.title}</h2>
         </div>
 
-        <p className="text-gray-400 mb-6">{stage.description}</p>
+        <p className="text-muted-foreground mb-6">{stage.description}</p>
 
         <div className="grid gap-6 md:grid-cols-2">
           {/* Skills */}
-          <Card className="bg-gray-800/30 backdrop-blur-sm border-gray-700">
+          <Card className="bg-card border-border">
             <CardHeader>
-              <CardTitle className="text-gray-100">Required Skills</CardTitle>
+              <CardTitle className="text-card-foreground">Required Skills</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 {Array.isArray(stage.skills) &&
                   stage.skills.map((skill: unknown, i: number) => (
                     <div key={i}>
-                      <h4 className="font-medium text-gray-200">
+                      <h4 className="font-medium text-card-foreground">
                         {skill.name}
                       </h4>
-                      <p className="text-sm text-gray-400">
+                      <p className="text-sm text-muted-foreground">
                         {skill.description}
                       </p>
-                      <p className="text-sm text-purple-400 mt-1">
+                      <p className="text-sm text-primary mt-1">
                         Why it matters: {skill.importance}
                       </p>
                     </div>
@@ -207,9 +207,9 @@ export default function Roadmaps() {
           </Card>
 
           {/* Resources */}
-          <Card className="bg-gray-800/30 backdrop-blur-sm border-gray-700">
+          <Card className="bg-card border-border">
             <CardHeader>
-              <CardTitle className="text-gray-100">
+              <CardTitle className="text-card-foreground">
                 Learning Resources
               </CardTitle>
             </CardHeader>
@@ -219,16 +219,16 @@ export default function Roadmaps() {
                   stage.resources.map((resource: unknown, i: number) => (
                     <div
                       key={i}
-                      className="border-b border-gray-700 pb-4 last:border-0"
+                      className="border-b border-border pb-4 last:border-0"
                     >
                       <div className="flex items-center justify-between">
-                        <h4 className="font-medium text-gray-200">
+                        <h4 className="font-medium text-card-foreground">
                           {resource.url ? (
                             <a
                               href={resource.url}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-purple-400 hover:underline flex items-center gap-1"
+                              className="text-primary hover:underline flex items-center gap-1"
                             >
                               {resource.name}
                               <ExternalLink className="h-3 w-3" />
@@ -247,17 +247,17 @@ export default function Roadmaps() {
                           {resource.cost}
                         </span>
                       </div>
-                      <p className="text-sm text-gray-400 mt-1">
+                      <p className="text-sm text-muted-foreground mt-1">
                         {resource.description}
                       </p>
                       <div className="flex flex-wrap gap-2 mt-2">
-                        <span className="text-xs bg-gray-700/50 px-2 py-1 rounded text-gray-300">
+                        <span className="text-xs bg-muted px-2 py-1 rounded text-muted-foreground">
                           {resource.format}
                         </span>
-                        <span className="text-xs bg-gray-700/50 px-2 py-1 rounded text-gray-300">
+                        <span className="text-xs bg-muted px-2 py-1 rounded text-muted-foreground">
                           {resource.difficulty}
                         </span>
-                        <span className="text-xs bg-gray-700/50 px-2 py-1 rounded text-gray-300">
+                        <span className="text-xs bg-muted px-2 py-1 rounded text-muted-foreground">
                           {resource.estimated_time}
                         </span>
                       </div>
@@ -270,7 +270,7 @@ export default function Roadmaps() {
 
         {/* Projects */}
         <div className="mt-6">
-          <h3 className="text-lg font-semibold mb-4 text-gray-100">
+          <h3 className="text-lg font-semibold mb-4 text-card-foreground">
             Practice Projects
           </h3>
           <div className="grid gap-4 md:grid-cols-2">
@@ -278,27 +278,27 @@ export default function Roadmaps() {
               stage.projects.map((project: unknown, i: number) => (
                 <Card
                   key={i}
-                  className="bg-gray-800/30 backdrop-blur-sm border-gray-700"
+                  className="bg-card border-border"
                 >
                   <CardHeader>
-                    <CardTitle className="text-gray-100">
+                    <CardTitle className="text-card-foreground">
                       {project.name}
                     </CardTitle>
-                    <CardDescription className="text-gray-400">
+                    <CardDescription className="text-muted-foreground">
                       {project.description}
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
                       <div>
-                        <h4 className="font-medium mb-2 text-gray-200">
+                        <h4 className="font-medium mb-2 text-card-foreground">
                           Learning Objectives
                         </h4>
                         <ul className="list-disc pl-4 space-y-1">
                           {Array.isArray(project.learning_objectives) &&
                             project.learning_objectives.map(
                               (obj: string, j: number) => (
-                                <li key={j} className="text-sm text-gray-400">
+                                <li key={j} className="text-sm text-muted-foreground">
                                   {obj}
                                 </li>
                               )
@@ -306,14 +306,14 @@ export default function Roadmaps() {
                         </ul>
                       </div>
                       <div>
-                        <h4 className="font-medium mb-2 text-gray-200">
+                        <h4 className="font-medium mb-2 text-card-foreground">
                           Key Features
                         </h4>
                         <ul className="list-disc pl-4 space-y-1">
                           {Array.isArray(project.features) &&
                             project.features.map(
                               (feature: string, j: number) => (
-                                <li key={j} className="text-sm text-gray-400">
+                                <li key={j} className="text-sm text-muted-foreground">
                                   {feature}
                                 </li>
                               )
@@ -326,7 +326,7 @@ export default function Roadmaps() {
                             (skill: string, j: number) => (
                               <span
                                 key={j}
-                                className="px-2 py-1 bg-purple-900/20 text-purple-300 border border-purple-700/50 rounded-full text-sm"
+                                className="px-2 py-1 bg-primary/20 text-primary border border-primary/30 rounded-full text-sm"
                               >
                                 {skill}
                               </span>
@@ -342,19 +342,19 @@ export default function Roadmaps() {
 
         {/* Best Practices & Pitfalls */}
         <div className="grid gap-6 md:grid-cols-2 mt-6">
-          <Card className="bg-gray-800/30 backdrop-blur-sm border-gray-700">
+          <Card className="bg-card border-border">
             <CardHeader>
-              <CardTitle className="text-gray-100">Best Practices</CardTitle>
+              <CardTitle className="text-card-foreground">Best Practices</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 {Array.isArray(stage.best_practices) &&
                   stage.best_practices.map((practice: unknown, i: number) => (
                     <div key={i}>
-                      <h4 className="font-medium text-gray-200">
+                      <h4 className="font-medium text-card-foreground">
                         {practice.title}
                       </h4>
-                      <p className="text-sm text-gray-400 mt-1">
+                      <p className="text-sm text-muted-foreground mt-1">
                         {practice.description}
                       </p>
                       <div className="mt-2 space-y-1">
@@ -363,7 +363,7 @@ export default function Roadmaps() {
                             (example: string, j: number) => (
                               <p
                                 key={j}
-                                className="text-sm bg-gray-700/50 p-2 rounded text-gray-300"
+                                className="text-sm bg-muted p-2 rounded text-muted-foreground"
                               >
                                 {example}
                               </p>
@@ -376,9 +376,9 @@ export default function Roadmaps() {
             </CardContent>
           </Card>
 
-          <Card className="bg-gray-800/30 backdrop-blur-sm border-gray-700">
+          <Card className="bg-card border-border">
             <CardHeader>
-              <CardTitle className="text-gray-100">Common Pitfalls</CardTitle>
+              <CardTitle className="text-card-foreground">Common Pitfalls</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
@@ -388,7 +388,7 @@ export default function Roadmaps() {
                       <h4 className="font-medium text-red-400">
                         {pitfall.issue}
                       </h4>
-                      <p className="text-sm text-gray-400 mt-1">
+                      <p className="text-sm text-muted-foreground mt-1">
                         Solution: {pitfall.solution}
                       </p>
                     </div>
@@ -402,7 +402,7 @@ export default function Roadmaps() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-950 text-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         {selectedRoadmap ? (
           <>
@@ -410,44 +410,44 @@ export default function Roadmaps() {
               <Button
                 variant="ghost"
                 onClick={() => setSelectedRoadmap(null)}
-                className="mb-4 text-gray-300 hover:text-purple-400"
+                className="mb-4 text-muted-foreground hover:text-primary hover:bg-muted"
               >
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Back to Roadmaps
               </Button>
 
-              <div className="bg-gray-800/30 backdrop-blur-sm border-gray-700 rounded-lg shadow-lg p-8">
-                <h1 className="text-3xl font-bold mb-2 text-gray-100">
+              <div className="bg-card/50 backdrop-blur-sm border-border rounded-lg shadow-lg p-8">
+                <h1 className="text-3xl font-bold mb-2 text-card-foreground">
                   {selectedRoadmap.content?.title || "Untitled Roadmap"}
                 </h1>
-                <p className="text-lg text-gray-400 mb-8">
+                <p className="text-lg text-muted-foreground mb-8">
                   {selectedRoadmap.content?.description ||
                     "No description available"}
                 </p>
 
                 <Tabs defaultValue="stages" className="w-full">
-                  <TabsList className="w-full justify-start bg-gray-800/50">
+                  <TabsList className="w-full justify-start bg-muted">
                     <TabsTrigger
                       value="stages"
-                      className="data-[state=active]:bg-purple-600 data-[state=active]:text-white text-gray-300"
+                      className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-muted-foreground"
                     >
                       Learning Path
                     </TabsTrigger>
                     <TabsTrigger
                       value="tools"
-                      className="data-[state=active]:bg-purple-600 data-[state=active]:text-white text-gray-300"
+                      className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-muted-foreground"
                     >
                       Tools
                     </TabsTrigger>
                     <TabsTrigger
                       value="certifications"
-                      className="data-[state=active]:bg-purple-600 data-[state=active]:text-white text-gray-300"
+                      className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-muted-foreground"
                     >
                       Certifications
                     </TabsTrigger>
                     <TabsTrigger
                       value="career"
-                      className="data-[state=active]:bg-purple-600 data-[state=active]:text-white text-gray-300"
+                      className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-muted-foreground"
                     >
                       Career Path
                     </TabsTrigger>
@@ -466,42 +466,42 @@ export default function Roadmaps() {
                           (tool: unknown, index: number) => (
                             <Card
                               key={index}
-                              className="bg-gray-800/30 backdrop-blur-sm border-gray-700"
+                              className="bg-card border-border"
                             >
                               <CardHeader>
                                 <div className="flex items-center justify-between">
-                                  <CardTitle className="text-gray-100">
+                                  <CardTitle className="text-card-foreground">
                                     {tool.name}
                                   </CardTitle>
-                                  <span className="text-sm bg-gray-700/50 px-2 py-1 rounded text-gray-300">
+                                  <span className="text-sm bg-muted px-2 py-1 rounded text-muted-foreground">
                                     {tool.category}
                                   </span>
                                 </div>
                               </CardHeader>
                               <CardContent>
-                                <p className="text-sm text-gray-400 mb-4">
+                                <p className="text-sm text-muted-foreground mb-4">
                                   {tool.description}
                                 </p>
                                 <a
                                   href={tool.url}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="text-purple-400 hover:underline flex items-center gap-1 mb-4"
+                                  className="text-primary hover:underline flex items-center gap-1 mb-4"
                                 >
                                   Official Documentation
                                   <ExternalLink className="h-3 w-3" />
                                 </a>
                                 <div className="space-y-4">
                                   <div>
-                                    <h4 className="font-medium mb-2 text-gray-200">
+                                    <h4 className="font-medium mb-2 text-card-foreground">
                                       Setup Guide
                                     </h4>
-                                    <p className="text-sm text-gray-400">
+                                    <p className="text-sm text-muted-foreground">
                                       {tool.setup_guide}
                                     </p>
                                   </div>
                                   <div>
-                                    <h4 className="font-medium mb-2 text-gray-200">
+                                    <h4 className="font-medium mb-2 text-card-foreground">
                                       Pros
                                     </h4>
                                     <ul className="list-disc pl-4 space-y-1">
@@ -510,7 +510,7 @@ export default function Roadmaps() {
                                           (pro: string, i: number) => (
                                             <li
                                               key={i}
-                                              className="text-sm text-gray-400"
+                                              className="text-sm text-muted-foreground"
                                             >
                                               {pro}
                                             </li>
@@ -519,7 +519,7 @@ export default function Roadmaps() {
                                     </ul>
                                   </div>
                                   <div>
-                                    <h4 className="font-medium mb-2 text-gray-200">
+                                    <h4 className="font-medium mb-2 text-card-foreground">
                                       Cons
                                     </h4>
                                     <ul className="list-disc pl-4 space-y-1">
@@ -528,7 +528,7 @@ export default function Roadmaps() {
                                           (con: string, i: number) => (
                                             <li
                                               key={i}
-                                              className="text-sm text-gray-400"
+                                              className="text-sm text-muted-foreground"
                                             >
                                               {con}
                                             </li>
@@ -537,7 +537,7 @@ export default function Roadmaps() {
                                     </ul>
                                   </div>
                                   <div>
-                                    <h4 className="font-medium mb-2 text-gray-200">
+                                    <h4 className="font-medium mb-2 text-card-foreground">
                                       Alternatives
                                     </h4>
                                     <div className="flex flex-wrap gap-2">
@@ -546,7 +546,7 @@ export default function Roadmaps() {
                                           (alt: string, i: number) => (
                                             <span
                                               key={i}
-                                              className="px-2 py-1 bg-gray-700/50 rounded text-sm text-gray-300"
+                                              className="px-2 py-1 bg-muted rounded text-sm text-muted-foreground"
                                             >
                                               {alt}
                                             </span>
@@ -569,11 +569,11 @@ export default function Roadmaps() {
                           (cert: unknown, index: number) => (
                             <Card
                               key={index}
-                              className="bg-gray-800/30 backdrop-blur-sm border-gray-700"
+                              className="bg-card border-border"
                             >
                               <CardHeader>
                                 <div className="flex items-center justify-between">
-                                  <CardTitle className="text-gray-100">
+                                  <CardTitle className="text-card-foreground">
                                     {cert.name}
                                   </CardTitle>
                                   <span
@@ -588,33 +588,33 @@ export default function Roadmaps() {
                                     {cert.level}
                                   </span>
                                 </div>
-                                <CardDescription className="text-gray-400">
+                                <CardDescription className="text-muted-foreground">
                                   {cert.provider}
                                 </CardDescription>
                               </CardHeader>
                               <CardContent>
-                                <p className="text-sm text-gray-400 mb-4">
+                                <p className="text-sm text-muted-foreground mb-4">
                                   {cert.description}
                                 </p>
                                 <div className="space-y-4">
                                   <div className="flex items-center justify-between">
-                                    <span className="text-sm font-medium text-gray-300">
+                                    <span className="text-sm font-medium text-card-foreground">
                                       Cost:
                                     </span>
-                                    <span className="text-sm text-gray-400">
+                                    <span className="text-sm text-muted-foreground">
                                       {cert.cost}
                                     </span>
                                   </div>
                                   <div className="flex items-center justify-between">
-                                    <span className="text-sm font-medium text-gray-300">
+                                    <span className="text-sm font-medium text-card-foreground">
                                       Validity:
                                     </span>
-                                    <span className="text-sm text-gray-400">
+                                    <span className="text-sm text-muted-foreground">
                                       {cert.validity}
                                     </span>
                                   </div>
                                   <div>
-                                    <h4 className="font-medium mb-2 text-gray-200">
+                                    <h4 className="font-medium mb-2 text-card-foreground">
                                       Preparation Resources
                                     </h4>
                                     <ul className="list-disc pl-4 space-y-1">
@@ -625,7 +625,7 @@ export default function Roadmaps() {
                                           (resource: string, i: number) => (
                                             <li
                                               key={i}
-                                              className="text-sm text-gray-400"
+                                              className="text-sm text-muted-foreground"
                                             >
                                               {resource}
                                             </li>
@@ -637,7 +637,7 @@ export default function Roadmaps() {
                                     href={cert.url}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="text-purple-400 hover:underline flex items-center gap-1"
+                                    className="text-primary hover:underline flex items-center gap-1"
                                   >
                                     Learn More
                                     <ExternalLink className="h-3 w-3" />
@@ -651,16 +651,16 @@ export default function Roadmaps() {
                   </TabsContent>
 
                   <TabsContent value="career" className="mt-6">
-                    <Card className="bg-gray-800/30 backdrop-blur-sm border-gray-700">
+                    <Card className="bg-card border-border">
                       <CardHeader>
-                        <CardTitle className="text-gray-100">
+                        <CardTitle className="text-card-foreground">
                           Career Progression Path
                         </CardTitle>
                       </CardHeader>
                       <CardContent>
                         <div className="space-y-6">
                           <div>
-                            <h3 className="text-lg font-semibold mb-3 text-gray-100">
+                            <h3 className="text-lg font-semibold mb-3 text-card-foreground">
                               Possible Roles
                             </h3>
                             <div className="flex flex-wrap gap-2">
@@ -671,7 +671,7 @@ export default function Roadmaps() {
                                   (role: unknown, i: number) => (
                                     <span
                                       key={i}
-                                      className="px-3 py-1 bg-purple-900/20 text-purple-300 border border-purple-700/50 rounded-full"
+                                      className="px-3 py-1 bg-primary/20 text-primary border border-primary/30 rounded-full"
                                     >
                                       {typeof role === "string"
                                         ? role
@@ -683,7 +683,7 @@ export default function Roadmaps() {
                           </div>
 
                           <div>
-                            <h3 className="text-lg font-semibold mb-3 text-gray-100">
+                            <h3 className="text-lg font-semibold mb-3 text-card-foreground">
                               Required Skills
                             </h3>
                             <div className="grid gap-2 md:grid-cols-2">
@@ -695,16 +695,16 @@ export default function Roadmaps() {
                                   (skill: unknown, i: number) => (
                                     <div
                                       key={i}
-                                      className="flex items-center gap-2 bg-gray-700/50 p-2 rounded"
+                                      className="flex items-center gap-2 bg-muted p-2 rounded"
                                     >
-                                      <span className="text-sm text-gray-300">
+                                      <span className="text-sm text-foreground">
                                         {typeof skill === "string"
                                           ? skill
                                           : skill.name || "Unknown Skill"}
                                       </span>
                                       {typeof skill !== "string" &&
                                         skill.description && (
-                                          <span className="text-xs text-gray-400">
+                                          <span className="text-xs text-muted-foreground">
                                             - {skill.description}
                                           </span>
                                         )}
@@ -715,7 +715,7 @@ export default function Roadmaps() {
                           </div>
 
                           <div>
-                            <h3 className="text-lg font-semibold mb-3 text-gray-100">
+                            <h3 className="text-lg font-semibold mb-3 text-card-foreground">
                               Career Progression
                             </h3>
                             <div className="space-y-4">
@@ -729,10 +729,10 @@ export default function Roadmaps() {
                                       key={i}
                                       className="flex items-center gap-4"
                                     >
-                                      <span className="flex items-center justify-center w-8 h-8 rounded-full bg-purple-600 text-white text-sm font-medium">
+                                      <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-primary-foreground text-sm font-medium">
                                         {i + 1}
                                       </span>
-                                      <span className="text-gray-300">
+                                      <span className="text-foreground">
                                         {step}
                                       </span>
                                     </div>
@@ -742,10 +742,10 @@ export default function Roadmaps() {
                           </div>
 
                           <div>
-                            <h3 className="text-lg font-semibold mb-3 text-gray-100">
+                            <h3 className="text-lg font-semibold mb-3 text-card-foreground">
                               Salary Range
                             </h3>
-                            <p className="text-lg font-medium text-purple-400">
+                            <p className="text-lg font-medium text-primary">
                               {selectedRoadmap.content?.career_path
                                 ?.salary_range || "Not available"}
                             </p>
@@ -761,18 +761,17 @@ export default function Roadmaps() {
         ) : (
           <>
             {/* Page Header with animated background */}
-
-            <div className="relative py-16 px-4 sm:px-6 lg:px-8 mb-12 rounded-2xl overflow-hidden bg-gradient-to-br from-gray-900 to-gray-800">
+            <div className="relative py-16 px-4 sm:px-6 lg:px-8 mb-12 rounded-2xl overflow-hidden bg-gradient-to-br from-muted to-primary/10">
               {/* Animated grid background */}
               <div className="absolute inset-0 z-0">
-                <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff0a_1px,transparent_1px),linear-gradient(to_bottom,#ffffff0a_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
+                <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--border))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border))_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
               </div>
               <div className="relative z-10 text-center">
-                <Route className="mx-auto h-16 w-16 text-purple-400" />
-                <h2 className="mt-2 text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-300 to-blue-400">
-                  Leaning Roadmaps
+                <Route className="mx-auto h-16 w-16 text-primary" />
+                <h2 className="mt-2 text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary via-accent-foreground to-primary">
+                  Learning Roadmaps
                 </h2>
-                <p className="mt-2 text-xl text-gray-300 max-w-2xl mx-auto">
+                <p className="mt-2 text-xl text-muted-foreground max-w-2xl mx-auto">
                   Discover structured learning paths for any technology
                 </p>
               </div>
@@ -789,18 +788,18 @@ export default function Roadmaps() {
                     value={searchQuery}
                     onChange={setSearchQuery}
                     placeholder="Search roadmaps..."
-                    className="bg-gray-800/50 border-gray-700 text-gray-100"
+                    className="bg-input border-border text-foreground placeholder:text-muted-foreground"
                   />
-                  <TabsList className="bg-gray-800/50">
+                  <TabsList className="bg-muted">
                     <TabsTrigger
                       value="all"
-                      className="data-[state=active]:bg-purple-600 data-[state=active]:text-white text-gray-300"
+                      className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-muted-foreground"
                     >
                       All Roadmaps
                     </TabsTrigger>
                     <TabsTrigger
                       value="my-roadmaps"
-                      className="data-[state=active]:bg-purple-600 data-[state=active]:text-white text-gray-300"
+                      className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-muted-foreground"
                     >
                       My Roadmaps
                     </TabsTrigger>
@@ -809,20 +808,20 @@ export default function Roadmaps() {
 
                 <Dialog>
                   <DialogTrigger asChild>
-                    <Button className="bg-purple-600 hover:bg-purple-700 text-white">
+                    <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
                       <Plus className="h-4 w-4 mr-2" />
                       Create Roadmap
                     </Button>
                   </DialogTrigger>
-                  <DialogContent className="bg-gray-800 border-gray-700 text-gray-100">
+                  <DialogContent className="bg-card border-border text-card-foreground">
                     <DialogHeader>
-                      <DialogTitle className="text-gray-100">
+                      <DialogTitle className="text-card-foreground">
                         Create New Roadmap
                       </DialogTitle>
                     </DialogHeader>
                     <div className="space-y-4 py-4">
                       <div className="space-y-2">
-                        <Label htmlFor="topic" className="text-gray-300">
+                        <Label htmlFor="topic" className="text-muted-foreground">
                           Topic
                         </Label>
                         <Input
@@ -830,7 +829,7 @@ export default function Roadmaps() {
                           placeholder="e.g., React Development, Web Development"
                           value={topic}
                           onChange={(e) => setTopic(e.target.value)}
-                          className="bg-gray-700/50 border-gray-600 text-gray-100 focus:ring-purple-500 focus:border-purple-500"
+                          className="bg-input border-border text-foreground focus:ring-primary focus:border-primary"
                         />
                         {error && (
                           <p className="text-sm text-red-400 mt-1">{error}</p>
@@ -839,7 +838,7 @@ export default function Roadmaps() {
                       <Button
                         onClick={handleCreateRoadmap}
                         disabled={generating || !topic.trim()}
-                        className="w-full bg-purple-600 hover:bg-purple-700 text-white"
+                        className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
                       >
                         {generating ? (
                           <>
@@ -856,11 +855,11 @@ export default function Roadmaps() {
               </div>
 
               {filteredRoadmaps.length === 0 ? (
-                <Card className="text-center p-8 bg-gray-800/30 backdrop-blur-sm border-gray-700">
+                <Card className="text-center p-8 bg-card border-border">
                   <CardContent>
-                    <Route className="mx-auto h-12 w-12 text-gray-500 mb-4" />
-                    <p className="text-xl text-gray-300">No roadmaps found</p>
-                    <p className="mt-2 text-gray-400">
+                    <Route className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
+                    <p className="text-xl text-card-foreground">No roadmaps found</p>
+                    <p className="mt-2 text-muted-foreground">
                       Try a different search term or create a new roadmap
                     </p>
                   </CardContent>
@@ -870,14 +869,14 @@ export default function Roadmaps() {
                   {filteredRoadmaps.map((roadmap) => (
                     <Card
                       key={roadmap.id}
-                      className="bg-gray-800/30 backdrop-blur-sm border-gray-700 hover:shadow-[0_0_15px_rgba(168,85,247,0.15)] transition-all duration-300 cursor-pointer"
+                      className="bg-card/50 backdrop-blur-sm border-border hover:shadow-lg hover:ring-2 hover:ring-primary/20 transition-all duration-300 cursor-pointer"
                       onClick={() => setSelectedRoadmap(roadmap)}
                     >
                       <CardHeader>
-                        <CardTitle className="text-gray-100">
+                        <CardTitle className="text-card-foreground">
                           {roadmap.content?.title || "Untitled Roadmap"}
                         </CardTitle>
-                        <CardDescription className="text-gray-400">
+                        <CardDescription className="text-muted-foreground">
                           {roadmap.content?.description ||
                             "No description available"}
                         </CardDescription>
@@ -900,7 +899,7 @@ export default function Roadmaps() {
                                         : "bg-red-500"
                                     }`}
                                   />
-                                  <span className="text-sm text-gray-400">
+                                  <span className="text-sm text-muted-foreground">
                                     {stage.title}
                                   </span>
                                 </div>

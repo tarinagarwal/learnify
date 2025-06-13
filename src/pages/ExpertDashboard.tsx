@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { supabase } from "../lib/supabase";
-import { Send, X } from "lucide-react";
+import { Send, X, MessageSquare, Clock, CheckCircle, Users, Sparkles } from "lucide-react";
 
 interface ChatSession {
   id: string;
@@ -200,49 +200,104 @@ export default function ExpertDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="bg-white rounded-lg shadow-md">
-          <div className="px-4 py-5 border-b border-gray-200 sm:px-6">
-            <h3 className="text-lg leading-6 font-medium text-gray-900">
-              Expert Dashboard
-            </h3>
+    <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
+      {/* Animated grid background */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--border))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border))_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
+      </div>
+
+      {/* Animated particles */}
+      <div className="absolute inset-0 z-0 opacity-30">
+        {[...Array(15)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute rounded-full bg-primary/20"
+            style={{
+              width: `${Math.random() * 6 + 2}px`,
+              height: `${Math.random() * 6 + 2}px`,
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              boxShadow: `0 0 ${Math.random() * 10 + 5}px hsl(var(--primary) / 0.3)`,
+              animation: `float ${Math.random() * 10 + 20}s linear infinite`,
+              animationDelay: `${Math.random() * 10}s`,
+            }}
+          />
+        ))}
+      </div>
+
+      <div className="max-w-7xl mx-auto relative z-10">
+        {/* Header Section */}
+        <div className="mb-8 text-center">
+          <div className="inline-flex items-center justify-center px-4 py-2 border border-accent text-sm font-medium rounded-full text-foreground bg-accent/20 backdrop-blur-sm mb-4">
+            <Users className="w-4 h-4 mr-2 text-primary" />
+            Expert Support System
+          </div>
+          <h1 className="text-4xl sm:text-5xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary via-accent-foreground to-primary pb-4">
+            Expert Dashboard
+          </h1>
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            Manage and respond to learner inquiries with real-time chat support
+          </p>
+        </div>
+
+        <div className="bg-card/50 backdrop-blur-sm border border-border rounded-2xl shadow-xl overflow-hidden">
+          <div className="px-6 py-5 border-b border-border bg-card/30">
+            <div className="flex items-center justify-between">
+              <h3 className="text-xl font-semibold text-card-foreground flex items-center gap-2">
+                <MessageSquare className="h-6 w-6 text-primary" />
+                Support Sessions
+              </h3>
+              <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
+                  <span>Pending</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                  <span>Active</span>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div className="flex h-[calc(100vh-200px)]">
+          <div className="flex h-[calc(100vh-300px)]">
             {/* Sessions List */}
-            <div className="w-1/3 border-r">
-              <div className="p-4">
-                <h4 className="text-sm font-medium text-gray-500 mb-4">
-                  Active Sessions
+            <div className="w-1/3 border-r border-border bg-muted/20">
+              <div className="p-6">
+                <h4 className="text-sm font-medium text-muted-foreground mb-4 flex items-center gap-2">
+                  <Clock className="w-4 h-4" />
+                  Active Sessions ({sessions.filter(s => s.status !== "closed").length})
                 </h4>
-                <div className="space-y-2">
+                <div className="space-y-3">
                   {sessions
                     .filter((s) => s.status !== "closed")
                     .map((session) => (
                       <div
                         key={session.id}
-                        className={`p-4 rounded-lg cursor-pointer transition-colors ${
+                        className={`p-4 rounded-xl cursor-pointer transition-all duration-200 border ${
                           selectedSession?.id === session.id
-                            ? "bg-indigo-50"
-                            : "hover:bg-gray-50"
+                            ? "bg-primary/10 border-primary/30 ring-2 ring-primary/20"
+                            : "bg-card/50 border-border hover:bg-card/80 hover:border-primary/20"
                         }`}
                         onClick={() => setSelectedSession(session)}
                       >
-                        <div className="flex justify-between items-start">
+                        <div className="flex justify-between items-start mb-3">
                           <div>
-                            <p className="font-medium">{session.user?.name}</p>
-                            <p className="text-sm text-gray-500 mt-1">
+                            <p className="font-medium text-card-foreground">{session.user?.name}</p>
+                            <p className="text-sm text-muted-foreground flex items-center gap-1 mt-1">
+                              <Clock className="w-3 h-3" />
                               {new Date(session.created_at).toLocaleString()}
                             </p>
                           </div>
-                          {session.status === "pending" && (
-                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                              Pending
-                            </span>
-                          )}
+                          <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${
+                            session.status === "pending"
+                              ? "bg-yellow-500/20 text-yellow-600 border border-yellow-500/30"
+                              : "bg-green-500/20 text-green-600 border border-green-500/30"
+                          }`}>
+                            {session.status === "pending" ? "Pending" : "Active"}
+                          </span>
                         </div>
-                        <p className="text-sm text-gray-600 mt-2">
+                        <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
                           {session.reason}
                         </p>
                         {session.status === "pending" && (
@@ -251,70 +306,104 @@ export default function ExpertDashboard() {
                               e.stopPropagation();
                               acceptSession(session);
                             }}
-                            className="mt-2 inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
+                            className="w-full inline-flex items-center justify-center px-3 py-2 border border-transparent text-sm font-medium rounded-lg text-primary-foreground bg-primary hover:bg-primary/90 transition-colors duration-200"
                           >
+                            <CheckCircle className="w-4 h-4 mr-2" />
                             Accept Session
                           </button>
                         )}
                       </div>
                     ))}
+                  {sessions.filter(s => s.status !== "closed").length === 0 && (
+                    <div className="text-center py-12">
+                      <Sparkles className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                      <p className="text-muted-foreground text-lg">No active sessions</p>
+                      <p className="text-muted-foreground text-sm mt-2">
+                        New support requests will appear here
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
 
             {/* Chat Area */}
             {selectedSession ? (
-              <div className="flex-1 flex flex-col">
-                <div className="p-4 border-b flex justify-between items-center">
-                  <div>
-                    <h4 className="font-medium">
-                      {selectedSession.user?.name}
-                    </h4>
-                    <p className="text-sm text-gray-500">
-                      {selectedSession.reason}
-                    </p>
+              <div className="flex-1 flex flex-col bg-background/50">
+                {/* Chat Header */}
+                <div className="p-6 border-b border-border bg-card/30">
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <h4 className="text-lg font-semibold text-card-foreground">
+                        {selectedSession.user?.name}
+                      </h4>
+                      <p className="text-sm text-muted-foreground mt-1">
+                        {selectedSession.reason}
+                      </p>
+                    </div>
+                    <button
+                      onClick={closeSession}
+                      className="p-2 text-muted-foreground hover:text-destructive hover:bg-muted rounded-lg transition-colors duration-200"
+                    >
+                      <X className="h-5 w-5" />
+                    </button>
                   </div>
-                  <button
-                    onClick={closeSession}
-                    className="text-red-600 hover:text-red-700"
-                  >
-                    <X className="h-5 w-5" />
-                  </button>
                 </div>
 
-                <div className="flex-1 p-4 overflow-y-auto">
+                {/* Messages Area */}
+                <div className="flex-1 p-6 overflow-y-auto">
                   <div className="space-y-4">
-                    {messages.map((message) => (
-                      <div
-                        key={message.id}
-                        className={`flex ${
-                          message.is_expert ? "justify-end" : "justify-start"
-                        }`}
-                      >
+                    {messages.length > 0 ? (
+                      messages.map((message) => (
                         <div
-                          className={`max-w-[80%] rounded-lg px-4 py-2 ${
-                            message.is_expert
-                              ? "bg-indigo-600 text-white"
-                              : "bg-gray-100 text-gray-800"
+                          key={message.id}
+                          className={`flex ${
+                            message.is_expert ? "justify-end" : "justify-start"
                           }`}
                         >
-                          {message.content}
+                          <div
+                            className={`max-w-[80%] rounded-xl px-4 py-3 ${
+                              message.is_expert
+                                ? "bg-primary text-primary-foreground"
+                                : "bg-muted text-foreground border border-border"
+                            }`}
+                          >
+                            <p className="text-sm">{message.content}</p>
+                            <p className={`text-xs mt-1 ${
+                              message.is_expert 
+                                ? "text-primary-foreground/70" 
+                                : "text-muted-foreground"
+                            }`}>
+                              {new Date(message.created_at).toLocaleTimeString()}
+                            </p>
+                          </div>
                         </div>
+                      ))
+                    ) : (
+                      <div className="flex flex-col items-center justify-center h-full text-center">
+                        <MessageSquare className="w-16 h-16 text-muted-foreground mb-4" />
+                        <h3 className="text-xl font-semibold text-foreground mb-2">
+                          Start the Conversation
+                        </h3>
+                        <p className="text-muted-foreground max-w-md">
+                          Begin chatting with {selectedSession.user?.name} to provide expert assistance
+                        </p>
                       </div>
-                    ))}
+                    )}
                     <div ref={messagesEndRef} />
                   </div>
                 </div>
 
+                {/* Message Input */}
                 {selectedSession.status === "active" && (
-                  <div className="p-4 border-t">
-                    <div className="flex space-x-2">
+                  <div className="p-6 border-t border-border bg-card/30">
+                    <div className="flex gap-3">
                       <input
                         type="text"
                         value={newMessage}
                         onChange={(e) => setNewMessage(e.target.value)}
-                        placeholder="Type your message..."
-                        className="flex-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                        placeholder="Type your response..."
+                        className="flex-1 rounded-xl border border-border bg-input px-4 py-3 text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none"
                         onKeyPress={(e) => {
                           if (e.key === "Enter" && !e.shiftKey) {
                             e.preventDefault();
@@ -325,22 +414,68 @@ export default function ExpertDashboard() {
                       <button
                         onClick={sendMessage}
                         disabled={!newMessage.trim()}
-                        className="inline-flex items-center p-2 border border-transparent rounded-md text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50"
+                        className="inline-flex items-center justify-center p-3 border border-transparent rounded-xl text-primary-foreground bg-primary hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
                       >
                         <Send className="h-5 w-5" />
                       </button>
                     </div>
                   </div>
                 )}
+                
+                {selectedSession.status === "pending" && (
+                  <div className="p-6 border-t border-border bg-card/30">
+                    <div className="text-center">
+                      <p className="text-muted-foreground mb-4">
+                        Accept this session to start chatting
+                      </p>
+                      <button
+                        onClick={() => acceptSession(selectedSession)}
+                        className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-xl text-primary-foreground bg-primary hover:bg-primary/90 transition-colors duration-200"
+                      >
+                        <CheckCircle className="w-5 h-5 mr-2" />
+                        Accept Session
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             ) : (
-              <div className="flex-1 flex items-center justify-center text-gray-500">
-                Select a session to start chatting
+              <div className="flex-1 flex items-center justify-center text-center bg-muted/10">
+                <div>
+                  <Users className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+                  <h3 className="text-xl font-semibold text-foreground mb-2">
+                    Select a Session
+                  </h3>
+                  <p className="text-muted-foreground max-w-md">
+                    Choose a support session from the left panel to start providing expert assistance
+                  </p>
+                </div>
               </div>
             )}
           </div>
         </div>
       </div>
+
+      {/* Animation keyframes */}
+      <style jsx>{`
+        @keyframes float {
+          0% {
+            transform: translateY(0) translateX(0);
+          }
+          25% {
+            transform: translateY(-10px) translateX(10px);
+          }
+          50% {
+            transform: translateY(0) translateX(20px);
+          }
+          75% {
+            transform: translateY(10px) translateX(10px);
+          }
+          100% {
+            transform: translateY(0) translateX(0);
+          }
+        }
+      `}</style>
     </div>
   );
 }

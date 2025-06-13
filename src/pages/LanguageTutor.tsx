@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-//import { useNavigate } from "react-router-dom"; currently un used hence commeneted
+//import { useNavigate } from "react-router-dom"; currently un used hence commented
 import {
   getTutorResponse,
   analyzeGrammar,
@@ -354,10 +354,10 @@ export default function LanguageTutor() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-950 text-gray-100">
+    <div className="min-h-screen bg-background text-foreground">
       {/* Animated grid background */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff0a_1px,transparent_1px),linear-gradient(to_bottom,#ffffff0a_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--border))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border))_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
       </div>
 
       {/* Animated particles */}
@@ -365,20 +365,13 @@ export default function LanguageTutor() {
         {[...Array(20)].map((_, i) => (
           <div
             key={i}
-            className="absolute rounded-full"
+            className="absolute rounded-full bg-primary/20"
             style={{
               width: `${Math.random() * 6 + 2}px`,
               height: `${Math.random() * 6 + 2}px`,
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
-              backgroundColor: `rgba(${Math.random() * 100 + 155}, ${
-                Math.random() * 100 + 155
-              }, 255, ${Math.random() * 0.5 + 0.5})`,
-              boxShadow: `0 0 ${Math.random() * 10 + 5}px rgba(${
-                Math.random() * 100 + 155
-              }, ${Math.random() * 100 + 155}, 255, ${
-                Math.random() * 0.5 + 0.5
-              })`,
+              boxShadow: `0 0 ${Math.random() * 10 + 5}px hsl(var(--primary) / 0.3)`,
               animation: `float ${Math.random() * 10 + 20}s linear infinite`,
               animationDelay: `${Math.random() * 10}s`,
             }}
@@ -389,14 +382,14 @@ export default function LanguageTutor() {
       <div className="container mx-auto py-24 px-4 relative z-10">
         <div className="max-w-4xl mx-auto">
           <div className="mb-8 text-center">
-            <div className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-full text-white bg-purple-500/20 backdrop-blur-sm mb-4">
-              <Globe className="w-4 h-4 mr-2" />
+            <div className="inline-flex items-center justify-center px-4 py-2 border border-accent text-sm font-medium rounded-full text-foreground bg-accent/20 backdrop-blur-sm mb-4">
+              <Globe className="w-4 h-4 mr-2 text-primary" />
               Powered by AI Language Learning
             </div>
-            <h1 className="text-4xl sm:text-5xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-300 to-blue-400 pb-4">
+            <h1 className="text-4xl sm:text-5xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary via-accent-foreground to-primary pb-4">
               AI English Tutor
             </h1>
-            <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Your personal language learning assistant to help you master
               English through conversation, practice, and feedback
             </p>
@@ -404,10 +397,10 @@ export default function LanguageTutor() {
 
           <div className="mb-6 flex justify-center">
             <Select value={userLevel} onValueChange={setUserLevel}>
-              <SelectTrigger className="w-[200px] bg-gray-800 border-gray-700 focus:ring-purple-500 focus:border-purple-500">
+              <SelectTrigger className="w-[200px] bg-input border-border text-foreground focus:ring-primary focus:border-primary">
                 <SelectValue placeholder="Select your level" />
               </SelectTrigger>
-              <SelectContent className="bg-gray-800 border-gray-700">
+              <SelectContent className="bg-card border-border text-card-foreground">
                 <SelectItem value="beginner">Beginner</SelectItem>
                 <SelectItem value="intermediate">Intermediate</SelectItem>
                 <SelectItem value="advanced">Advanced</SelectItem>
@@ -420,31 +413,31 @@ export default function LanguageTutor() {
             onValueChange={setActiveTab}
             className="w-full"
           >
-            <TabsList className="mb-6 grid grid-cols-4 bg-gray-800 p-1 rounded-full">
+            <TabsList className="mb-6 grid grid-cols-4 bg-muted p-1 rounded-full">
               <TabsTrigger
                 value="chat"
-                className="flex items-center gap-2 rounded-full data-[state=active]:bg-purple-600 data-[state=active]:text-white"
+                className="flex items-center gap-2 rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-muted-foreground"
               >
                 <MessageCircle className="w-4 h-4" />
                 Chat
               </TabsTrigger>
               <TabsTrigger
                 value="grammar"
-                className="flex items-center gap-2 rounded-full data-[state=active]:bg-purple-600 data-[state=active]:text-white"
+                className="flex items-center gap-2 rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-muted-foreground"
               >
                 <Book className="w-4 h-4" />
                 Grammar Check
               </TabsTrigger>
               <TabsTrigger
                 value="practice"
-                className="flex items-center gap-2 rounded-full data-[state=active]:bg-purple-600 data-[state=active]:text-white"
+                className="flex items-center gap-2 rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-muted-foreground"
               >
                 <GraduationCap className="w-4 h-4" />
                 Practice
               </TabsTrigger>
               <TabsTrigger
                 value="saved"
-                className="flex items-center gap-2 rounded-full data-[state=active]:bg-purple-600 data-[state=active]:text-white"
+                className="flex items-center gap-2 rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-muted-foreground"
               >
                 <Bookmark className="w-4 h-4" />
                 Saved
@@ -452,18 +445,18 @@ export default function LanguageTutor() {
             </TabsList>
 
             <TabsContent value="chat">
-              <Card className="bg-gray-800 border-none hover:shadow-[0_0_15px_rgba(168,85,247,0.15)] transition-all duration-300">
+              <Card className="bg-card/50 backdrop-blur-sm border-border hover:shadow-lg hover:ring-2 hover:ring-primary/20 transition-all duration-300">
                 <CardHeader>
                   <div className="flex flex-col md:flex-row md:justify-between items-start md:items-center">
-                    <CardTitle className="text-white flex items-center gap-2">
-                      <Brain className="h-5 w-5 text-purple-400" />
+                    <CardTitle className="text-card-foreground flex items-center gap-2">
+                      <Brain className="h-5 w-5 text-primary" />
                       Chat with Your Tutor
                     </CardTitle>
                     <div className="mt-4 md:mt-0 flex gap-2 ">
                       <Button
                         variant="outline"
                         onClick={() => setShowHistory(true)}
-                        className="flex items-center gap-2 border-purple-400 text-purple-400 hover:bg-purple-400/10 rounded-full"
+                        className="flex items-center gap-2 border-primary text-primary hover:bg-primary/10 rounded-full"
                       >
                         <History className="w-4 h-4" />
                         History
@@ -477,8 +470,7 @@ export default function LanguageTutor() {
                       />
                     </div>
                   </div>
-
-                  <CardDescription className="text-gray-400">
+                  <CardDescription className="text-muted-foreground">
                     Practice conversation and get instant feedback from your AI
                     language tutor
                   </CardDescription>
@@ -486,20 +478,20 @@ export default function LanguageTutor() {
                 <CardContent>
                   {showHistory ? (
                     <div className="space-y-4">
-                      <h3 className="text-lg font-semibold mb-4 text-white">
+                      <h3 className="text-lg font-semibold mb-4 text-card-foreground">
                         Chat History
                       </h3>
                       {chatSessions.length > 0 ? (
                         chatSessions.map((session) => (
                           <div
                             key={session.id}
-                            className="p-4 rounded-lg bg-gray-700 hover:bg-gray-600 cursor-pointer border border-gray-600 hover:border-purple-500 transition-all duration-200"
+                            className="p-4 rounded-lg bg-muted hover:bg-muted/80 cursor-pointer border border-border hover:border-primary transition-all duration-200"
                             onClick={() => handleSelectSession(session.id)}
                           >
-                            <h4 className="font-medium text-white">
+                            <h4 className="font-medium text-foreground">
                               {session.title}
                             </h4>
-                            <p className="text-sm text-gray-400">
+                            <p className="text-sm text-muted-foreground">
                               {new Date(
                                 session.created_at
                               ).toLocaleDateString()}
@@ -508,8 +500,8 @@ export default function LanguageTutor() {
                         ))
                       ) : (
                         <div className="text-center py-8">
-                          <p className="text-gray-400">No chat history found</p>
-                          <p className="text-gray-500 text-sm mt-2">
+                          <p className="text-muted-foreground">No chat history found</p>
+                          <p className="text-muted-foreground text-sm mt-2">
                             Start a new conversation to begin learning
                           </p>
                         </div>
@@ -517,7 +509,7 @@ export default function LanguageTutor() {
                     </div>
                   ) : (
                     <>
-                      <div className="h-[400px] overflow-y-auto mb-4 space-y-4 p-4 bg-gray-900 rounded-lg">
+                      <div className="h-[400px] overflow-y-auto mb-4 space-y-4 p-4 bg-muted/20 rounded-lg border border-border">
                         {messages.length > 0 ? (
                           messages.map((message, index) => (
                             <div
@@ -531,8 +523,8 @@ export default function LanguageTutor() {
                               <div
                                 className={`max-w-[80%] rounded-lg p-3 ${
                                   message.role === "user"
-                                    ? "bg-purple-600 text-white"
-                                    : "bg-gray-700 text-gray-100"
+                                    ? "bg-primary text-primary-foreground"
+                                    : "bg-card text-card-foreground"
                                 }`}
                               >
                                 <ReactMarkdown>{message.content}</ReactMarkdown>
@@ -541,11 +533,11 @@ export default function LanguageTutor() {
                           ))
                         ) : (
                           <div className="h-full flex flex-col items-center justify-center text-center">
-                            <Sparkles className="h-12 w-12 text-purple-400 mb-4" />
-                            <h3 className="text-xl font-semibold text-white mb-2">
+                            <Sparkles className="h-12 w-12 text-primary mb-4" />
+                            <h3 className="text-xl font-semibold text-foreground mb-2">
                               Start Chatting with Your AI Tutor
                             </h3>
-                            <p className="text-gray-400 max-w-md">
+                            <p className="text-muted-foreground max-w-md">
                               Ask questions, practice conversations, or get help
                               with English grammar and vocabulary
                             </p>
@@ -562,12 +554,12 @@ export default function LanguageTutor() {
                             e.key === "Enter" && handleSendMessage()
                           }
                           disabled={isLoading || !currentSessionId}
-                          className="bg-gray-700 border-gray-600 focus:border-purple-500 focus:ring-purple-500"
+                          className="bg-input border-border text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary"
                         />
                         <Button
                           onClick={handleSendMessage}
                           disabled={isLoading || !currentSessionId}
-                          className="bg-purple-600 hover:bg-purple-700 text-white rounded-full w-[100px]"
+                          className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full w-[100px]"
                         >
                           {isLoading ? (
                             <Loader2 className="w-4 h-4 animate-spin" />
@@ -583,13 +575,13 @@ export default function LanguageTutor() {
             </TabsContent>
 
             <TabsContent value="grammar">
-              <Card className="bg-gray-800 border-none hover:shadow-[0_0_15px_rgba(168,85,247,0.15)] transition-all duration-300">
+              <Card className="bg-card/50 backdrop-blur-sm border-border hover:shadow-lg hover:ring-2 hover:ring-primary/20 transition-all duration-300">
                 <CardHeader>
-                  <CardTitle className="text-white flex items-center gap-2">
-                    <Book className="h-5 w-5 text-purple-400" />
+                  <CardTitle className="text-card-foreground flex items-center gap-2">
+                    <Book className="h-5 w-5 text-primary" />
                     Grammar Check
                   </CardTitle>
-                  <CardDescription className="text-gray-400">
+                  <CardDescription className="text-muted-foreground">
                     Get instant feedback on your writing and improve your
                     grammar skills
                   </CardDescription>
@@ -599,13 +591,13 @@ export default function LanguageTutor() {
                     value={grammarText}
                     onChange={(e) => setGrammarText(e.target.value)}
                     placeholder="Enter your text for grammar checking..."
-                    className="mb-4 bg-gray-700 border-gray-600 focus:border-purple-500 focus:ring-purple-500 min-h-[150px]"
+                    className="mb-4 bg-input border-border text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary min-h-[150px]"
                     rows={6}
                   />
                   <Button
                     onClick={handleGrammarCheck}
                     disabled={isLoading}
-                    className="w-full mb-4 bg-purple-600 hover:bg-purple-700 text-white rounded-full"
+                    className="w-full mb-4 bg-primary hover:bg-primary/90 text-primary-foreground rounded-full"
                   >
                     {isLoading ? (
                       <Loader2 className="w-4 h-4 animate-spin mr-2" />
@@ -618,11 +610,11 @@ export default function LanguageTutor() {
                       {grammarCorrections.map((correction, index) => (
                         <div
                           key={index}
-                          className="bg-gray-700 rounded-lg p-4 border border-gray-600"
+                          className="bg-muted rounded-lg p-4 border border-border"
                         >
                           <div className="flex items-center gap-2 mb-2">
-                            <XCircle className="w-4 h-4 text-red-400 shrink-0" />
-                            <span className="text-red-400">
+                            <XCircle className="w-4 h-4 text-destructive shrink-0" />
+                            <span className="text-destructive">
                               {correction.original}
                             </span>
                           </div>
@@ -632,15 +624,15 @@ export default function LanguageTutor() {
                               {correction.corrected}
                             </span>
                           </div>
-                          <p className="text-gray-300 text-sm pl-6">
+                          <p className="text-muted-foreground text-sm pl-6">
                             {correction.explanation}
                           </p>
                         </div>
                       ))}
                     </div>
                   ) : grammarText.length > 0 && !isLoading ? (
-                    <div className="text-center py-4 bg-gray-700 rounded-lg">
-                      <p className="text-gray-300">No grammar errors found</p>
+                    <div className="text-center py-4 bg-muted rounded-lg border border-border">
+                      <p className="text-foreground">No grammar errors found</p>
                     </div>
                   ) : null}
                 </CardContent>
@@ -648,21 +640,21 @@ export default function LanguageTutor() {
             </TabsContent>
 
             <TabsContent value="practice">
-              <Card className="bg-gray-800 border-none hover:shadow-[0_0_15px_rgba(168,85,247,0.15)] transition-all duration-300">
+              <Card className="bg-card/50 backdrop-blur-sm border-border hover:shadow-lg hover:ring-2 hover:ring-primary/20 transition-all duration-300">
                 <CardHeader>
-                  <CardTitle className="text-white flex items-center gap-2">
-                    <GraduationCap className="h-5 w-5 text-purple-400" />
+                  <CardTitle className="text-card-foreground flex items-center gap-2">
+                    <GraduationCap className="h-5 w-5 text-primary" />
                     Practice Exercises
                   </CardTitle>
-                  <CardDescription className="text-gray-400">
+                  <CardDescription className="text-muted-foreground">
                     Improve your skills with targeted exercises and vocabulary
                     practice
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="mb-8">
-                    <h3 className="text-lg font-semibold mb-4 text-white flex items-center gap-2">
-                      <Book className="h-4 w-4 text-purple-400" />
+                    <h3 className="text-lg font-semibold mb-4 text-card-foreground flex items-center gap-2">
+                      <Book className="h-4 w-4 text-primary" />
                       Vocabulary Practice
                     </h3>
                     <div className="flex gap-2 mb-4">
@@ -670,12 +662,12 @@ export default function LanguageTutor() {
                         value={topic}
                         onChange={(e) => setTopic(e.target.value)}
                         placeholder="Enter a topic (e.g., travel, business, food)..."
-                        className="bg-gray-700 border-gray-600 focus:border-purple-500 focus:ring-purple-500"
+                        className="bg-input border-border text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary"
                       />
                       <Button
                         onClick={handleGenerateVocabulary}
                         disabled={isLoading}
-                        className="bg-purple-600 hover:bg-purple-700 text-white rounded-full whitespace-nowrap"
+                        className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full whitespace-nowrap"
                       >
                         {isLoading ? (
                           <Loader2 className="w-4 h-4 animate-spin mr-2" />
@@ -689,10 +681,10 @@ export default function LanguageTutor() {
                         {vocabularyItems.map((item, index) => (
                           <div
                             key={index}
-                            className="bg-gray-700 rounded-lg p-4 border border-gray-600 hover:border-purple-500 transition-all duration-200"
+                            className="bg-muted rounded-lg p-4 border border-border hover:border-primary transition-all duration-200"
                           >
                             <div className="flex items-center justify-between mb-2">
-                              <h4 className="text-lg font-semibold text-purple-400">
+                              <h4 className="text-lg font-semibold text-primary">
                                 {item.word}
                               </h4>
                               <div className="flex gap-2">
@@ -700,7 +692,7 @@ export default function LanguageTutor() {
                                   <Button
                                     variant="ghost"
                                     size="sm"
-                                    className="text-gray-400 cursor-not-allowed"
+                                    className="text-muted-foreground cursor-not-allowed"
                                     disabled
                                   >
                                     <VolumeX className="w-5 h-5" />
@@ -713,7 +705,7 @@ export default function LanguageTutor() {
                                     <Button
                                       variant="ghost"
                                       size="sm"
-                                      className="text-purple-400 hover:text-purple-300 hover:bg-purple-400/10"
+                                      className="text-primary hover:text-primary/80 hover:bg-primary/10"
                                       onClick={async () => {
                                         try {
                                           await playWordAudio(
@@ -743,7 +735,7 @@ export default function LanguageTutor() {
                                   className={
                                     item.saved
                                       ? "text-yellow-400 hover:text-yellow-300 hover:bg-yellow-400/10"
-                                      : "text-gray-400 hover:text-gray-300 hover:bg-gray-400/10"
+                                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
                                   }
                                   onClick={() => handleSaveVocabulary(item)}
                                   disabled={item.saved}
@@ -756,26 +748,26 @@ export default function LanguageTutor() {
                                 </Button>
                               </div>
                             </div>
-                            <p className="text-gray-200 mb-2">
+                            <p className="text-foreground mb-2">
                               {item.definition}
                             </p>
                             <div className="space-y-2">
-                              <p className="text-sm text-purple-400 font-medium">
+                              <p className="text-sm text-primary font-medium">
                                 Examples:
                               </p>
                               <ul className="list-disc list-inside space-y-1 pl-2">
                                 {item.examples.map((example, i) => (
-                                  <li key={i} className="text-gray-300">
+                                  <li key={i} className="text-muted-foreground">
                                     {example}
                                   </li>
                                 ))}
                               </ul>
                             </div>
                             <div className="mt-2">
-                              <p className="text-sm text-purple-400 font-medium">
+                              <p className="text-sm text-primary font-medium">
                                 Synonyms:
                               </p>
-                              <p className="text-gray-300">
+                              <p className="text-muted-foreground">
                                 {item.synonyms.join(", ")}
                               </p>
                             </div>
@@ -786,14 +778,14 @@ export default function LanguageTutor() {
                   </div>
 
                   <div>
-                    <h3 className="text-lg font-semibold mb-4 text-white flex items-center gap-2">
-                      <GraduationCap className="h-4 w-4 text-purple-400" />
+                    <h3 className="text-lg font-semibold mb-4 text-card-foreground flex items-center gap-2">
+                      <GraduationCap className="h-4 w-4 text-primary" />
                       Practice Exercises
                     </h3>
                     <Button
                       onClick={handleGeneratePractice}
                       disabled={isLoading}
-                      className="w-full mb-4 bg-purple-600 hover:bg-purple-700 text-white rounded-full"
+                      className="w-full mb-4 bg-primary hover:bg-primary/90 text-primary-foreground rounded-full"
                     >
                       {isLoading ? (
                         <Loader2 className="w-4 h-4 animate-spin mr-2" />
@@ -806,10 +798,10 @@ export default function LanguageTutor() {
                         {practiceExercises.map((exercise, index) => (
                           <div
                             key={index}
-                            className="bg-gray-700 rounded-lg p-4 border border-gray-600 hover:border-purple-500 transition-all duration-200"
+                            className="bg-muted rounded-lg p-4 border border-border hover:border-primary transition-all duration-200"
                           >
                             <div className="flex items-center justify-between mb-2">
-                              <span className="bg-purple-600 text-white px-3 py-1 rounded-full text-sm">
+                              <span className="bg-primary text-primary-foreground px-3 py-1 rounded-full text-sm">
                                 {exercise.type}
                               </span>
                               <Button
@@ -818,7 +810,7 @@ export default function LanguageTutor() {
                                 className={
                                   exercise.saved
                                     ? "text-yellow-400 hover:text-yellow-300 hover:bg-yellow-400/10"
-                                    : "text-gray-400 hover:text-gray-300 hover:bg-gray-400/10"
+                                    : "text-muted-foreground hover:text-foreground hover:bg-muted"
                                 }
                                 onClick={() => handleSaveExercise(exercise)}
                                 disabled={exercise.saved}
@@ -831,13 +823,13 @@ export default function LanguageTutor() {
                               </Button>
                             </div>
                             {exercise.passage && (
-                              <div className="mb-4 p-4 bg-gray-400 rounded-lg">
+                              <div className="mb-4 p-4 bg-card rounded-lg border border-border">
                                 <ReactMarkdown>
                                   {exercise.passage}
                                 </ReactMarkdown>
                               </div>
                             )}
-                            <p className="text-gray-100 mb-4">
+                            <p className="text-foreground mb-4">
                               {exercise.question}
                             </p>
                             {exercise.options && (
@@ -845,15 +837,15 @@ export default function LanguageTutor() {
                                 {exercise.options.map((option, i) => (
                                   <div
                                     key={i}
-                                    className="flex items-center gap-2 p-3 rounded-lg bg-gray-400 hover:bg-gray-600 cursor-pointer border border-gray-700 hover:border-purple-500 transition-all duration-200"
+                                    className="flex items-center gap-2 p-3 rounded-lg bg-card hover:bg-card/80 cursor-pointer border border-border hover:border-primary transition-all duration-200"
                                   >
-                                    <span>{option}</span>
+                                    <span className="text-card-foreground">{option}</span>
                                   </div>
                                 ))}
                               </div>
                             )}
-                            <div className="mt-4 p-4 bg-gray-800 rounded-lg border border-gray-700">
-                              <p className="text-sm text-gray-300">
+                            <div className="mt-4 p-4 bg-secondary rounded-lg border border-border">
+                              <p className="text-sm text-muted-foreground">
                                 {exercise.explanation}
                               </p>
                             </div>
@@ -867,13 +859,13 @@ export default function LanguageTutor() {
             </TabsContent>
 
             <TabsContent value="saved">
-              <Card className="bg-gray-800 border-none hover:shadow-[0_0_15px_rgba(168,85,247,0.15)] transition-all duration-300">
+              <Card className="bg-card/50 backdrop-blur-sm border-border hover:shadow-lg hover:ring-2 hover:ring-primary/20 transition-all duration-300">
                 <CardHeader>
-                  <CardTitle className="text-white flex items-center gap-2">
-                    <BookmarkCheck className="h-5 w-5 text-purple-400" />
+                  <CardTitle className="text-card-foreground flex items-center gap-2">
+                    <BookmarkCheck className="h-5 w-5 text-primary" />
                     Saved Items
                   </CardTitle>
-                  <CardDescription className="text-gray-400">
+                  <CardDescription className="text-muted-foreground">
                     Review your saved vocabulary and exercises for continued
                     learning
                   </CardDescription>
@@ -881,8 +873,8 @@ export default function LanguageTutor() {
                 <CardContent>
                   <div className="space-y-8">
                     <div>
-                      <h3 className="text-lg font-semibold mb-4 text-white flex items-center gap-2">
-                        <Book className="h-4 w-4 text-purple-400" />
+                      <h3 className="text-lg font-semibold mb-4 text-card-foreground flex items-center gap-2">
+                        <Book className="h-4 w-4 text-primary" />
                         Saved Vocabulary
                       </h3>
                       {savedVocabulary.length > 0 ? (
@@ -890,31 +882,31 @@ export default function LanguageTutor() {
                           {savedVocabulary.map((item, index) => (
                             <div
                               key={index}
-                              className="bg-gray-700 rounded-lg p-4 border border-gray-600 hover:border-purple-500 transition-all duration-200"
+                              className="bg-muted rounded-lg p-4 border border-border hover:border-primary transition-all duration-200"
                             >
-                              <h4 className="text-lg font-semibold text-purple-400 mb-2">
+                              <h4 className="text-lg font-semibold text-primary mb-2">
                                 {item.word}
                               </h4>
-                              <p className="text-gray-200 mb-2">
+                              <p className="text-foreground mb-2">
                                 {item.definition}
                               </p>
                               <div className="space-y-2">
-                                <p className="text-sm text-purple-400 font-medium">
+                                <p className="text-sm text-primary font-medium">
                                   Examples:
                                 </p>
                                 <ul className="list-disc list-inside space-y-1 pl-2">
                                   {item.examples.map((example, i) => (
-                                    <li key={i} className="text-gray-300">
+                                    <li key={i} className="text-muted-foreground">
                                       {example}
                                     </li>
                                   ))}
                                 </ul>
                               </div>
                               <div className="mt-2">
-                                <p className="text-sm text-purple-400 font-medium">
+                                <p className="text-sm text-primary font-medium">
                                   Synonyms:
                                 </p>
-                                <p className="text-gray-300">
+                                <p className="text-muted-foreground">
                                   {item.synonyms.join(", ")}
                                 </p>
                               </div>
@@ -922,12 +914,12 @@ export default function LanguageTutor() {
                           ))}
                         </div>
                       ) : (
-                        <div className="text-center py-8 bg-gray-700 rounded-lg border border-gray-600">
-                          <BookmarkCheck className="h-10 w-10 text-gray-500 mx-auto mb-2" />
-                          <p className="text-gray-400">
+                        <div className="text-center py-8 bg-muted rounded-lg border border-border">
+                          <BookmarkCheck className="h-10 w-10 text-muted-foreground mx-auto mb-2" />
+                          <p className="text-muted-foreground">
                             No saved vocabulary items
                           </p>
-                          <p className="text-gray-500 text-sm mt-2">
+                          <p className="text-muted-foreground text-sm mt-2">
                             Save vocabulary items to review them later
                           </p>
                         </div>
@@ -935,8 +927,8 @@ export default function LanguageTutor() {
                     </div>
 
                     <div>
-                      <h3 className="text-lg font-semibold mb-4 text-white flex items-center gap-2">
-                        <GraduationCap className="h-4 w-4 text-purple-400" />
+                      <h3 className="text-lg font-semibold mb-4 text-card-foreground flex items-center gap-2">
+                        <GraduationCap className="h-4 w-4 text-primary" />
                         Saved Exercises
                       </h3>
                       {savedExercises.length > 0 ? (
@@ -944,19 +936,19 @@ export default function LanguageTutor() {
                           {savedExercises.map((exercise, index) => (
                             <div
                               key={index}
-                              className="bg-gray-700 rounded-lg p-4 border border-gray-600 hover:border-purple-500 transition-all duration-200"
+                              className="bg-muted rounded-lg p-4 border border-border hover:border-primary transition-all duration-200"
                             >
-                              <span className="bg-purple-600 text-white px-3 py-1 rounded-full text-sm">
+                              <span className="bg-primary text-primary-foreground px-3 py-1 rounded-full text-sm">
                                 {exercise.type}
                               </span>
                               {exercise.passage && (
-                                <div className="mt-4 p-4 bg-gray-400 rounded-lg">
+                                <div className="mt-4 p-4 bg-card rounded-lg border border-border">
                                   <ReactMarkdown>
                                     {exercise.passage}
                                   </ReactMarkdown>
                                 </div>
                               )}
-                              <p className="text-gray-100 my-4">
+                              <p className="text-foreground my-4">
                                 {exercise.question}
                               </p>
                               {exercise.options && (
@@ -964,15 +956,15 @@ export default function LanguageTutor() {
                                   {exercise.options.map((option, i) => (
                                     <div
                                       key={i}
-                                      className="flex items-center gap-2 p-3 rounded-lg bg-gray-400 border border-gray-700"
+                                      className="flex items-center gap-2 p-3 rounded-lg bg-card border border-border"
                                     >
-                                      <span>{option}</span>
+                                      <span className="text-card-foreground">{option}</span>
                                     </div>
                                   ))}
                                 </div>
                               )}
-                              <div className="mt-4 p-4 bg-gray-800 rounded-lg border border-gray-700">
-                                <p className="text-sm text-gray-300">
+                              <div className="mt-4 p-4 bg-secondary rounded-lg border border-border">
+                                <p className="text-sm text-muted-foreground">
                                   {exercise.explanation}
                                 </p>
                               </div>
@@ -980,10 +972,10 @@ export default function LanguageTutor() {
                           ))}
                         </div>
                       ) : (
-                        <div className="text-center py-8 bg-gray-700 rounded-lg border border-gray-600">
-                          <BookmarkCheck className="h-10 w-10 text-gray-500 mx-auto mb-2" />
-                          <p className="text-gray-400">No saved exercises</p>
-                          <p className="text-gray-500 text-sm mt-2">
+                        <div className="text-center py-8 bg-muted rounded-lg border border-border">
+                          <BookmarkCheck className="h-10 w-10 text-muted-foreground mx-auto mb-2" />
+                          <p className="text-muted-foreground">No saved exercises</p>
+                          <p className="text-muted-foreground text-sm mt-2">
                             Save exercises to practice them later
                           </p>
                         </div>

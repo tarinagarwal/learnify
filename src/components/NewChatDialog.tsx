@@ -65,16 +65,18 @@ export function NewChatDialog({ onChatCreated }: NewChatDialogProps) {
       <DialogTrigger asChild>
         <Button
           variant="outline"
-          className="flex items-center gap-2 border-purple-400 text-purple-400 hover:bg-purple-400/10 rounded-full"
+          className="flex items-center gap-2 border-primary text-primary hover:bg-primary/10 hover:border-primary/80 rounded-full transition-all duration-200"
         >
           <Plus className="w-4 h-4" />
           New Chat
         </Button>
       </DialogTrigger>
-      <DialogContent className="bg-gray-800 border-gray-700 text-white shadow-[0_0_15px_rgba(168,85,247,0.2)]">
+      <DialogContent className="bg-card/90 backdrop-blur-sm border-border text-card-foreground shadow-xl">
         <DialogHeader>
-          <DialogTitle className="text-white flex items-center gap-2">
-            <MessageCircle className="h-5 w-5 text-purple-400" />
+          <DialogTitle className="text-card-foreground flex items-center gap-2">
+            <div className="p-1.5 rounded-full bg-primary/20">
+              <MessageCircle className="h-5 w-5 text-primary" />
+            </div>
             Create New Chat
           </DialogTitle>
         </DialogHeader>
@@ -85,9 +87,10 @@ export function NewChatDialog({ onChatCreated }: NewChatDialogProps) {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               onKeyPress={(e) => e.key === "Enter" && handleCreateChat()}
-              className="bg-gray-700 border-gray-600 text-white placeholder:text-gray-400 focus:border-purple-500 focus:ring-purple-500"
+              className="bg-input border-border text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200"
+              autoFocus
             />
-            <p className="text-xs text-gray-400">
+            <p className="text-xs text-muted-foreground">
               Give your chat a descriptive name to help you find it later
             </p>
           </div>
@@ -95,14 +98,14 @@ export function NewChatDialog({ onChatCreated }: NewChatDialogProps) {
             <Button
               variant="outline"
               onClick={() => setIsOpen(false)}
-              className="border-gray-600 text-gray-300 hover:bg-gray-700 rounded-full"
+              className="border-border text-muted-foreground hover:text-foreground hover:bg-muted rounded-full transition-all duration-200"
             >
               Cancel
             </Button>
             <Button
               onClick={handleCreateChat}
               disabled={isLoading}
-              className="bg-purple-600 hover:bg-purple-700 text-white rounded-full"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
             >
               {isLoading ? (
                 <>

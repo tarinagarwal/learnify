@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Document, Page } from 'react-pdf';
 import { getAnnotations } from '../services/annotations';
 import { Annotation } from '../types';
-import { ChevronLeft, ChevronRight, ZoomIn, ZoomOut, MessageSquare } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ZoomIn, ZoomOut, MessageSquare, FileText, Sparkles } from 'lucide-react';
 
 interface PdfViewerProps {
   pdfUrl: string;
@@ -56,53 +56,63 @@ export const PdfViewer: React.FC<PdfViewerProps> = ({ pdfUrl, pdfId, userId }) =
 
   if (loading) {
     return (
-      <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
-        <div className="flex items-center justify-center h-96">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl shadow-lg overflow-hidden">
+        <div className="flex flex-col items-center justify-center h-96 p-6">
+          <div className="relative w-16 h-16 mx-auto mb-4">
+            <div className="absolute inset-0 rounded-full border-4 border-primary/20 animate-pulse"></div>
+            <div className="absolute inset-0 rounded-full border-t-4 border-primary animate-spin"></div>
+            <FileText className="absolute inset-0 m-auto h-8 w-8 text-primary" />
+          </div>
+          <p className="text-lg font-medium text-foreground">Loading PDF Document...</p>
+          <p className="text-sm text-muted-foreground mt-2">Please wait while we prepare your document</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+    <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl shadow-lg overflow-hidden hover:shadow-xl hover:ring-2 hover:ring-primary/20 transition-all duration-300">
       {/* PDF Viewer Header */}
-      <div className="bg-gray-50 border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+      <div className="bg-muted/50 border-b border-border px-6 py-4 flex items-center justify-between">
         <div className="flex items-center space-x-4">
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center gap-2 bg-card/50 backdrop-blur-sm rounded-lg p-2 border border-border">
             <button 
               onClick={() => handlePageChange('prev')}
               disabled={currentPage <= 1}
-              className="p-2 rounded-lg hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="p-2 rounded-md text-muted-foreground hover:text-primary hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+              aria-label="Previous page"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
-            <span className="text-sm font-medium text-gray-700 px-3 py-1 bg-white rounded-md border min-w-[80px] text-center">
+            <span className="text-sm font-medium text-foreground px-3 py-1 bg-background rounded-md border border-border min-w-[80px] text-center">
               {currentPage} / {numPages || 1}
             </span>
             <button 
               onClick={() => handlePageChange('next')}
               disabled={!numPages || currentPage >= numPages}
-              className="p-2 rounded-lg hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="p-2 rounded-md text-muted-foreground hover:text-primary hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+              aria-label="Next page"
             >
               <ChevronRight className="w-4 h-4" />
             </button>
           </div>
         </div>
         
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center gap-2 bg-card/50 backdrop-blur-sm rounded-lg p-2 border border-border">
           <button 
             onClick={() => handleZoomChange('out')}
-            className="p-2 rounded-lg hover:bg-gray-200 transition-colors"
+            className="p-2 rounded-md text-muted-foreground hover:text-primary hover:bg-muted transition-all duration-200"
+            aria-label="Zoom out"
           >
             <ZoomOut className="w-4 h-4" />
           </button>
-          <span className="text-sm font-medium text-gray-700 px-3 py-1 bg-white rounded-md border min-w-[60px] text-center">
+          <span className="text-sm font-medium text-foreground px-3 py-1 bg-background rounded-md border border-border min-w-[60px] text-center">
             {zoom}%
           </span>
           <button 
             onClick={() => handleZoomChange('in')}
-            className="p-2 rounded-lg hover:bg-gray-200 transition-colors"
+            className="p-2 rounded-md text-muted-foreground hover:text-primary hover:bg-muted transition-all duration-200"
+            aria-label="Zoom in"
           >
             <ZoomIn className="w-4 h-4" />
           </button>
@@ -110,27 +120,31 @@ export const PdfViewer: React.FC<PdfViewerProps> = ({ pdfUrl, pdfId, userId }) =
       </div>
 
       {/* PDF Content Area */}
-      <div className="p-6 bg-gray-100 min-h-[600px] flex justify-center overflow-auto">
-        <div className="relative">
+      <div className="p-6 bg-muted/20 min-h-[600px] flex justify-center overflow-auto relative">
+        {/* Subtle grid pattern background */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--border))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border))_1px,transparent_1px)] bg-[size:20px_20px] opacity-30" />
+        
+        <div className="relative z-10">
           <Document 
             file={pdfUrl} 
             onLoadSuccess={onDocumentLoadSuccess}
             onLoadError={(error) => console.error('PDF Load Error:', error)}
-            className="shadow-lg"
+            className="shadow-xl rounded-lg overflow-hidden"
           >
-            <div className="relative bg-white border border-gray-300 shadow-lg">
+            <div className="relative bg-background border border-border shadow-xl rounded-lg overflow-hidden">
               <Page 
                 pageNumber={currentPage}
                 scale={zoom / 100}
                 renderTextLayer={true}
                 renderAnnotationLayer={true}
+                className="rounded-lg"
               />
               
               {/* Highlight Overlays */}
               {getCurrentPageAnnotations().map((annotation) => (
                 <div
                   key={annotation.id}
-                  className="absolute bg-yellow-300 bg-opacity-40 border-2 border-yellow-400 cursor-pointer hover:bg-opacity-60 transition-all duration-200 group"
+                  className="absolute bg-yellow-400/30 border-2 border-yellow-500/60 cursor-pointer hover:bg-yellow-400/50 transition-all duration-200 group rounded-sm"
                   style={{
                     left: `${annotation.highlight_coords.x * (zoom / 100)}px`,
                     top: `${annotation.highlight_coords.y * (zoom / 100)}px`,
@@ -138,10 +152,19 @@ export const PdfViewer: React.FC<PdfViewerProps> = ({ pdfUrl, pdfId, userId }) =
                     height: `${annotation.highlight_coords.height * (zoom / 100)}px`,
                   }}
                   title={annotation.comment || 'Highlight'}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`Annotation: ${annotation.comment || 'Highlight'}`}
                 >
-                  <div className="absolute -top-2 -right-2 bg-yellow-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="absolute -top-2 -right-2 bg-yellow-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg border border-yellow-600">
                     <MessageSquare className="w-3 h-3" />
                   </div>
+                  {annotation.comment && (
+                    <div className="absolute top-full left-0 mt-2 bg-card border border-border rounded-lg p-3 shadow-xl max-w-xs opacity-0 group-hover:opacity-100 transition-opacity z-20 text-card-foreground text-sm">
+                      <div className="absolute -top-1 left-4 w-2 h-2 bg-card border-l border-t border-border transform rotate-45"></div>
+                      {annotation.comment}
+                    </div>
+                  )}
                 </div>
               ))}
             </div>

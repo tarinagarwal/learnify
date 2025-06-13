@@ -17,8 +17,8 @@ export const PdfThumbnail: React.FC<PdfThumbnailProps> = ({
   onLoadSuccess,
 }) => {
   return (
-    <div className="group overflow-hidden rounded-xl shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-100 bg-white">
-      <div className="aspect-[3/4] bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center relative">
+    <div className="group overflow-hidden rounded-xl shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-border bg-card/50 backdrop-blur-sm hover:ring-2 hover:ring-primary/20">
+      <div className="aspect-[3/4] bg-gradient-to-br from-muted to-primary/10 flex items-center justify-center relative">
         <Document
           file={pdfUrl}
           onLoadSuccess={onLoadSuccess}
@@ -30,10 +30,10 @@ export const PdfThumbnail: React.FC<PdfThumbnailProps> = ({
             width={width}
             renderTextLayer={false}
             renderAnnotationLayer={false}
-            className="w-full h-full object-contain"
+            className="w-full h-full object-contain rounded-lg"
           />
         </Document>
-        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-5 transition-all duration-300 rounded-t-xl"></div>
+        <div className="absolute inset-0 bg-background/0 group-hover:bg-background/5 transition-all duration-300 rounded-xl"></div>
       </div>
     </div>
   );

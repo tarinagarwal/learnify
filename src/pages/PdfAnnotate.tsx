@@ -1,10 +1,9 @@
-/ src/pages/PdfAnnotate.tsx
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../services/supabase';
 import { PdfViewer } from '../components/PdfViewer';
 import { AnnotationControls } from '../components/AnnotationControls';
-import { ChevronLeft } from 'lucide-react';
+import { ChevronLeft, Loader2, AlertCircle } from 'lucide-react';
 
 export const PdfAnnotate: React.FC = () => {
   const { pdfId } = useParams<{ pdfId: string }>();
@@ -56,10 +55,15 @@ export const PdfAnnotate: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading PDF...</p>
+          <div className="relative w-16 h-16 mx-auto mb-6">
+            <div className="absolute inset-0 rounded-full border-4 border-primary/20 animate-pulse"></div>
+            <div className="absolute inset-0 rounded-full border-t-4 border-primary animate-spin"></div>
+            <Loader2 className="absolute inset-0 m-auto h-8 w-8 text-primary" />
+          </div>
+          <p className="text-xl text-foreground">Loading PDF...</p>
+          <p className="text-muted-foreground mt-2">Please wait while we prepare your document</p>
         </div>
       </div>
     );
@@ -67,15 +71,16 @@ export const PdfAnnotate: React.FC = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-            <p className="font-bold">Error</p>
-            <p>{error}</p>
+      <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
+        <div className="text-center max-w-md mx-auto p-6">
+          <div className="bg-destructive/20 border border-destructive rounded-lg p-6 mb-6">
+            <AlertCircle className="w-12 h-12 text-destructive mx-auto mb-4" />
+            <p className="font-bold text-destructive text-lg mb-2">Error Loading PDF</p>
+            <p className="text-destructive-foreground">{error}</p>
           </div>
           <button 
             onClick={handleBack}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            className="px-6 py-3 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg transition-colors duration-200 font-medium"
           >
             Back to Resources
           </button>
@@ -86,12 +91,14 @@ export const PdfAnnotate: React.FC = () => {
 
   if (!pdfUrl || !userId) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-gray-600">Unable to load PDF or user information</p>
+      <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
+        <div className="text-center max-w-md mx-auto p-6">
+          <AlertCircle className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+          <p className="text-xl text-foreground mb-2">Unable to Load Content</p>
+          <p className="text-muted-foreground mb-6">Unable to load PDF or user information</p>
           <button 
             onClick={handleBack}
-            className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            className="px-6 py-3 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg transition-colors duration-200 font-medium"
           >
             Back to Resources
           </button>
@@ -101,36 +108,57 @@ export const PdfAnnotate: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background text-foreground">
       <div className="container mx-auto px-6 py-6">
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-8 bg-card/50 backdrop-blur-sm border border-border rounded-xl p-6">
           <div className="flex items-center">
             <button 
               onClick={handleBack}
-              className="mr-4 p-2 rounded-lg hover:bg-gray-200 transition-colors"
+              className="mr-4 p-2 rounded-lg text-muted-foreground hover:text-primary hover:bg-muted transition-colors duration-200"
             >
-              <ChevronLeft className="w-5 h-5" />
+              <ChevronLeft className="w-6 h-6" />
             </button>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Annotate PDF</h1>
-              <p className="text-gray-600">{pdfId}</p>
+              <h1 className="text-3xl font-bold text-card-foreground">PDF Annotation Studio</h1>
+              <p className="text-muted-foreground mt-1">
+                Document: <span className="text-primary font-medium">{pdfId}</span>
+              </p>
             </div>
           </div>
         </div>
 
         {/* Main Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* PDF Viewer Section */}
           <div className="lg:col-span-3">
-            <PdfViewer pdfUrl={pdfUrl} pdfId={pdfId!} userId={userId} />
+            <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl p-6 shadow-lg">
+              <div className="mb-4 flex items-center justify-between">
+                <h2 className="text-xl font-semibold text-card-foreground">Document Viewer</h2>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-muted-foreground">Page</span>
+                  <span className="px-2 py-1 bg-primary/20 text-primary border border-primary/30 rounded text-sm font-medium">
+                    {pageNumber}
+                  </span>
+                </div>
+              </div>
+              <div className="border border-border rounded-lg overflow-hidden bg-muted/20">
+                <PdfViewer pdfUrl={pdfUrl} pdfId={pdfId!} userId={userId} />
+              </div>
+            </div>
           </div>
+
+          {/* Annotation Controls Section */}
           <div className="lg:col-span-1">
-            <AnnotationControls
-              pdfId={pdfId!}
-              pageNumber={pageNumber}
-              userId={userId}
-              onHighlight={handleHighlight}
-            />
+            <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl p-6 shadow-lg sticky top-6">
+              <h2 className="text-xl font-semibold text-card-foreground mb-6">Annotation Tools</h2>
+              <AnnotationControls
+                pdfId={pdfId!}
+                pageNumber={pageNumber}
+                userId={userId}
+                onHighlight={handleHighlight}
+              />
+            </div>
           </div>
         </div>
       </div>
