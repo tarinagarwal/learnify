@@ -361,14 +361,11 @@ export default function LanguageTutor() {
               height: `${Math.random() * 6 + 2}px`,
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
-              backgroundColor: `rgba(${Math.random() * 100 + 155}, ${
-                Math.random() * 100 + 155
-              }, 255, ${Math.random() * 0.5 + 0.5})`,
-              boxShadow: `0 0 ${Math.random() * 10 + 5}px rgba(${
-                Math.random() * 100 + 155
-              }, ${Math.random() * 100 + 155}, 255, ${
-                Math.random() * 0.5 + 0.5
-              })`,
+              backgroundColor: `rgba(${Math.random() * 100 + 155}, ${Math.random() * 100 + 155
+                }, 255, ${Math.random() * 0.5 + 0.5})`,
+              boxShadow: `0 0 ${Math.random() * 10 + 5}px rgba(${Math.random() * 100 + 155
+                }, ${Math.random() * 100 + 155}, 255, ${Math.random() * 0.5 + 0.5
+                })`,
               animation: `float ${Math.random() * 10 + 20}s linear infinite`,
               animationDelay: `${Math.random() * 10}s`,
             }}
@@ -410,36 +407,46 @@ export default function LanguageTutor() {
             onValueChange={setActiveTab}
             className="w-full"
           >
-            <TabsList className="mb-6 grid grid-cols-4 bg-gray-800 p-1 rounded-full">
+
+
+
+
+            <TabsList className="mb-6 flex justify-between bg-gray-800 px-0 rounded-full h-auto md:p-1">
               <TabsTrigger
                 value="chat"
-                className="flex items-center gap-2 rounded-full data-[state=active]:bg-purple-600 data-[state=active]:text-white"
+                className="text-xs gap-1 flex items-center px-2 mx-0 rounded-full data-[state=active]:bg-purple-600 data-[state=active]:text-white md:text-xl md:gap-2 md:w-auto md:h-auto md:px-8"
               >
                 <MessageCircle className="w-4 h-4" />
-                Chat
+                <span>Chat</span>
               </TabsTrigger>
+
               <TabsTrigger
                 value="grammar"
-                className="flex items-center gap-2 rounded-full data-[state=active]:bg-purple-600 data-[state=active]:text-white"
+                className="text-xs gap-1 px-2 flex items-center rounded-full data-[state=active]:bg-purple-600 data-[state=active]:text-white md:text-xl md:gap-2 md:w-auto md:h-auto md:px-8"
               >
-                <Book className="w-4 h-4" />
-                Grammar Check
+                <Book className="w-3 h-3 md:w-4 md:h-4" />
+                <span>Grammar Check</span>
               </TabsTrigger>
+
               <TabsTrigger
                 value="practice"
-                className="flex items-center gap-2 rounded-full data-[state=active]:bg-purple-600 data-[state=active]:text-white"
+                className="text-xs gap-1 mx-0 flex px-2 items-center rounded-full data-[state=active]:bg-purple-600 data-[state=active]:text-white md:text-xl md:gap-2 md:w-auto md:h-auto md:px-8"
               >
                 <GraduationCap className="w-4 h-4" />
-                Practice
+                <span>Practice</span>
               </TabsTrigger>
+
               <TabsTrigger
                 value="saved"
-                className="flex items-center gap-2 rounded-full data-[state=active]:bg-purple-600 data-[state=active]:text-white"
+                className="text-xs gap-1 flex items-center px-2 rounded-full data-[state=active]:bg-purple-600 data-[state=active]:text-white md:text-xl md:gap-2 md:w-auto md:h-auto md:px-8"
               >
                 <Bookmark className="w-4 h-4" />
-                Saved
+                <span>Saved</span>
               </TabsTrigger>
             </TabsList>
+
+
+
 
             <TabsContent value="chat">
               <Card className="bg-gray-800 border-none hover:shadow-[0_0_15px_rgba(168,85,247,0.15)] transition-all duration-300">
@@ -512,18 +519,16 @@ export default function LanguageTutor() {
                           messages.map((message, index) => (
                             <div
                               key={index}
-                              className={`flex ${
-                                message.role === "user"
-                                  ? "justify-end"
-                                  : "justify-start"
-                              }`}
+                              className={`flex ${message.role === "user"
+                                ? "justify-end"
+                                : "justify-start"
+                                }`}
                             >
                               <div
-                                className={`max-w-[80%] rounded-lg p-3 ${
-                                  message.role === "user"
-                                    ? "bg-purple-600 text-white"
-                                    : "bg-gray-700 text-gray-100"
-                                }`}
+                                className={`max-w-[80%] rounded-lg p-3 ${message.role === "user"
+                                  ? "bg-purple-600 text-white"
+                                  : "bg-gray-700 text-gray-100"
+                                  }`}
                               >
                                 <ReactMarkdown>{message.content}</ReactMarkdown>
                               </div>
