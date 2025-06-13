@@ -67,7 +67,7 @@ export default function Profile() {
       if (error) throw error;
 
       setAlert({ show: true, title: "Success", message: "Profile updated successfully!", type: "success" });
-    } catch (error: any) {
+    } catch (error: unknown) {
       setAlert({ show: true, title: "Error", message: error.message || "Unknown error", type: "error" });
     } finally {
       setLoading(false);
@@ -105,7 +105,7 @@ export default function Profile() {
       setCurrentPassword(""); setNewPassword(""); setConfirmPassword("");
 
       setAlert({ show: true, title: "Success", message: "Password updated successfully!", type: "success" });
-    } catch (error: any) {
+    } catch (error: unknown) {
       setAlert({ show: true, title: "Error", message: error.message || "Unknown error", type: "error" });
     } finally {
       setLoading(false);

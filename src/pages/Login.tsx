@@ -28,7 +28,7 @@ export default function Login() {
 
       if (error) throw error;
       navigate("/");
-    } catch (error: any) {
+    } catch (error: unknown) {
       setError(error.message);
     } finally {
       setLoading(false);

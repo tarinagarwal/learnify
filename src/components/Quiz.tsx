@@ -182,7 +182,7 @@ export default function Quiz() {
         questions={questions}
         userAnswers={userAnswers}
         onRestart={handleRestart}
-        // @ts-expect-error
+        // @ts-expect-error: `quizId` is required by the component but not defined in this code path due to conditional rendering logic.
         quizId={quizId}
       />
     ) : (

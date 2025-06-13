@@ -18,9 +18,8 @@ import {
   Mail,
   MessageSquare,
   Send,
-  CheckCircle,
-  Clock,
-  Sparkles,
+  CheckCircle
+
 } from "lucide-react";
 
 export default function ContactPage() {

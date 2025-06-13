@@ -35,7 +35,7 @@ export default function ForgotPassword() {
         type: "success",
       });
       setEmail("");
-    } catch (error: any) {
+    } catch (error: unknown) {
       setAlert({
         show: true,
         title: "Error",

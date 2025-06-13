@@ -14,7 +14,6 @@ import {
   Save,
   Undo,
   X,
-  Sparkles,
 } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";

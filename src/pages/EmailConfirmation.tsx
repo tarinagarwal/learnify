@@ -36,7 +36,7 @@ export default function EmailConfirmation() {
 
           return () => clearInterval(interval);
         }
-      } catch (error: any) {
+      } catch (error: unknown) {
         setError(error.message);
         setVerifying(false);
       }

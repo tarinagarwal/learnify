@@ -55,6 +55,7 @@ export default function QuizSetup({ onStart, initialConfig }: Props) {
       setTopic(storedTopic);
       sessionStorage.clear();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handlePdfChange = async (e: React.ChangeEvent<HTMLInputElement>) => {

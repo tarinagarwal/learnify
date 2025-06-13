@@ -8,7 +8,6 @@ import {
   ChevronUp,
   Brain,
   Loader2,
-  Sparkles,
 } from "lucide-react";
 import type { Question } from "../types/quiz";
 import {

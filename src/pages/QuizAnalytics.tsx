@@ -31,6 +31,7 @@ export default function QuizAnalytics() {
       return;
     }
     fetchAnalytics();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const fetchAnalytics = async () => {
@@ -291,7 +292,7 @@ export default function QuizAnalytics() {
                       {...props}
                     />
                   ),
-                  // @ts-expect-error
+                  // @ts-expect-error: The `code` component may receive props that aren't explicitly typed,
                   code: ({ inline, ...props }) =>
                     inline ? (
                       <code

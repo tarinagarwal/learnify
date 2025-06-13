@@ -9,7 +9,7 @@ import {
   Loader2,
   Bookmark,
   BookmarkCheck,
-  Sparkles,
+
 } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import {
