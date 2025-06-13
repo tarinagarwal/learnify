@@ -15,10 +15,8 @@ export default function ChapterContent() {
   const [chapter, setChapter] = useState<Chapter | null>(null);
   const [course, setCourse] = useState<Course | null>(null);
   const [chapters, setChapters] = useState<unknown[]>([]);
-
   const [loading, setLoading] = useState(true);
 
-  
   useEffect(() => {
     fetchContent();
    // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -110,14 +108,14 @@ export default function ChapterContent() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-950 text-gray-100 flex items-center justify-center">
+      <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
         <div className="text-center">
           <div className="relative w-16 h-16 mx-auto">
-            <div className="absolute inset-0 rounded-full border-4 border-purple-400/20 animate-pulse"></div>
-            <div className="absolute inset-0 rounded-full border-t-4 border-purple-400 animate-spin"></div>
-            <Sparkles className="absolute inset-0 m-auto h-8 w-8 text-purple-400" />
+            <div className="absolute inset-0 rounded-full border-4 border-primary/20 animate-pulse"></div>
+            <div className="absolute inset-0 rounded-full border-t-4 border-primary animate-spin"></div>
+            <Sparkles className="absolute inset-0 m-auto h-8 w-8 text-primary" />
           </div>
-          <p className="mt-6 text-xl text-gray-100">
+          <p className="mt-6 text-xl text-foreground">
             Loading Chapter Content...
           </p>
         </div>
@@ -126,34 +124,34 @@ export default function ChapterContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-950 text-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         <div className="mb-8 flex justify-between items-center">
           <Button
             variant="ghost"
             onClick={() => navigate(`/courses`)}
-            className="inline-flex items-center text-gray-300 hover:text-purple-400"
+            className="inline-flex items-center text-muted-foreground hover:text-primary hover:bg-muted"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Courses
           </Button>
           <Button
             onClick={handleGenerateQuiz}
-            className="bg-purple-600 hover:bg-purple-700 text-white"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground"
           >
             <Brain className="h-4 w-4 mr-2" />
             Generate Quiz
           </Button>
         </div>
 
-        <Card className="bg-gray-800/30 backdrop-blur-sm border-gray-700 overflow-hidden">
-          <CardHeader className="border-b border-gray-700">
-            <div className="flex items-center gap-2 text-sm font-medium text-gray-400 mb-2 md:justify-between">
-              <div className="flex item-center gap-2 text-sm font-medium mb-2">
-                <BookOpen className=" text-purple-400" />
+        <Card className="bg-card/50 backdrop-blur-sm border-border overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
+          <CardHeader className="border-b border-border bg-card/30">
+            <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground mb-2 md:justify-between">
+              <div className="flex items-center gap-2 text-sm font-medium mb-2">
+                <BookOpen className="text-primary" />
                 <span>{course?.title}</span>
               </div>
-              <div className="flex items-center gap-2 bg-gray-800 p-2 rounded-lg">
+              <div className="flex items-center gap-2 bg-muted/50 p-2 rounded-lg border border-border">
                 <Button
                   variant="outline"
                   size="sm"
@@ -171,7 +169,7 @@ export default function ChapterContent() {
                       }
                     }
                   }}
-                  className="flex items-center gap-2 border-gray-700 text-gray-900"
+                  className="flex items-center gap-2 border-border text-muted-foreground hover:text-primary hover:bg-muted"
                   disabled={
                     !chapter ||
                     chapters.findIndex((c) => c.id === chapterId) <= 0
@@ -180,7 +178,7 @@ export default function ChapterContent() {
                   <ArrowLeft className="w-4 h-4" />
                   Previous
                 </Button>
-                <span className="text-gray-300 px-2">
+                <span className="text-foreground px-2 font-medium">
                   Chapter{" "}
                   {
                     chapters[chapters.findIndex((c) => c.id === chapterId)]
@@ -204,7 +202,7 @@ export default function ChapterContent() {
                       }
                     }
                   }}
-                  className="flex items-center gap-2 border-gray-700 text-gray-900"
+                  className="flex items-center gap-2 border-border text-muted-foreground hover:text-primary hover:bg-muted"
                   disabled={
                     !chapter ||
                     chapters.findIndex((c) => c.id === chapterId) >=
@@ -216,7 +214,7 @@ export default function ChapterContent() {
                 </Button>
               </div>
             </div>
-            <CardTitle className="text-2xl font-bold text-gray-100">
+            <CardTitle className="text-2xl font-bold text-card-foreground">
               {chapter?.title}
             </CardTitle>
           </CardHeader>
@@ -226,43 +224,43 @@ export default function ChapterContent() {
                 components={{
                   h1: ({ ...props }) => (
                     <h1
-                      className="text-2xl font-bold mt-6 mb-4 text-gray-100"
+                      className="text-2xl font-bold mt-6 mb-4 text-card-foreground"
                       {...props}
                     />
                   ),
                   h2: ({ ...props }) => (
                     <h2
-                      className="text-xl font-semibold mt-5 mb-3 text-gray-100"
+                      className="text-xl font-semibold mt-5 mb-3 text-card-foreground"
                       {...props}
                     />
                   ),
                   h3: ({ ...props }) => (
                     <h3
-                      className="text-lg font-medium mt-4 mb-2 text-gray-100"
+                      className="text-lg font-medium mt-4 mb-2 text-card-foreground"
                       {...props}
                     />
                   ),
                   p: ({ ...props }) => (
-                    <p className="mb-4 text-gray-300" {...props} />
+                    <p className="mb-4 text-foreground leading-relaxed" {...props} />
                   ),
                   ul: ({ ...props }) => (
                     <ul
-                      className="list-disc pl-6 mb-4 text-gray-300"
+                      className="list-disc pl-6 mb-4 text-foreground"
                       {...props}
                     />
                   ),
                   ol: ({ ...props }) => (
                     <ol
-                      className="list-decimal pl-6 mb-4 text-gray-300"
+                      className="list-decimal pl-6 mb-4 text-foreground"
                       {...props}
                     />
                   ),
-                  li: ({  ...props }) => (
-                    <li className="mb-1 text-gray-300" {...props} />
+                  li: ({ ...props }) => (
+                    <li className="mb-1 text-foreground" {...props} />
                   ),
-                  blockquote: ({  ...props }) => (
+                  blockquote: ({ ...props }) => (
                     <blockquote
-                      className="border-l-4 border-purple-500 pl-4 italic my-4 text-gray-300"
+                      className="border-l-4 border-primary pl-4 italic my-4 text-muted-foreground bg-muted/20 py-2 rounded-r-lg"
                       {...props}
                     />
                   ),
@@ -270,12 +268,12 @@ export default function ChapterContent() {
                   code: ({ inline, ...props }) =>
                     inline ? (
                       <code
-                        className="bg-gray-800 px-1 py-0.5 rounded text-sm text-purple-300"
+                        className="bg-muted px-2 py-1 rounded text-sm text-primary font-medium border border-border"
                         {...props}
                       />
                     ) : (
-                      <pre className="bg-gray-800 p-4 rounded-md overflow-x-auto">
-                        <code className="text-sm text-gray-300" {...props} />
+                      <pre className="bg-muted p-4 rounded-lg overflow-x-auto border border-border my-4">
+                        <code className="text-sm text-foreground font-mono" {...props} />
                       </pre>
                     ),
                 }}

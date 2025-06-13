@@ -8,6 +8,7 @@ import {
   AlertTriangle,
   Download,
   Printer,
+  Share2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -23,7 +24,6 @@ export default function QuizAnalytics() {
   const [error, setError] = useState<string | null>(null);
   const contentRef = useRef<HTMLDivElement>(null);
 
-  
   useEffect(() => {
     if (!id) {
       setError("No quiz ID provided");
@@ -31,7 +31,6 @@ export default function QuizAnalytics() {
       return;
     }
     fetchAnalytics();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const fetchAnalytics = async () => {
@@ -69,48 +68,28 @@ export default function QuizAnalytics() {
     window.print();
   };
 
-/*
-  const handleShare = async () => {
-    try {
-      await navigator.share({
-        title: "Quiz Analytics",
-        text: "Check out my quiz analytics!",
-        url: window.location.href,
-      });
-    } catch (error) {
-      console.error("Error sharing:", error);
-    }
-  };
-*/
   const handleDownload = async () => {
     if (!contentRef.current || !analytics) return;
 
     try {
-      // Capture the full content in a canvas
       const canvas = await html2canvas(contentRef.current, {
         scale: 2,
-        backgroundColor: "#111827", // Ensure matching the website's dark theme
+        backgroundColor: "#111827",
         logging: false,
       });
 
-      // Convert the canvas to an image
       const imgData = canvas.toDataURL("image/jpeg", 1.0);
-
-      // Set up PDF dimensions for A4
       const pdf = new jsPDF("p", "mm", "a4");
-      const pageWidth = 210; // A4 width in mm
-      const pageHeight = 297; // A4 height in mm
+      const pageWidth = 210;
+      const pageHeight = 297;
 
-      // Calculate the image height based on the canvas dimensions and scale
       const imgHeight = (canvas.height * pageWidth) / canvas.width;
       let heightLeft = imgHeight;
       let position = 0;
 
-      // Add the first page
       pdf.addImage(imgData, "JPEG", 0, position, pageWidth, imgHeight);
       heightLeft -= pageHeight;
 
-      // Continue adding pages while there is content left
       while (heightLeft > 0) {
         position = heightLeft - imgHeight;
         pdf.addPage();
@@ -118,10 +97,25 @@ export default function QuizAnalytics() {
         heightLeft -= pageHeight;
       }
 
-      // Save the PDF
       pdf.save("quiz-analytics.pdf");
     } catch (error) {
       console.error("Error generating PDF:", error);
+    }
+  };
+
+  const handleShare = async () => {
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: "Quiz Analytics",
+          text: "Check out my quiz performance analysis!",
+          url: window.location.href,
+        });
+      } else {
+        alert("Sharing not supported on this browser.");
+      }
+    } catch (error) {
+      console.error("Error sharing:", error);
     }
   };
 
@@ -183,7 +177,6 @@ export default function QuizAnalytics() {
   return (
     <div className="min-h-screen bg-gray-950 text-gray-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-5xl mx-auto">
-        {/* Header */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8">
           <div className="flex items-center">
             <Button
@@ -220,6 +213,15 @@ export default function QuizAnalytics() {
               <Download className="h-4 w-4 mr-2" />
               Download PDF
             </Button>
+
+            <Button
+              variant="outline"
+              onClick={handleShare}
+              className="border-gray-700 text-gray-700 hover:text-purple-400"
+            >
+              <Share2 className="h-4 w-4 mr-2" />
+              Share
+            </Button>
           </div>
         </div>
 
@@ -244,19 +246,19 @@ export default function QuizAnalytics() {
                       {...props}
                     />
                   ),
-                  h3: ({  ...props }) => (
+                  h3: ({ ...props }) => (
                     <h3
                       className="text-xl font-medium mt-8 mb-4 text-purple-300"
                       {...props}
                     />
                   ),
-                  h4: ({  ...props }) => (
+                  h4: ({ ...props }) => (
                     <h4
                       className="text-lg font-medium mt-6 mb-3 text-gray-200"
                       {...props}
                     />
                   ),
-                  p: ({  ...props }) => (
+                  p: ({ ...props }) => (
                     <p
                       className="mb-4 text-gray-300 leading-relaxed"
                       {...props}
@@ -268,28 +270,28 @@ export default function QuizAnalytics() {
                       {...props}
                     />
                   ),
-                  ol: ({  ...props }) => (
+                  ol: ({ ...props }) => (
                     <ol
                       className="my-6 ml-6 list-decimal [&>li]:mt-2 text-gray-300"
                       {...props}
                     />
                   ),
-                  li: ({  ...props }) => (
+                  li: ({ ...props }) => (
                     <li className="text-gray-300" {...props} />
                   ),
-                  strong: ({  ...props }) => (
+                  strong: ({ ...props }) => (
                     <strong
                       className="font-semibold text-purple-300"
                       {...props}
                     />
                   ),
-                  blockquote: ({  ...props }) => (
+                  blockquote: ({ ...props }) => (
                     <blockquote
                       className="mt-6 border-l-4 border-purple-500 pl-6 italic text-gray-300"
                       {...props}
                     />
                   ),
-                  // @ts-expect-error: Custom renderer for <code> block does not match the expected type in ReactMarkdown components
+                  // @ts-expect-error
                   code: ({ inline, ...props }) =>
                     inline ? (
                       <code
@@ -301,7 +303,7 @@ export default function QuizAnalytics() {
                         <code className="text-gray-300 text-sm" {...props} />
                       </pre>
                     ),
-                  a: ({  ...props }) => (
+                  a: ({ ...props }) => (
                     <a
                       className="font-medium text-purple-400 underline underline-offset-4 hover:text-purple-300 transition-colors"
                       target="_blank"
@@ -309,7 +311,7 @@ export default function QuizAnalytics() {
                       {...props}
                     />
                   ),
-                  table: ({  ...props }) => (
+                  table: ({ ...props }) => (
                     <div className="my-6 w-full overflow-y-auto">
                       <table
                         className="w-full border-collapse border border-gray-700"
@@ -323,7 +325,7 @@ export default function QuizAnalytics() {
                       {...props}
                     />
                   ),
-                  td: ({  ...props }) => (
+                  td: ({ ...props }) => (
                     <td
                       className="border border-gray-700 px-4 py-2 text-gray-300"
                       {...props}

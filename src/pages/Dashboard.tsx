@@ -285,27 +285,27 @@ export const Dashboard: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[calc(100vh-4rem)] bg-gray-950 text-gray-100">
+      <div className="flex items-center justify-center min-h-[calc(100vh-4rem)] bg-background text-foreground">
         <div className="text-center">
           <div className="relative w-16 h-16 mx-auto">
-            <div className="absolute inset-0 rounded-full border-4 border-purple-400/20 animate-pulse"></div>
-            <div className="absolute inset-0 rounded-full border-t-4 border-purple-400 animate-spin"></div>
-            <Sparkles className="absolute inset-0 m-auto h-8 w-8 text-purple-400" />
+            <div className="absolute inset-0 rounded-full border-4 border-primary/20 animate-pulse"></div>
+            <div className="absolute inset-0 rounded-full border-t-4 border-primary animate-spin"></div>
+            <Sparkles className="absolute inset-0 m-auto h-8 w-8 text-primary" />
           </div>
-          <p className="mt-6 text-xl text-gray-100">Loading Dashboard...</p>
+          <p className="mt-6 text-xl text-foreground">Loading Dashboard...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-950 text-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         {/* Page Header with animated background */}
-        <div className="relative py-16 px-4 sm:px-6 lg:px-8 mb-12 rounded-2xl overflow-hidden bg-gradient-to-br from-gray-900 to-purple-900/30">
+        <div className="relative py-16 px-4 sm:px-6 lg:px-8 mb-12 rounded-2xl overflow-hidden bg-gradient-to-br from-muted to-primary/10">
           {/* Animated grid background */}
           <div className="absolute inset-0 z-0">
-            <div className="absolute inset-0 bg-[linear-gradient(45deg,#ffffff0a_1px,transparent_1px),linear-gradient(135deg,#ffffff0a_1px,transparent_1px)] bg-[size:40px_40px]" />
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--border))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border))_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
           </div>
 
           {/* Animated particles */}
@@ -313,20 +313,13 @@ export const Dashboard: React.FC = () => {
             {[...Array(10)].map((_, i) => (
               <div
                 key={i}
-                className="absolute rounded-full"
+                className="absolute rounded-full bg-primary/20"
                 style={{
                   width: `${Math.random() * 6 + 2}px`,
                   height: `${Math.random() * 6 + 2}px`,
                   left: `${Math.random() * 100}%`,
                   top: `${Math.random() * 100}%`,
-                  backgroundColor: `rgba(${Math.random() * 100 + 155}, ${
-                    Math.random() * 100 + 155
-                  }, 255, ${Math.random() * 0.5 + 0.5})`,
-                  boxShadow: `0 0 ${Math.random() * 10 + 5}px rgba(${
-                    Math.random() * 100 + 155
-                  }, ${Math.random() * 100 + 155}, 255, ${
-                    Math.random() * 0.5 + 0.5
-                  })`,
+                  boxShadow: `0 0 ${Math.random() * 10 + 5}px hsl(var(--primary) / 0.3)`,
                   animation: `float ${
                     Math.random() * 10 + 20
                   }s linear infinite`,
@@ -337,85 +330,87 @@ export const Dashboard: React.FC = () => {
           </div>
 
           <div className="relative z-10 text-center">
-            <div className="inline-flex items-center justify-center p-3 bg-purple-500/20 backdrop-blur-sm rounded-full mb-4">
-              <BookOpen className="h-16 w-16 text-purple-400" />
+            <div className="inline-flex items-center justify-center p-3 bg-primary/20 backdrop-blur-sm rounded-full mb-4">
+              <BookOpen className="h-16 w-16 text-primary" />
             </div>
-            <h2 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-300 to-blue-400">
+            <h2 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary via-accent-foreground to-primary">
               Dashboard
             </h2>
-            <p className="mt-2 text-xl text-gray-300">
+            <p className="mt-2 text-xl text-muted-foreground">
               Manage your notebooks and whiteboards
             </p>
           </div>
         </div>
 
+        {/* Stats Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-          <Card className="bg-gray-800/30 backdrop-blur-sm border-gray-700">
+          <Card className="bg-card/50 backdrop-blur-sm border-border hover:shadow-lg hover:ring-2 hover:ring-primary/20 transition-all duration-300">
             <CardContent className="p-6">
               <div className="flex items-center gap-3 mb-2">
-                <div className="p-2 rounded-full bg-purple-900/30 text-purple-400">
+                <div className="p-2 rounded-full bg-primary/20 text-primary">
                   <PencilRuler className="w-6 h-6" />
                 </div>
-                <h3 className="text-lg font-medium text-gray-100">
+                <h3 className="text-lg font-medium text-card-foreground">
                   Individual Whiteboards
                 </h3>
               </div>
-              <p className="text-3xl font-bold text-gray-100">
+              <p className="text-3xl font-bold text-card-foreground">
                 {stats.totalWhiteboards}
               </p>
             </CardContent>
           </Card>
-          <Card className="bg-gray-800/30 backdrop-blur-sm border-gray-700">
+          <Card className="bg-card/50 backdrop-blur-sm border-border hover:shadow-lg hover:ring-2 hover:ring-primary/20 transition-all duration-300">
             <CardContent className="p-6">
               <div className="flex items-center gap-3 mb-2">
-                <div className="p-2 rounded-full bg-purple-900/30 text-purple-400">
+                <div className="p-2 rounded-full bg-primary/20 text-primary">
                   <Book className="w-6 h-6" />
                 </div>
-                <h3 className="text-lg font-medium text-gray-100">Notebooks</h3>
+                <h3 className="text-lg font-medium text-card-foreground">Notebooks</h3>
               </div>
-              <p className="text-3xl font-bold text-gray-100">
+              <p className="text-3xl font-bold text-card-foreground">
                 {stats.totalNotebooks}
               </p>
             </CardContent>
           </Card>
-          <Card className="bg-gray-800/30 backdrop-blur-sm border-gray-700">
+          <Card className="bg-card/50 backdrop-blur-sm border-border hover:shadow-lg hover:ring-2 hover:ring-primary/20 transition-all duration-300">
             <CardContent className="p-6">
               <div className="flex items-center gap-3 mb-2">
-                <div className="p-2 rounded-full bg-purple-900/30 text-purple-400">
+                <div className="p-2 rounded-full bg-primary/20 text-primary">
                   <BookOpen className="w-6 h-6" />
                 </div>
-                <h3 className="text-lg font-medium text-gray-100">
+                <h3 className="text-lg font-medium text-card-foreground">
                   Notebook Pages
                 </h3>
               </div>
-              <p className="text-3xl font-bold text-gray-100">
+              <p className="text-3xl font-bold text-card-foreground">
                 {stats.totalNotebookPages}
               </p>
             </CardContent>
           </Card>
-          <Card className="bg-gray-800/30 backdrop-blur-sm border-gray-700">
+          <Card className="bg-card/50 backdrop-blur-sm border-border hover:shadow-lg hover:ring-2 hover:ring-primary/20 transition-all duration-300">
             <CardContent className="p-6">
               <div className="flex items-center gap-3 mb-2">
-                <div className="p-2 rounded-full bg-purple-900/30 text-purple-400">
+                <div className="p-2 rounded-full bg-primary/20 text-primary">
                   <MessageSquare className="w-6 h-6" />
                 </div>
-                <h3 className="text-lg font-medium text-gray-100">
+                <h3 className="text-lg font-medium text-card-foreground">
                   AI Responses
                 </h3>
               </div>
-              <p className="text-3xl font-bold text-gray-100">
+              <p className="text-3xl font-bold text-card-foreground">
                 {stats.totalResponses}
               </p>
             </CardContent>
           </Card>
         </div>
 
+        {/* Notebooks Section */}
         <div className="mb-12">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-gray-100">Your Notebooks</h2>
+            <h2 className="text-2xl font-bold text-foreground">Your Notebooks</h2>
             <Button
               onClick={() => setShowNewNotebookDialog(true)}
-              className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white"
+              className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground"
             >
               <Plus className="w-5 h-5" />
               New Notebook
@@ -423,11 +418,11 @@ export const Dashboard: React.FC = () => {
           </div>
 
           {notebooks.length === 0 ? (
-            <Card className="text-center p-8 bg-gray-800/30 backdrop-blur-sm border-gray-700">
+            <Card className="text-center p-8 bg-card/50 backdrop-blur-sm border-border">
               <CardContent>
-                <Book className="mx-auto h-12 w-12 text-gray-500 mb-4" />
-                <p className="text-xl text-gray-300">No notebooks yet</p>
-                <p className="mt-2 text-gray-400">
+                <Book className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
+                <p className="text-xl text-card-foreground">No notebooks yet</p>
+                <p className="mt-2 text-muted-foreground">
                   Create your first notebook to get started
                 </p>
               </CardContent>
@@ -437,11 +432,11 @@ export const Dashboard: React.FC = () => {
               {notebooks.map((notebook) => (
                 <div
                   key={notebook.id}
-                  className="bg-gray-800/30 backdrop-blur-sm border border-gray-700 rounded-xl overflow-hidden hover:shadow-[0_0_15px_rgba(168,85,247,0.15)] transition-all duration-300"
+                  className="bg-card/50 backdrop-blur-sm border border-border rounded-xl overflow-hidden hover:shadow-lg hover:ring-2 hover:ring-primary/20 transition-all duration-300"
                 >
                   <div className="p-6">
                     <div className="flex items-center justify-between mb-3">
-                      <h3 className="text-lg font-medium text-gray-100">
+                      <h3 className="text-lg font-medium text-card-foreground">
                         {notebook.title}
                       </h3>
                       <div className="flex items-center gap-2">
@@ -449,7 +444,7 @@ export const Dashboard: React.FC = () => {
                           variant="ghost"
                           size="icon"
                           onClick={() => navigate(`/notebook/${notebook.id}`)}
-                          className="text-purple-400 hover:text-purple-300 hover:bg-gray-800"
+                          className="text-primary hover:text-primary/80 hover:bg-muted"
                         >
                           <Book className="w-5 h-5" />
                         </Button>
@@ -457,20 +452,20 @@ export const Dashboard: React.FC = () => {
                           variant="ghost"
                           size="icon"
                           onClick={() => deleteNotebook(notebook.id)}
-                          className="text-gray-400 hover:text-red-400 hover:bg-gray-800"
+                          className="text-muted-foreground hover:text-destructive hover:bg-muted"
                         >
                           <Trash2 className="w-5 h-5" />
                         </Button>
                       </div>
                     </div>
-                    <p className="text-sm text-gray-400 mb-4">
+                    <p className="text-sm text-muted-foreground mb-4">
                       Created:{" "}
                       {new Date(notebook.created_at).toLocaleDateString()}
                     </p>
                     <div className="flex items-center gap-2">
-                      <div className="h-1 flex-grow bg-gray-700 rounded-full overflow-hidden">
+                      <div className="h-1 flex-grow bg-muted rounded-full overflow-hidden">
                         <div
-                          className="h-full bg-purple-500"
+                          className="h-full bg-primary"
                           style={{
                             width: `${Math.min(
                               100,
@@ -479,7 +474,7 @@ export const Dashboard: React.FC = () => {
                           }}
                         ></div>
                       </div>
-                      <span className="text-sm text-gray-400 whitespace-nowrap">
+                      <span className="text-sm text-muted-foreground whitespace-nowrap">
                         {notebook.whiteboards?.length || 0} pages
                       </span>
                     </div>
@@ -490,14 +485,15 @@ export const Dashboard: React.FC = () => {
           )}
         </div>
 
+        {/* Whiteboards Section */}
         <div>
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-gray-100">
+            <h2 className="text-2xl font-bold text-foreground">
               Your Whiteboards
             </h2>
             <Button
               onClick={() => setShowNewBoardDialog(true)}
-              className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white"
+              className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground"
             >
               <Plus className="w-5 h-5" />
               New Whiteboard
@@ -505,11 +501,11 @@ export const Dashboard: React.FC = () => {
           </div>
 
           {whiteboards.length === 0 ? (
-            <Card className="text-center p-8 bg-gray-800/30 backdrop-blur-sm border-gray-700">
+            <Card className="text-center p-8 bg-card/50 backdrop-blur-sm border-border">
               <CardContent>
-                <PencilRuler className="mx-auto h-12 w-12 text-gray-500 mb-4" />
-                <p className="text-xl text-gray-300">No whiteboards yet</p>
-                <p className="mt-2 text-gray-400">
+                <PencilRuler className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
+                <p className="text-xl text-card-foreground">No whiteboards yet</p>
+                <p className="mt-2 text-muted-foreground">
                   Create your first whiteboard to get started
                 </p>
               </CardContent>
@@ -519,11 +515,11 @@ export const Dashboard: React.FC = () => {
               {whiteboards.map((whiteboard) => (
                 <div
                   key={whiteboard.id}
-                  className="bg-gray-800/30 backdrop-blur-sm border border-gray-700 rounded-xl overflow-hidden hover:shadow-[0_0_15px_rgba(168,85,247,0.15)] transition-all duration-300"
+                  className="bg-card/50 backdrop-blur-sm border border-border rounded-xl overflow-hidden hover:shadow-lg hover:ring-2 hover:ring-primary/20 transition-all duration-300"
                 >
                   <div className="p-6">
                     <div className="flex items-center justify-between mb-3">
-                      <h3 className="text-lg font-medium text-gray-100">
+                      <h3 className="text-lg font-medium text-card-foreground">
                         {whiteboard.title}
                       </h3>
                       <div className="flex items-center gap-2">
@@ -537,7 +533,7 @@ export const Dashboard: React.FC = () => {
                               }&title=${encodeURIComponent(whiteboard.title)}`
                             )
                           }
-                          className="text-purple-400 hover:text-purple-300 hover:bg-gray-800"
+                          className="text-primary hover:text-primary/80 hover:bg-muted"
                         >
                           <PencilRuler className="w-5 h-5" />
                         </Button>
@@ -545,20 +541,20 @@ export const Dashboard: React.FC = () => {
                           variant="ghost"
                           size="icon"
                           onClick={() => deleteWhiteboard(whiteboard.id)}
-                          className="text-gray-400 hover:text-red-400 hover:bg-gray-800"
+                          className="text-muted-foreground hover:text-destructive hover:bg-muted"
                         >
                           <Trash2 className="w-5 h-5" />
                         </Button>
                       </div>
                     </div>
-                    <p className="text-sm text-gray-400 mb-4">
+                    <p className="text-sm text-muted-foreground mb-4">
                       Created:{" "}
                       {new Date(whiteboard.created_at).toLocaleDateString()}
                     </p>
                     <div className="flex items-center gap-2">
-                      <div className="h-1 flex-grow bg-gray-700 rounded-full overflow-hidden">
+                      <div className="h-1 flex-grow bg-muted rounded-full overflow-hidden">
                         <div
-                          className="h-full bg-purple-500"
+                          className="h-full bg-primary"
                           style={{
                             width: `${Math.min(
                               100,
@@ -567,7 +563,7 @@ export const Dashboard: React.FC = () => {
                           }}
                         ></div>
                       </div>
-                      <span className="text-sm text-gray-400 whitespace-nowrap">
+                      <span className="text-sm text-muted-foreground whitespace-nowrap">
                         {whiteboard.drawing_data.length} strokes
                       </span>
                     </div>
@@ -578,10 +574,11 @@ export const Dashboard: React.FC = () => {
           )}
         </div>
 
+        {/* New Whiteboard Dialog */}
         {showNewBoardDialog && (
-          <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50">
-            <div className="bg-gray-800 border border-gray-700 rounded-xl shadow-xl max-w-md w-full mx-4 p-6">
-              <h3 className="text-xl font-medium text-gray-100 mb-4">
+          <div className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-50">
+            <div className="bg-card border border-border rounded-xl shadow-xl max-w-md w-full mx-4 p-6">
+              <h3 className="text-xl font-medium text-card-foreground mb-4">
                 Create New Whiteboard
               </h3>
               <Input
@@ -589,7 +586,7 @@ export const Dashboard: React.FC = () => {
                 value={newBoardTitle}
                 onChange={(e) => setNewBoardTitle(e.target.value)}
                 placeholder="Enter whiteboard title"
-                className="w-full px-3 py-2 bg-gray-700/50 border-gray-600 text-gray-100 focus:ring-purple-500 focus:border-purple-500 mb-6"
+                className="w-full px-3 py-2 bg-input border-border text-foreground focus:ring-primary focus:border-primary mb-6"
               />
               <div className="flex justify-end gap-3">
                 <Button
@@ -598,13 +595,13 @@ export const Dashboard: React.FC = () => {
                     setShowNewBoardDialog(false);
                     setNewBoardTitle("");
                   }}
-                  className="border-gray-600 text-gray-300 hover:bg-gray-700"
+                  className="border-border text-muted-foreground hover:bg-muted"
                 >
                   Cancel
                 </Button>
                 <Button
                   onClick={handleCreateWhiteboard}
-                  className="bg-purple-600 hover:bg-purple-700 text-white"
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground"
                 >
                   Create
                 </Button>
@@ -613,15 +610,16 @@ export const Dashboard: React.FC = () => {
           </div>
         )}
 
+        {/* New Notebook Dialog */}
         {showNewNotebookDialog && (
-          <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50">
-            <div className="bg-gray-800 border border-gray-700 rounded-xl shadow-xl max-w-md w-full mx-4 p-6">
-              <h3 className="text-xl font-medium text-gray-100 mb-4">
+          <div className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-50">
+            <div className="bg-card border border-border rounded-xl shadow-xl max-w-md w-full mx-4 p-6">
+              <h3 className="text-xl font-medium text-card-foreground mb-4">
                 Create New Notebook
               </h3>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">
+                  <label className="block text-sm font-medium text-muted-foreground mb-1">
                     Notebook Title
                   </label>
                   <Input
@@ -629,11 +627,11 @@ export const Dashboard: React.FC = () => {
                     value={newNotebookTitle}
                     onChange={(e) => setNewNotebookTitle(e.target.value)}
                     placeholder="Enter notebook title"
-                    className="w-full px-3 py-2 bg-gray-700/50 border-gray-600 text-gray-100 focus:ring-purple-500 focus:border-purple-500"
+                    className="w-full px-3 py-2 bg-input border-border text-foreground focus:ring-primary focus:border-primary"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">
+                  <label className="block text-sm font-medium text-muted-foreground mb-1">
                     Number of Pages (max 25)
                   </label>
                   <Input
@@ -649,7 +647,7 @@ export const Dashboard: React.FC = () => {
                         )
                       )
                     }
-                    className="w-full px-3 py-2 bg-gray-700/50 border-gray-600 text-gray-100 focus:ring-purple-500 focus:border-purple-500"
+                    className="w-full px-3 py-2 bg-input border-border text-foreground focus:ring-primary focus:border-primary"
                   />
                 </div>
               </div>
@@ -661,13 +659,13 @@ export const Dashboard: React.FC = () => {
                     setNewNotebookTitle("");
                     setNewNotebookSize(5);
                   }}
-                  className="border-gray-600 text-gray-300 hover:bg-gray-700"
+                  className="border-border text-muted-foreground hover:bg-muted"
                 >
                   Cancel
                 </Button>
                 <Button
                   onClick={handleCreateNotebook}
-                  className="bg-purple-600 hover:bg-purple-700 text-white"
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground"
                 >
                   Create
                 </Button>
@@ -686,10 +684,7 @@ export const Dashboard: React.FC = () => {
       </div>
 
       {/* Animation keyframes */}
-      <style
-       // @ts-expect-error: 'jsx' prop not recognized by TypeScript for style tag, but needed for styled-jsx
-        jsx
-      >{`
+      <style jsx>{`
         @keyframes float {
           0% {
             transform: translateY(0) translateX(0);

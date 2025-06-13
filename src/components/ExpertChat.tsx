@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { MessageCircle, X, Send } from 'lucide-react';
+import { MessageCircle, X, Send, Clock, User, Bot, Sparkles } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
 interface ChatSession {
@@ -193,22 +193,35 @@ export default function ExpertChat() {
   return (
     <div className="fixed bottom-4 right-4 z-50">
       {isOpen ? (
-        <div className="bg-white rounded-lg shadow-xl w-96 max-h-[600px] flex flex-col">
-          <div className="p-4 border-b flex justify-between items-center bg-indigo-600 text-white rounded-t-lg">
-            <h3 className="font-medium">Expert Chat</h3>
-            <button onClick={() => setIsOpen(false)} className="text-white hover:text-gray-200">
+        <div className="bg-card/90 backdrop-blur-sm border border-border rounded-xl shadow-xl w-96 max-h-[600px] flex flex-col overflow-hidden">
+          <div className="p-4 border-b border-border flex justify-between items-center bg-primary rounded-t-xl">
+            <div className="flex items-center gap-2">
+              <div className="p-1.5 bg-primary-foreground/20 rounded-full">
+                <MessageCircle className="h-5 w-5 text-primary-foreground" />
+              </div>
+              <h3 className="font-medium text-primary-foreground">Expert Chat</h3>
+            </div>
+            <button 
+              onClick={() => setIsOpen(false)} 
+              className="text-primary-foreground hover:text-primary-foreground/80 p-1 rounded-full hover:bg-primary-foreground/20 transition-colors"
+            >
               <X className="h-5 w-5" />
             </button>
           </div>
 
-          <div className="flex-1 overflow-y-auto p-4 min-h-[300px] max-h-[400px]">
+          <div className="flex-1 overflow-y-auto p-4 min-h-[300px] max-h-[400px] bg-card/50">
             {step === 'initial' && (
-              <div className="text-center">
-                <p className="mb-4">Connect with our experts for personalized assistance.</p>
+              <div className="text-center py-8">
+                <div className="inline-flex items-center justify-center p-3 bg-primary/20 rounded-full mb-4">
+                  <User className="h-8 w-8 text-primary" />
+                </div>
+                <h4 className="text-lg font-medium text-card-foreground mb-2">Connect with Experts</h4>
+                <p className="text-muted-foreground mb-6">Get personalized assistance from our learning experts</p>
                 <button
                   onClick={() => setStep('reason')}
-                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
+                  className="inline-flex items-center px-6 py-3 border border-transparent text-sm font-medium rounded-full text-primary-foreground bg-primary hover:bg-primary/90 transition-all duration-200"
                 >
+                  <Sparkles className="h-4 w-4 mr-2" />
                   Start a Session
                 </button>
               </div>
@@ -216,22 +229,29 @@ export default function ExpertChat() {
 
             {step === 'reason' && (
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-card-foreground mb-3">
                   What would you like to discuss?
                 </label>
                 <textarea
                   value={reason}
                   onChange={(e) => setReason(e.target.value)}
-                  className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                  className="w-full rounded-lg border border-border bg-input text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200 p-3"
                   rows={4}
-                  placeholder="Describe your question or topic..."
+                  placeholder="Describe your question or topic in detail..."
                 />
                 <button
                   onClick={startSession}
                   disabled={loading || !reason.trim()}
-                  className="mt-4 w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50"
+                  className="mt-4 w-full inline-flex justify-center items-center px-4 py-3 border border-transparent text-sm font-medium rounded-lg text-primary-foreground bg-primary hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
                 >
-                  {loading ? 'Creating Session...' : 'Submit'}
+                  {loading ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin mr-2"></div>
+                      Creating Session...
+                    </>
+                  ) : (
+                    'Submit Request'
+                  )}
                 </button>
               </div>
             )}
@@ -239,10 +259,16 @@ export default function ExpertChat() {
             {step === 'chat' && (
               <>
                 {currentSession?.status === 'pending' ? (
-                  <div className="text-center text-gray-600">
-                    <p>Waiting for an expert to join...</p>
-                    <div className="mt-2 flex justify-center">
-                      <div className="animate-bounce">⌛</div>
+                  <div className="text-center py-8">
+                    <div className="inline-flex items-center justify-center p-3 bg-yellow-500/20 rounded-full mb-4">
+                      <Clock className="h-8 w-8 text-yellow-500" />
+                    </div>
+                    <h4 className="text-lg font-medium text-card-foreground mb-2">Finding an Expert</h4>
+                    <p className="text-muted-foreground">Please wait while we connect you with the right expert...</p>
+                    <div className="mt-4 flex justify-center space-x-1">
+                      <div className="w-2 h-2 bg-primary rounded-full animate-bounce"></div>
+                      <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                      <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
                     </div>
                   </div>
                 ) : (
@@ -254,14 +280,36 @@ export default function ExpertChat() {
                           message.is_expert ? 'justify-start' : 'justify-end'
                         }`}
                       >
-                        <div
-                          className={`max-w-[80%] rounded-lg px-4 py-2 ${
-                            message.is_expert
-                              ? 'bg-gray-100 text-gray-800'
-                              : 'bg-indigo-600 text-white'
-                          }`}
-                        >
-                          {message.content}
+                        <div className={`flex items-start gap-2 max-w-[85%] ${
+                          message.is_expert ? 'flex-row' : 'flex-row-reverse'
+                        }`}>
+                          <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
+                            message.is_expert 
+                              ? 'bg-accent/20' 
+                              : 'bg-primary/20'
+                          }`}>
+                            {message.is_expert ? (
+                              <Bot className="h-4 w-4 text-accent-foreground" />
+                            ) : (
+                              <User className="h-4 w-4 text-primary" />
+                            )}
+                          </div>
+                          <div
+                            className={`rounded-xl px-4 py-3 ${
+                              message.is_expert
+                                ? 'bg-muted/50 text-foreground border border-border'
+                                : 'bg-primary text-primary-foreground'
+                            }`}
+                          >
+                            <p className="text-sm leading-relaxed">{message.content}</p>
+                            <span className={`text-xs mt-1 block ${
+                              message.is_expert 
+                                ? 'text-muted-foreground' 
+                                : 'text-primary-foreground/70'
+                            }`}>
+                              {new Date(message.created_at).toLocaleTimeString()}
+                            </span>
+                          </div>
                         </div>
                       </div>
                     ))}
@@ -273,14 +321,14 @@ export default function ExpertChat() {
           </div>
 
           {step === 'chat' && currentSession?.status === 'active' && (
-            <div className="p-4 border-t">
+            <div className="p-4 border-t border-border bg-card/30">
               <div className="flex space-x-2">
                 <input
                   type="text"
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
                   placeholder="Type your message..."
-                  className="flex-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                  className="flex-1 rounded-lg border border-border bg-input text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200 px-3 py-2"
                   onKeyPress={(e) => {
                     if (e.key === 'Enter' && !e.shiftKey) {
                       e.preventDefault();
@@ -291,7 +339,7 @@ export default function ExpertChat() {
                 <button
                   onClick={sendMessage}
                   disabled={!newMessage.trim()}
-                  className="inline-flex items-center p-2 border border-transparent rounded-md text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50"
+                  className="inline-flex items-center p-2 border border-transparent rounded-lg text-primary-foreground bg-primary hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
                 >
                   <Send className="h-5 w-5" />
                 </button>
@@ -300,10 +348,10 @@ export default function ExpertChat() {
           )}
 
           {step === 'chat' && currentSession && (
-            <div className="p-2 border-t text-center">
+            <div className="p-3 border-t border-border text-center bg-card/30">
               <button
                 onClick={closeSession}
-                className="text-sm text-red-600 hover:text-red-700"
+                className="text-sm text-destructive hover:text-destructive/80 hover:bg-destructive/10 px-3 py-1 rounded-md transition-colors"
               >
                 Close Session
               </button>
@@ -313,7 +361,7 @@ export default function ExpertChat() {
       ) : (
         <button
           onClick={() => setIsOpen(true)}
-          className="bg-indigo-600 text-white rounded-full p-3 shadow-lg hover:bg-indigo-700"
+          className="bg-primary text-primary-foreground rounded-full p-4 shadow-lg hover:bg-primary/90 hover:shadow-xl transition-all duration-300 hover:scale-105"
         >
           <MessageCircle className="h-6 w-6" />
         </button>

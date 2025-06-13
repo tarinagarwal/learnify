@@ -45,17 +45,20 @@ export default function Quiz() {
       setQuestions(generatedQuestions);
       setCurrentQuestion(0);
       setUserAnswers([]);
-    } catch (err) {
-      setError(err,"Failed to generate questions. Please try again.");
+    } catch {
+      setError("Failed to generate questions. Please try again.");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const handleAnswer = async (answer: string) => {
     const newAnswers = [...userAnswers, answer];
     setUserAnswers(newAnswers);
 
-    if (currentQuestion === questions.length - 1) {
+    const isLast = currentQuestion === questions.length - 1;
+
+    if (isLast) {
       const score = newAnswers.reduce(
         (acc, ans, idx) =>
           questions[idx].correctAnswer === ans ? acc + 1 : acc,
@@ -65,6 +68,7 @@ export default function Quiz() {
       const {
         data: { user },
       } = await supabase.auth.getUser();
+
       if (user && quizConfig) {
         const { data, error } = await supabase
           .from("quiz_history")
@@ -85,9 +89,7 @@ export default function Quiz() {
       }
     }
 
-    if (currentQuestion < questions.length - 1) {
-      setCurrentQuestion(currentQuestion + 1);
-    }
+    if (!isLast) setCurrentQuestion(currentQuestion + 1);
   };
 
   const handleRestart = () => {
@@ -100,16 +102,10 @@ export default function Quiz() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-950 text-gray-100 py-12 px-4">
+    <div className="min-h-screen bg-background text-foreground py-12 px-4">
       <div className="container mx-auto max-w-4xl">
-        {/* Page Header with animated background */}
-        <div className="relative py-16 px-4 sm:px-6 lg:px-8 mb-12 rounded-2xl overflow-hidden bg-gradient-to-br from-gray-900 to-purple-900/30">
-          {/* Animated grid background */}
-          <div className="absolute inset-0 z-0">
-            <div className="absolute inset-0 bg-[linear-gradient(45deg,#ffffff0a_1px,transparent_1px),linear-gradient(135deg,#ffffff0a_1px,transparent_1px)] bg-[size:40px_40px]" />
-          </div>
-
-          {/* Animated particles */}
+        <div className="relative py-16 px-4 sm:px-6 lg:px-8 mb-12 rounded-2xl overflow-hidden bg-muted/50">
+          <div className="absolute inset-0 z-0 bg-[linear-gradient(45deg,#ffffff0a_1px,transparent_1px),linear-gradient(135deg,#ffffff0a_1px,transparent_1px)] bg-[size:40px_40px]" />
           <div className="absolute inset-0 opacity-30">
             {[...Array(10)].map((_, i) => (
               <div
@@ -138,73 +134,71 @@ export default function Quiz() {
           </div>
 
           <div className="relative z-10 text-center">
-            <div className="inline-flex items-center justify-center p-3 bg-purple-500/20 backdrop-blur-sm rounded-full mb-4">
-              <Brain className="w-12 h-12 text-purple-400" />
+            <div className="inline-flex items-center justify-center p-3 bg-primary/20 backdrop-blur-sm rounded-full mb-4">
+              <Brain className="w-12 h-12 text-primary" />
             </div>
-            <h2 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-300 to-blue-400">
+            <h2 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary via-accent to-blue-400">
               Quiz Master
             </h2>
-            <p className="mt-2 text-xl text-gray-300 max-w-2xl mx-auto">
+            <p className="mt-2 text-xl text-muted-foreground max-w-2xl mx-auto">
               Test your knowledge and challenge yourself on any topic
             </p>
           </div>
         </div>
 
-        <Card className="bg-gray-800/30 backdrop-blur-sm border-gray-700 overflow-hidden">
-          <CardContent className="p-0">
-            {loading ? (
-              <div className="flex flex-col items-center justify-center py-16">
-                <div className="relative w-16 h-16">
-                  <div className="absolute inset-0 rounded-full border-4 border-purple-400/20 animate-pulse"></div>
-                  <div className="absolute inset-0 rounded-full border-t-4 border-purple-400 animate-spin"></div>
-                  <Sparkles className="absolute inset-0 m-auto h-8 w-8 text-purple-400" />
-                </div>
-                <p className="mt-6 text-gray-300">Generating your quiz...</p>
-                <p className="text-sm text-gray-400 max-w-md text-center mt-2">
-                  Our AI is crafting challenging questions based on your
-                  selected topic
-                </p>
-              </div>
-            ) : error ? (
-              <div className="text-center py-16 px-4">
-                <div className="inline-flex items-center justify-center p-3 bg-red-500/20 backdrop-blur-sm rounded-full mb-4">
-                  <Brain className="w-12 h-12 text-red-400" />
-                </div>
-                <p className="text-red-300 mb-4">{error}</p>
-                <Button
-                  onClick={handleRestart}
-                  className="bg-purple-600 hover:bg-purple-700 text-white"
-                >
-                  Try Again
-                </Button>
-              </div>
-            ) : questions.length === 0 ? (
-              <QuizSetup onStart={handleStart} />
-            ) : userAnswers.length === questions.length ? (
-              <QuizResults
-                questions={questions}
-                userAnswers={userAnswers}
-                onRestart={handleRestart}
-                // @ts-expect-error: quizId prop type might not match expected type but is safe here
-                quizId={quizId}
-              />
-            ) : (
-              <QuizQuestion
-                question={questions[currentQuestion]}
-                onAnswer={handleAnswer}
-                currentQuestion={currentQuestion}
-                totalQuestions={questions.length}
-              />
-            )}
-          </CardContent>
-        </Card>
+        <Card className="bg-card border border-border shadow-md rounded-xl">
+  <CardContent className="p-6">
+    {loading ? (
+      <div className="flex flex-col items-center justify-center py-16">
+        <div className="relative w-16 h-16">
+          <div className="absolute inset-0 rounded-full border-4 border-primary/20 animate-pulse"></div>
+          <div className="absolute inset-0 rounded-full border-t-4 border-primary animate-spin"></div>
+          <Sparkles className="absolute inset-0 m-auto h-8 w-8 text-primary" />
+        </div>
+        <p className="mt-6 text-muted-foreground">Generating your quiz...</p>
+        <p className="text-sm text-muted-foreground max-w-md text-center mt-2">
+          Our AI is crafting challenging questions based on your selected topic
+        </p>
+      </div>
+    ) : error ? (
+      <div className="text-center py-16 px-4">
+        <div className="inline-flex items-center justify-center p-3 bg-destructive/20 backdrop-blur-sm rounded-full mb-4">
+          <Brain className="w-12 h-12 text-destructive" />
+        </div>
+        <p className="text-destructive mb-4">{error}</p>
+        <Button
+          onClick={handleRestart}
+          className="bg-primary hover:bg-primary/90 text-primary-foreground"
+        >
+          Try Again
+        </Button>
+      </div>
+    ) : questions.length === 0 ? (
+      <div className="space-y-4">
+        <QuizSetup onStart={handleStart} />
+      </div>
+    ) : userAnswers.length === questions.length ? (
+      <QuizResults
+        questions={questions}
+        userAnswers={userAnswers}
+        onRestart={handleRestart}
+        // @ts-expect-error
+        quizId={quizId}
+      />
+    ) : (
+      <QuizQuestion
+        question={questions[currentQuestion]}
+        onAnswer={handleAnswer}
+        currentQuestion={currentQuestion}
+        totalQuestions={questions.length}
+      />
+    )}
+  </CardContent>
+</Card>
+
       </div>
 
-      {/* Animation keyframes */}
-      <style
-        // @ts-expect-error: 'jsx' prop not recognized by TypeScript for style tag, but needed for styled-jsx
-        jsx
-      >{`
+      <style jsx>{`
         @keyframes float {
           0% {
             transform: translateY(0) translateX(0);

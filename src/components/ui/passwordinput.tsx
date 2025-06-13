@@ -49,7 +49,7 @@ const PasswordInput: React.FC<PasswordInputProps> = ({ password, setPassword }) 
 
   return (
     <div className="relative">
-      <label htmlFor="password" className="block text-sm font-medium text-gray-300">
+      <label htmlFor="password" className="block text-sm font-medium text-muted-foreground">
         Password
       </label>
       <input
@@ -58,21 +58,19 @@ const PasswordInput: React.FC<PasswordInputProps> = ({ password, setPassword }) 
   required
   value={password}
   onChange={(e) => setPassword(e.target.value)}
-  className={`mt-1 block w-full ${
-    password ? "bg-gray-300 text-gray-900" : "bg-gray-700/50 text-gray-200"
-  } border border-gray-600 rounded-lg shadow-sm py-2 px-3 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent`}
+  className="mt-1 block w-full bg-background border border-border rounded-lg shadow-sm py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary"
 />
 
 
       <button
         type="button"
         onClick={() => setShowPassword((prev) => !prev)}
-        className="absolute right-3 top-[35px] text-gray-400 hover:text-gray-200 focus:outline-none"
+        className="absolute right-3 top-[35px] text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] focus:outline-none"
       >
         {showPassword ? (
-          <EyeOff className="h-5 w-5" color="black" />
+          <EyeOff className="h-5 w-5" color="#a21caf" />
         ) : (
-          <Eye className="h-5 w-5" color="black" />
+          <Eye className="h-5 w-5" color="#a21caf" />
         )}
       </button>
 

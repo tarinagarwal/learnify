@@ -4,7 +4,6 @@ import Navbar from "./Navbar";
 import AIKnowledgeBot from "./AIKnowledgeBot";
 import ScrollToTopButton from "./ScrollToTop";
 
-
 // ScrollToTop component for route changes
 function ScrollToTopOnRoute() {
   const { pathname } = useLocation();
@@ -22,10 +21,11 @@ function ScrollToTopOnRoute() {
 
 export default function Layout() {
   return (
-    <div className="min-h-screen flex flex-col">      <Navbar />
+    <div className="min-h-screen flex flex-col bg-background text-foreground">
+      <Navbar />
       <ScrollToTopOnRoute />
 
-      <main className="flex-grow pt-16">
+      <main className="flex-grow pt-16 bg-background">
         <Outlet />
       </main>
       
@@ -35,11 +35,11 @@ export default function Layout() {
       {/* AI Knowledge Bot - Replaces the Zapier chatbot */}
       <AIKnowledgeBot />
 
-      <footer className="bg-gray-950 border-t border-[#777696] text-gray-400 py-12 px-4">
+      <footer className="bg-card border-t border-border text-muted-foreground py-12 px-4">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
-            <h3 className="text-white text-lg font-semibold mb-4">Learnify</h3>
-            <p className="mb-4">
+            <h3 className="text-foreground text-lg font-semibold mb-4">Learnify</h3>
+            <p className="mb-4 text-muted-foreground">
               Transforming education through AI and interactive learning
               experiences.
             </p>
@@ -48,12 +48,12 @@ export default function Layout() {
             </div>
           </div>
           <div>
-            <h3 className="text-white text-lg font-semibold mb-4">Features</h3>
+            <h3 className="text-foreground text-lg font-semibold mb-4">Features</h3>
             <ul className="space-y-2">
               <li>
                 <Link
                   to="/quiz"
-                  className="hover:text-purple-400 transition-colors"
+                  className="text-muted-foreground hover:text-primary transition-colors duration-200"
                 >
                   Interactive Quizzes
                 </Link>
@@ -61,7 +61,7 @@ export default function Layout() {
               <li>
                 <Link
                   to="/courses"
-                  className="hover:text-purple-400 transition-colors"
+                  className="text-muted-foreground hover:text-primary transition-colors duration-200"
                 >
                   Courses
                 </Link>
@@ -69,7 +69,7 @@ export default function Layout() {
               <li>
                 <Link
                   to="/resources"
-                  className="hover:text-purple-400 transition-colors"
+                  className="text-muted-foreground hover:text-primary transition-colors duration-200"
                 >
                   PDF Tools
                 </Link>
@@ -77,7 +77,7 @@ export default function Layout() {
               <li>
                 <Link
                   to="/roadmaps"
-                  className="hover:text-purple-400 transition-colors"
+                  className="text-muted-foreground hover:text-primary transition-colors duration-200"
                 >
                   Learning Roadmaps
                 </Link>
@@ -85,12 +85,12 @@ export default function Layout() {
             </ul>
           </div>
           <div>
-            <h3 className="text-white text-lg font-semibold mb-4">About</h3>
+            <h3 className="text-foreground text-lg font-semibold mb-4">About</h3>
             <ul className="space-y-2">
               <li>
                 <Link
                   to="/about"
-                  className="hover:text-purple-400 transition-colors"
+                  className="text-muted-foreground hover:text-primary transition-colors duration-200"
                 >
                   About Us
                 </Link>
@@ -98,7 +98,7 @@ export default function Layout() {
               <li>
                 <Link
                   to="/contact"
-                  className="hover:text-purple-400 transition-colors"
+                  className="text-muted-foreground hover:text-primary transition-colors duration-200"
                 >
                   Contact
                 </Link>
@@ -106,7 +106,7 @@ export default function Layout() {
               <li>
                 <a
                   href="https://tarinagarwal.in/"
-                  className="hover:text-purple-400 transition-colors"
+                  className="text-muted-foreground hover:text-primary transition-colors duration-200"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -116,12 +116,12 @@ export default function Layout() {
             </ul>
           </div>
           <div>
-            <h3 className="text-white text-lg font-semibold mb-4">Legal</h3>
+            <h3 className="text-foreground text-lg font-semibold mb-4">Legal</h3>
             <ul className="space-y-2">
               <li>
                 <Link
                   to="/terms"
-                  className="hover:text-purple-400 transition-colors"
+                  className="text-muted-foreground hover:text-primary transition-colors duration-200"
                 >
                   Terms of Service
                 </Link>
@@ -129,7 +129,7 @@ export default function Layout() {
               <li>
                 <Link
                   to="/privacy"
-                  className="hover:text-purple-400 transition-colors"
+                  className="text-muted-foreground hover:text-primary transition-colors duration-200"
                 >
                   Privacy Policy
                 </Link>
@@ -137,7 +137,7 @@ export default function Layout() {
               <li>
                 <Link
                   to="/cookies"
-                  className="hover:text-purple-400 transition-colors"
+                  className="text-muted-foreground hover:text-primary transition-colors duration-200"
                 >
                   Cookie Policy
                 </Link>
@@ -145,8 +145,8 @@ export default function Layout() {
             </ul>
           </div>
         </div>
-        <div className="max-w-7xl mx-auto mt-8 pt-8 border-t border-gray-800 text-center">
-          <p>© {new Date().getFullYear()} Learnify. All rights reserved.</p>
+        <div className="max-w-7xl mx-auto mt-8 pt-8 border-t border-border text-center">
+          <p className="text-muted-foreground">© {new Date().getFullYear()} Learnify. All rights reserved.</p>
         </div>
       </footer>
     </div>

@@ -4,9 +4,7 @@ import { supabase } from "../lib/supabase";
 import { AlertDialog } from "../components/AlertDialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { UserCircle, Key, Loader2 } from "lucide-react";
-import { Eye, EyeOff } from "lucide-react";
-
+import { UserCircle, Key, Loader2, Eye, EyeOff } from "lucide-react";
 
 export default function Profile() {
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
@@ -20,21 +18,16 @@ export default function Profile() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [userEmail, setUserEmail] = useState("");
-  const [alert, setAlert] = useState<{
-    show: boolean;
-    title: string;
-    message: string;
-    type: "success" | "error" | "info" | "warning";
-  }>({ show: false, title: "", message: "", type: "info" });
+  const [alert, setAlert] = useState({
+    show: false,
+    title: "",
+    message: "",
+    type: "info" as "success" | "error" | "info" | "warning",
+  });
 
-  // useCallback to memoize loadProfile and avoid useEffect dependency warning
   const loadProfile = useCallback(async () => {
     try {
-      const {
-        data: { user },
-        error: userError,
-      } = await supabase.auth.getUser();
-
+      const { data: { user }, error: userError } = await supabase.auth.getUser();
       if (userError || !user) {
         navigate("/login");
         return;
@@ -57,50 +50,25 @@ export default function Profile() {
 
   useEffect(() => {
     loadProfile();
-  }, [loadProfile]); // added loadProfile here to fix react-hooks/exhaustive-deps warning
+  }, [loadProfile]);
 
   const updateProfile = async () => {
     if (!name.trim()) {
-      setAlert({
-        show: true,
-        title: "Error",
-        message: "Name cannot be empty.",
-        type: "error",
-      });
+      setAlert({ show: true, title: "Error", message: "Name cannot be empty.", type: "error" });
       return;
     }
 
     try {
       setLoading(true);
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
+      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("No user found");
 
-      const { error } = await supabase
-        .from("profiles")
-        .update({ name })
-        .eq("id", user.id);
-
+      const { error } = await supabase.from("profiles").update({ name }).eq("id", user.id);
       if (error) throw error;
 
-      setAlert({
-        show: true,
-        title: "Success",
-        message: "Profile updated successfully!",
-        type: "success",
-      });
-    } catch (error: unknown) {
-      // Type safe error handling
-      let message = "An unknown error occurred.";
-      if (error instanceof Error) message = error.message;
-
-      setAlert({
-        show: true,
-        title: "Error",
-        message,
-        type: "error",
-      });
+      setAlert({ show: true, title: "Success", message: "Profile updated successfully!", type: "success" });
+    } catch (error: any) {
+      setAlert({ show: true, title: "Error", message: error.message || "Unknown error", type: "error" });
     } finally {
       setLoading(false);
     }
@@ -108,74 +76,37 @@ export default function Profile() {
 
   const updatePassword = async () => {
     if (!currentPassword || !newPassword || !confirmPassword) {
-      setAlert({
-        show: true,
-        title: "Error",
-        message: "All password fields are required.",
-        type: "error",
-      });
+      setAlert({ show: true, title: "Error", message: "All password fields are required.", type: "error" });
       return;
     }
 
     if (newPassword.length < 6) {
-      setAlert({
-        show: true,
-        title: "Error",
-        message: "Password should be at least 6 characters long.",
-        type: "error",
-      });
+      setAlert({ show: true, title: "Error", message: "Password should be at least 6 characters.", type: "error" });
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      setAlert({
-        show: true,
-        title: "Error",
-        message: "New passwords do not match.",
-        type: "error",
-      });
+      setAlert({ show: true, title: "Error", message: "Passwords do not match.", type: "error" });
       return;
     }
 
     try {
       setLoading(true);
 
-      // Re-authenticate user with current password
       const { error: signInError } = await supabase.auth.signInWithPassword({
         email: userEmail,
         password: currentPassword,
       });
+      if (signInError) throw new Error("Current password is incorrect.");
 
-      if (signInError) {
-        throw new Error("Current password is incorrect.");
-      }
-
-      const { error } = await supabase.auth.updateUser({
-        password: newPassword,
-      });
-
+      const { error } = await supabase.auth.updateUser({ password: newPassword });
       if (error) throw error;
 
-      setNewPassword("");
-      setConfirmPassword("");
-      setCurrentPassword("");
+      setCurrentPassword(""); setNewPassword(""); setConfirmPassword("");
 
-      setAlert({
-        show: true,
-        title: "Success",
-        message: "Password updated successfully!",
-        type: "success",
-      });
-    } catch (error: unknown) {
-      let message = "An unknown error occurred.";
-      if (error instanceof Error) message = error.message;
-
-      setAlert({
-        show: true,
-        title: "Error",
-        message,
-        type: "error",
-      });
+      setAlert({ show: true, title: "Success", message: "Password updated successfully!", type: "success" });
+    } catch (error: any) {
+      setAlert({ show: true, title: "Error", message: error.message || "Unknown error", type: "error" });
     } finally {
       setLoading(false);
     }
@@ -194,15 +125,12 @@ export default function Profile() {
         </div>
 
         <div className="space-y-6">
-          {/* Profile Information */}
+          {/* Profile Info */}
           <div className="bg-gray-800/30 backdrop-blur-sm border border-gray-700 rounded-xl p-6">
             <h2 className="text-xl font-semibold mb-4">Profile Information</h2>
             <div className="space-y-4">
               <div>
-                <label
-                  htmlFor="name"
-                  className="block text-sm font-medium text-gray-300 mb-1"
-                >
+                <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-1">
                   Name
                 </label>
                 <Input
@@ -218,9 +146,7 @@ export default function Profile() {
                 disabled={loading}
                 className="w-full bg-purple-600 hover:bg-purple-700 text-white"
               >
-                {loading ? (
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                ) : null}
+                {loading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
                 Update Profile
               </Button>
             </div>
@@ -230,11 +156,9 @@ export default function Profile() {
           <div className="bg-gray-800/30 backdrop-blur-sm border border-gray-700 rounded-xl p-6">
             <h2 className="text-xl font-semibold mb-4">Change Password</h2>
             <div className="space-y-4">
+              {/* Current Password */}
               <div className="relative">
-                <label
-                  htmlFor="currentPassword"
-                  className="block text-sm font-medium text-gray-300 mb-1"
-                >
+                <label htmlFor="currentPassword" className="block text-sm font-medium text-gray-300 mb-1">
                   Current Password
                 </label>
                 <Input
@@ -252,11 +176,9 @@ export default function Profile() {
                 </div>
               </div>
 
+              {/* New Password */}
               <div className="relative">
-                <label
-                  htmlFor="newPassword"
-                  className="block text-sm font-medium text-gray-300 mb-1"
-                >
+                <label htmlFor="newPassword" className="block text-sm font-medium text-gray-300 mb-1">
                   New Password
                 </label>
                 <Input
@@ -274,11 +196,9 @@ export default function Profile() {
                 </div>
               </div>
 
+              {/* Confirm Password */}
               <div className="relative">
-                <label
-                  htmlFor="confirmPassword"
-                  className="block text-sm font-medium text-gray-300 mb-1"
-                >
+                <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-300 mb-1">
                   Confirm New Password
                 </label>
                 <Input

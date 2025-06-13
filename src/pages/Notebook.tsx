@@ -52,7 +52,6 @@ export const Notebook: React.FC = () => {
   }>({ show: false, title: "", message: "", type: "info" });
   const navigate = useNavigate();
 
-
   useEffect(() => {
     if (id) {
       loadNotebookData();
@@ -216,21 +215,21 @@ export const Notebook: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[calc(100vh-4rem)] bg-gray-950 text-gray-100">
+      <div className="flex items-center justify-center min-h-[calc(100vh-4rem)] bg-background text-foreground">
         <div className="text-center">
           <div className="relative w-16 h-16 mx-auto">
-            <div className="absolute inset-0 rounded-full border-4 border-purple-400/20 animate-pulse"></div>
-            <div className="absolute inset-0 rounded-full border-t-4 border-purple-400 animate-spin"></div>
-            <Sparkles className="absolute inset-0 m-auto h-8 w-8 text-purple-400" />
+            <div className="absolute inset-0 rounded-full border-4 border-primary/20 animate-pulse"></div>
+            <div className="absolute inset-0 rounded-full border-t-4 border-primary animate-spin"></div>
+            <Sparkles className="absolute inset-0 m-auto h-8 w-8 text-primary" />
           </div>
-          <p className="mt-6 text-xl text-gray-100">Loading Notebook...</p>
+          <p className="mt-6 text-xl text-foreground">Loading Notebook...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-950 text-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="mb-8 flex flex-col md:flex-row md:items-center md:justify-between">
           {/* Left group: Back button + Title */}
@@ -238,12 +237,12 @@ export const Notebook: React.FC = () => {
             <Button
               variant="ghost"
               onClick={() => navigate("/dashboard")}
-              className="flex items-center gap-2 text-gray-300 hover:text-purple-400"
+              className="flex items-center gap-2 text-muted-foreground hover:text-primary hover:bg-muted"
             >
               <ArrowLeft className="w-5 h-5" />
               Back to Dashboard
             </Button>
-            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-300">
+            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent-foreground">
               {notebook?.title}
             </h1>
           </div>
@@ -255,8 +254,8 @@ export const Notebook: React.FC = () => {
               onClick={() => setReordering(!reordering)}
               className={`flex items-center gap-2 transition-colors duration-200 ${
                 reordering
-                  ? "bg-purple-900/30 text-purple-300 border-purple-700"
-                  : "border-gray-700 text-gray-900"
+                  ? "bg-primary/20 text-primary border-primary/30"
+                  : "border-border text-primary hover:bg-primary/10"
               }`}
             >
               <MoveVertical className="w-5 h-5" />
@@ -264,7 +263,7 @@ export const Notebook: React.FC = () => {
             </Button>
             <Button
               onClick={() => setShowNewBoardDialog(true)}
-              className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white transition-colors duration-200"
+              className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground transition-colors duration-200"
             >
               <Plus className="w-5 h-5" />
               Add Whiteboard
@@ -276,11 +275,11 @@ export const Notebook: React.FC = () => {
           {whiteboards.map((whiteboard, index) => (
             <div
               key={whiteboard.id}
-              className="bg-gray-800/30 backdrop-blur-sm border border-gray-700 rounded-xl overflow-hidden hover:shadow-[0_0_15px_rgba(168,85,247,0.15)] transition-all duration-300"
+              className="bg-card/50 backdrop-blur-sm border border-border rounded-xl overflow-hidden hover:shadow-lg hover:ring-2 hover:ring-primary/20 transition-all duration-300"
             >
               <div className="p-6">
                 <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-lg font-medium text-gray-100">
+                  <h3 className="text-lg font-medium text-card-foreground">
                     {whiteboard.title}
                   </h3>
                   <div className="flex items-center gap-2">
@@ -293,8 +292,8 @@ export const Notebook: React.FC = () => {
                           disabled={index === 0}
                           className={`p-1 rounded-full ${
                             index === 0
-                              ? "text-gray-600 cursor-not-allowed"
-                              : "text-gray-400 hover:text-purple-400 hover:bg-gray-800"
+                              ? "text-muted-foreground cursor-not-allowed"
+                              : "text-muted-foreground hover:text-primary hover:bg-muted"
                           }`}
                         >
                           <ArrowLeft className="w-4 h-4" />
@@ -306,8 +305,8 @@ export const Notebook: React.FC = () => {
                           disabled={index === whiteboards.length - 1}
                           className={`p-1 rounded-full ${
                             index === whiteboards.length - 1
-                              ? "text-gray-600 cursor-not-allowed"
-                              : "text-gray-400 hover:text-purple-400 hover:bg-gray-800"
+                              ? "text-muted-foreground cursor-not-allowed"
+                              : "text-muted-foreground hover:text-primary hover:bg-muted"
                           }`}
                         >
                           <ArrowRight className="w-4 h-4" />
@@ -325,7 +324,7 @@ export const Notebook: React.FC = () => {
                               }&title=${encodeURIComponent(whiteboard.title)}`
                             )
                           }
-                          className="text-purple-400 hover:text-purple-300 hover:bg-gray-800"
+                          className="text-primary hover:text-primary/80 hover:bg-muted"
                         >
                           <PencilRuler className="w-5 h-5" />
                         </Button>
@@ -333,7 +332,7 @@ export const Notebook: React.FC = () => {
                           variant="ghost"
                           size="icon"
                           onClick={() => deleteWhiteboard(whiteboard.id)}
-                          className="text-gray-400 hover:text-red-400 hover:bg-gray-800"
+                          className="text-muted-foreground hover:text-destructive hover:bg-muted"
                         >
                           <Trash2 className="w-5 h-5" />
                         </Button>
@@ -341,14 +340,14 @@ export const Notebook: React.FC = () => {
                     )}
                   </div>
                 </div>
-                <p className="text-sm text-gray-400 mb-4">
+                <p className="text-sm text-muted-foreground mb-4">
                   Created:{" "}
                   {new Date(whiteboard.created_at).toLocaleDateString()}
                 </p>
                 <div className="flex items-center gap-2">
-                  <div className="h-1 flex-grow bg-gray-700 rounded-full overflow-hidden">
+                  <div className="h-1 flex-grow bg-muted rounded-full overflow-hidden">
                     <div
-                      className="h-full bg-purple-500"
+                      className="h-full bg-primary"
                       style={{
                         width: `${Math.min(
                           100,
@@ -357,7 +356,7 @@ export const Notebook: React.FC = () => {
                       }}
                     ></div>
                   </div>
-                  <span className="text-sm text-gray-400 whitespace-nowrap">
+                  <span className="text-sm text-muted-foreground whitespace-nowrap">
                     {whiteboard.drawing_data.length} strokes
                   </span>
                 </div>
@@ -367,9 +366,9 @@ export const Notebook: React.FC = () => {
         </div>
 
         {showNewBoardDialog && (
-          <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50">
-            <div className="bg-gray-800 border border-gray-700 rounded-xl shadow-xl max-w-md w-full mx-4 p-6">
-              <h3 className="text-xl font-medium text-gray-100 mb-4">
+          <div className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-50">
+            <div className="bg-card border border-border rounded-xl shadow-xl max-w-md w-full mx-4 p-6">
+              <h3 className="text-xl font-medium text-card-foreground mb-4">
                 Add New Whiteboard
               </h3>
               <Input
@@ -377,7 +376,7 @@ export const Notebook: React.FC = () => {
                 value={newBoardTitle}
                 onChange={(e) => setNewBoardTitle(e.target.value)}
                 placeholder="Enter whiteboard title"
-                className="w-full px-3 py-2 bg-gray-700/50 border-gray-600 text-gray-100 focus:ring-purple-500 focus:border-purple-500 mb-6"
+                className="w-full px-3 py-2 bg-input border-border text-foreground focus:ring-primary focus:border-primary mb-6"
               />
               <div className="flex justify-end gap-3">
                 <Button
@@ -386,13 +385,13 @@ export const Notebook: React.FC = () => {
                     setShowNewBoardDialog(false);
                     setNewBoardTitle("");
                   }}
-                  className="border-gray-600 text-gray-300 hover:bg-gray-700"
+                  className="border-border text-muted-foreground hover:bg-muted"
                 >
                   Cancel
                 </Button>
                 <Button
                   onClick={handleCreateWhiteboard}
-                  className="bg-purple-600 hover:bg-purple-700 text-white"
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground"
                 >
                   Create
                 </Button>

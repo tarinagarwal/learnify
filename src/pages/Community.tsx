@@ -4,7 +4,7 @@ import type React from "react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
-import { Plus, Search, Users } from "lucide-react";
+import { Plus, Search, Users, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -139,19 +139,27 @@ export default function Community() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-950">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-400"></div>
+      <div className="flex items-center justify-center min-h-screen bg-background text-foreground">
+        <div className="text-center">
+          <div className="relative w-16 h-16 mx-auto">
+            <div className="absolute inset-0 rounded-full border-4 border-primary/20 animate-pulse"></div>
+            <div className="absolute inset-0 rounded-full border-t-4 border-primary animate-spin"></div>
+            <Sparkles className="absolute inset-0 m-auto h-8 w-8 text-primary" />
+          </div>
+          <p className="mt-6 text-xl text-foreground">Loading Communities...</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-950 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        <div className="relative py-16 px-4 sm:px-6 lg:px-8 mb-12 rounded-2xl overflow-hidden bg-gradient-to-br from-gray-900 to-purple-900/30">
+        {/* Page Header with animated background */}
+        <div className="relative py-16 px-4 sm:px-6 lg:px-8 mb-12 rounded-2xl overflow-hidden bg-gradient-to-br from-muted to-primary/10">
           {/* Animated grid background */}
           <div className="absolute inset-0 z-0">
-            <div className="absolute inset-0 bg-[linear-gradient(45deg,#ffffff0a_1px,transparent_1px),linear-gradient(135deg,#ffffff0a_1px,transparent_1px)] bg-[size:40px_40px]" />
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--border))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border))_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
           </div>
 
           {/* Animated particles */}
@@ -159,20 +167,13 @@ export default function Community() {
             {[...Array(10)].map((_, i) => (
               <div
                 key={i}
-                className="absolute rounded-full"
+                className="absolute rounded-full bg-primary/20"
                 style={{
                   width: `${Math.random() * 6 + 2}px`,
                   height: `${Math.random() * 6 + 2}px`,
                   left: `${Math.random() * 100}%`,
                   top: `${Math.random() * 100}%`,
-                  backgroundColor: `rgba(${Math.random() * 100 + 155}, ${
-                    Math.random() * 100 + 155
-                  }, 255, ${Math.random() * 0.5 + 0.5})`,
-                  boxShadow: `0 0 ${Math.random() * 10 + 5}px rgba(${
-                    Math.random() * 100 + 155
-                  }, ${Math.random() * 100 + 155}, 255, ${
-                    Math.random() * 0.5 + 0.5
-                  })`,
+                  boxShadow: `0 0 ${Math.random() * 10 + 5}px hsl(var(--primary) / 0.3)`,
                   animation: `float ${
                     Math.random() * 10 + 20
                   }s linear infinite`,
@@ -183,13 +184,13 @@ export default function Community() {
           </div>
 
           <div className="relative z-10 text-center">
-            <div className="inline-flex items-center justify-center p-3 bg-purple-500/20 backdrop-blur-sm rounded-full mb-4">
-              <Users className="mx-auto h-16 w-16 text-purple-400" />
+            <div className="inline-flex items-center justify-center p-3 bg-primary/20 backdrop-blur-sm rounded-full mb-4">
+              <Users className="h-16 w-16 text-primary" />
             </div>
-            <h2 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-300 to-blue-400">
+            <h2 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary via-accent-foreground to-primary">
               Community Learning
             </h2>
-            <p className="mt-2 text-xl text-gray-300 max-w-2xl mx-auto">
+            <p className="mt-2 text-xl text-muted-foreground max-w-2xl mx-auto">
               Connect with other learners, share knowledge, and learn together
             </p>
           </div>
@@ -197,70 +198,84 @@ export default function Community() {
 
         <div className="mb-8 flex flex-col sm:flex-row justify-between items-center gap-4">
           <div className="relative w-full sm:w-64">
-            <Search className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+            <Search className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
             <Input
               placeholder="Search communities..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 bg-gray-800 border-gray-700 text-white placeholder:text-gray-400"
+              className="pl-10 bg-input border-border text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
           </div>
           <Button
             onClick={() => setShowNewCommunityDialog(true)}
-            className="bg-purple-600 hover:bg-purple-700 text-white"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground"
           >
             <Plus className="h-4 w-4 mr-2" />
             Create Community
           </Button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredCommunities.map((community) => (
-            <Card
-              key={community.id}
-              className="cursor-pointer transition-all duration-300 bg-gray-800/50 border-b border-gray-700 hover:shadow-[0_0_15px_rgba(168,85,247,0.15)] text-white"
-              onClick={() => navigate(`/community/${community.id}`)}
-            >
-              <CardHeader>
-                <CardTitle className="text-white">{community.title}</CardTitle>
-                <CardDescription className="text-gray-400">
-                  {community.description}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {community.tags.map((tag, index) => (
-                    <span
-                      key={index}
-                      className="px-2 py-1 bg-purple-500/20 text-purple-400 rounded-full text-sm"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-                <div className="flex items-center justify-between text-sm text-gray-400">
-                  <span>Created by {community.user?.name}</span>
-                  <span>{community._count?.messages || 0} messages</span>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+        {filteredCommunities.length === 0 ? (
+          <Card className="text-center p-8 bg-card/50 backdrop-blur-sm border-border">
+            <CardContent>
+              <Users className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
+              <p className="text-xl text-card-foreground">No communities found</p>
+              <p className="mt-2 text-muted-foreground">
+                {searchQuery
+                  ? "Try a different search term or create a new community"
+                  : "Be the first to create a community and start learning together"}
+              </p>
+            </CardContent>
+          </Card>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredCommunities.map((community) => (
+              <Card
+                key={community.id}
+                className="cursor-pointer transition-all duration-300 bg-card/50 backdrop-blur-sm border-border hover:shadow-lg hover:ring-2 hover:ring-primary/20"
+                onClick={() => navigate(`/community/${community.id}`)}
+              >
+                <CardHeader>
+                  <CardTitle className="text-card-foreground">{community.title}</CardTitle>
+                  <CardDescription className="text-muted-foreground">
+                    {community.description}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {community.tags.map((tag, index) => (
+                      <span
+                        key={index}
+                        className="px-3 py-1 bg-primary/20 text-primary border border-primary/30 rounded-full text-sm font-medium"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="flex items-center justify-between text-sm text-muted-foreground">
+                    <span>Created by {community.user?.name}</span>
+                    <span>{community._count?.messages || 0} messages</span>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
 
         {/* Create Community Dialog */}
         <Dialog
           open={showNewCommunityDialog}
           onOpenChange={setShowNewCommunityDialog}
         >
-          <DialogContent className="bg-gray-800 border-gray-700 text-white">
+          <DialogContent className="bg-card border-border text-card-foreground">
             <DialogHeader>
-              <DialogTitle className="text-white">
+              <DialogTitle className="text-card-foreground">
                 Create New Community
               </DialogTitle>
             </DialogHeader>
             <form onSubmit={handleCreateCommunity} className="space-y-4">
               <div>
-                <Label htmlFor="title" className="text-gray-300">
+                <Label htmlFor="title" className="text-muted-foreground">
                   Title
                 </Label>
                 <Input
@@ -270,11 +285,11 @@ export default function Community() {
                     setFormData({ ...formData, title: e.target.value })
                   }
                   required
-                  className="bg-gray-700 border-gray-600 text-white"
+                  className="bg-input border-border text-foreground focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
               <div>
-                <Label htmlFor="description" className="text-gray-300">
+                <Label htmlFor="description" className="text-muted-foreground">
                   Description
                 </Label>
                 <Textarea
@@ -284,11 +299,11 @@ export default function Community() {
                     setFormData({ ...formData, description: e.target.value })
                   }
                   required
-                  className="bg-gray-700 border-gray-600 text-white"
+                  className="bg-input border-border text-foreground focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
               <div>
-                <Label htmlFor="tags" className="text-gray-300">
+                <Label htmlFor="tags" className="text-muted-foreground">
                   Tags (comma-separated)
                 </Label>
                 <Input
@@ -298,12 +313,12 @@ export default function Community() {
                     setFormData({ ...formData, tags: e.target.value })
                   }
                   placeholder="react, typescript, web development"
-                  className="bg-gray-700 border-gray-600 text-white placeholder:text-gray-500"
+                  className="bg-input border-border text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
               <Button
                 type="submit"
-                className="w-full bg-purple-600 hover:bg-purple-700 text-white"
+                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
               >
                 Create Community
               </Button>
@@ -311,6 +326,27 @@ export default function Community() {
           </DialogContent>
         </Dialog>
       </div>
+
+      {/* Animation keyframes */}
+      <style jsx>{`
+        @keyframes float {
+          0% {
+            transform: translateY(0) translateX(0);
+          }
+          25% {
+            transform: translateY(-10px) translateX(10px);
+          }
+          50% {
+            transform: translateY(0) translateX(20px);
+          }
+          75% {
+            transform: translateY(10px) translateX(10px);
+          }
+          100% {
+            transform: translateY(0) translateX(0);
+          }
+        }
+      `}</style>
     </div>
   );
 }

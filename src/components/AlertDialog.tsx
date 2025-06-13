@@ -20,43 +20,47 @@ export const AlertDialog: React.FC<AlertDialogProps> = ({
 
   const icons = {
     success: <CheckCircle className="w-6 h-6 text-green-500" />,
-    error: <XCircle className="w-6 h-6 text-red-500" />,
+    error: <XCircle className="w-6 h-6 text-destructive" />,
     warning: <AlertTriangle className="w-6 h-6 text-yellow-500" />,
-    info: <Info className="w-6 h-6 text-blue-500" />,
+    info: <Info className="w-6 h-6 text-primary" />,
   };
 
-  const bgColors = {
-    success: "bg-green-50",
-    error: "bg-red-50",
-    warning: "bg-yellow-50",
-    info: "bg-blue-50",
+  const containerStyles = {
+    success: "bg-green-500/10 border-green-500/20",
+    error: "bg-destructive/10 border-destructive/20", 
+    warning: "bg-yellow-500/10 border-yellow-500/20",
+    info: "bg-primary/10 border-primary/20",
   };
 
-  const textColors = {
-    success: "text-green-800",
-    error: "text-red-800",
-    warning: "text-yellow-800",
-    info: "text-blue-800",
+  const textStyles = {
+    success: "text-green-600 dark:text-green-400",
+    error: "text-destructive",
+    warning: "text-yellow-600 dark:text-yellow-400", 
+    info: "text-primary",
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-50">
       <div
-        className={`max-w-md w-full mx-4 p-6 rounded-lg shadow-xl ${bgColors[type]}`}
+        className={`max-w-md w-full mx-4 p-6 rounded-xl shadow-xl border ${containerStyles[type]} bg-card/90 backdrop-blur-sm`}
       >
         <div className="flex items-start gap-4">
-          {icons[type]}
+          <div className="flex-shrink-0">
+            {icons[type]}
+          </div>
           <div className="flex-1">
-            <h3 className={`text-lg font-medium ${textColors[type]}`}>
+            <h3 className={`text-lg font-semibold ${textStyles[type]}`}>
               {title}
             </h3>
-            <p className={`mt-2 text-sm ${textColors[type]}`}>{message}</p>
+            <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+              {message}
+            </p>
           </div>
         </div>
-        <div className="mt-4 flex justify-end">
+        <div className="mt-6 flex justify-end">
           <button
             onClick={onClose}
-            className={`px-4 py-2 text-sm font-medium rounded-md ${textColors[type]} hover:bg-white/25`}
+            className="px-4 py-2 text-sm font-medium rounded-lg bg-muted hover:bg-muted/80 text-foreground border border-border hover:border-primary/50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
           >
             Close
           </button>

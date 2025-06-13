@@ -14,6 +14,7 @@ import {
   Save,
   Undo,
   X,
+  Sparkles,
 } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
@@ -72,7 +73,6 @@ export const Whiteboard: React.FC = () => {
   const whiteboardId = searchParams.get("id");
   const whiteboardTitle = searchParams.get("title");
 
-  
   useEffect(() => {
     if (!whiteboardId) {
       navigate("/dashboard");
@@ -84,7 +84,7 @@ export const Whiteboard: React.FC = () => {
     if (notebookId) {
       loadNotebookWhiteboards(notebookId);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [whiteboardId, navigate, notebookId]);
 
   const loadWhiteboardData = async () => {
@@ -124,6 +124,7 @@ export const Whiteboard: React.FC = () => {
       console.error("Error loading notebook whiteboards:", error);
     }
   };
+
   const loadAIResponses = async () => {
     if (!whiteboardId) return;
 
@@ -141,8 +142,7 @@ export const Whiteboard: React.FC = () => {
     }
   };
 
-  // handle key press to navigate to next and previous page
- 
+  // Handle key press to navigate to next and previous page
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       // Skip if user is typing in an input field
@@ -435,7 +435,7 @@ export const Whiteboard: React.FC = () => {
     "#a78bfa",
     "#f472b6",
   ];
-  
+
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -501,7 +501,7 @@ export const Whiteboard: React.FC = () => {
     if (!ctx) return;
 
     ctx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-    ctx.fillStyle = "#1f2937";
+    ctx.fillStyle = "hsl(var(--muted))";
     ctx.fillRect(0, 0, canvasElement.width, canvasElement.height);
 
     data.forEach((path) => {
@@ -521,19 +521,43 @@ export const Whiteboard: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-950 text-gray-100 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
+      {/* Animated grid background */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--border))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border))_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
+      </div>
+
+      {/* Animated particles */}
+      <div className="absolute inset-0 z-0 opacity-30">
+        {[...Array(15)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute rounded-full bg-primary/20"
+            style={{
+              width: `${Math.random() * 6 + 2}px`,
+              height: `${Math.random() * 6 + 2}px`,
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              boxShadow: `0 0 ${Math.random() * 10 + 5}px hsl(var(--primary) / 0.3)`,
+              animation: `float ${Math.random() * 10 + 20}s linear infinite`,
+              animationDelay: `${Math.random() * 10}s`,
+            }}
+          />
+        ))}
+      </div>
+
+      <div className="max-w-7xl mx-auto relative z-10">
         <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div className="flex justify-between items-center gap-4">
             <Button
               variant="ghost"
               onClick={() => navigate(-1)}
-              className="flex items-center gap-2 text-gray-300 hover:text-purple-400"
+              className="flex items-center gap-2 text-muted-foreground hover:text-primary hover:bg-muted"
             >
               <ArrowLeft className="w-5 h-5" />
               Back
             </Button>
-            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-300">
+            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent-foreground">
               {decodeURIComponent(whiteboardTitle || "")}
             </h1>
           </div>
@@ -542,17 +566,16 @@ export const Whiteboard: React.FC = () => {
             <Button
               variant="outline"
               onClick={() => setShowShortcutsCard(true)}
-              className="flex items-center gap-2 border-gray-700 text-gray-900"
+              className="flex items-center gap-2 border-border text-muted-foreground hover:text-primary hover:bg-muted"
               title="Keyboard Shortcuts"
             >
               <Keyboard className="w-4 h-4" />
               Shortcuts
             </Button>
-
             <Button
               variant="outline"
               onClick={clearDrawing}
-              className="flex items-center gap-2 border-gray-700 text-gray-900"
+              className="flex items-center gap-2 border-border text-muted-foreground hover:text-primary hover:bg-muted"
               disabled={loading}
             >
               <Eraser className="w-4 h-4" />
@@ -561,7 +584,7 @@ export const Whiteboard: React.FC = () => {
             <Button
               variant="outline"
               onClick={() => setShowResponseHistory(true)}
-              className="flex items-center gap-2 border-gray-700 text-gray-900"
+              className="flex items-center gap-2 border-border text-muted-foreground hover:text-primary hover:bg-muted"
             >
               <History className="w-4 h-4" />
               Response History
@@ -569,14 +592,14 @@ export const Whiteboard: React.FC = () => {
             <Button
               variant="outline"
               onClick={downloadCanvas}
-              className="flex items-center gap-2 border-gray-700 text-gray-900"
+              className="flex items-center gap-2 border-border text-muted-foreground hover:text-primary hover:bg-muted"
             >
               <Download className="w-4 h-4" />
               Download
             </Button>
             <Button
               onClick={getAIResponse}
-              className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white"
+              className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground"
               disabled={loading}
             >
               <MessageSquare className="w-4 h-4" />
@@ -584,7 +607,7 @@ export const Whiteboard: React.FC = () => {
             </Button>
             <Button
               onClick={saveWhiteboard}
-              className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white"
+              className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground"
               disabled={loading}
             >
               <Save className="w-4 h-4" />
@@ -593,19 +616,19 @@ export const Whiteboard: React.FC = () => {
           </div>
         </div>
 
-        <div className="bg-gray-900 rounded-xl shadow-lg border border-gray-800 p-6 mb-6">
+        <div className="bg-card/50 backdrop-blur-sm rounded-xl shadow-lg border border-border p-6 mb-6">
           <div className="mb-6 flex flex-wrap items-center gap-4 md:justify-between">
-            <div className="flex items-center gap-2 bg-gray-800 py-2 rounded-lg ">
-              <Palette className="w-5 h-5 text-purple-400" />
+            <div className="flex items-center gap-2 bg-muted/50 py-2 px-4 rounded-lg border border-border">
+              <Palette className="w-5 h-5 text-primary" />
               <div className="flex gap-2">
                 {colorOptions.map((color) => (
                   <button
                     key={color}
                     onClick={() => setCurrentColor(color)}
-                    className={`w-6 h-6 rounded-full transition-transform ${
+                    className={`w-6 h-6 rounded-full transition-transform border-2 ${
                       currentColor === color
-                        ? "scale-125 ring-2 ring-purple-500"
-                        : ""
+                        ? "scale-125 ring-2 ring-primary border-primary"
+                        : "border-border"
                     }`}
                     style={{ backgroundColor: color }}
                     aria-label={`Select ${color} color`}
@@ -615,15 +638,15 @@ export const Whiteboard: React.FC = () => {
                   type="color"
                   value={currentColor}
                   onChange={(e) => setCurrentColor(e.target.value)}
-                  className="w-6 h-6 rounded-full cursor-pointer bg-transparent"
+                  className="w-6 h-6 rounded-full cursor-pointer bg-transparent border-2 border-border"
                   aria-label="Custom color picker"
                 />
               </div>
             </div>
-            <div className="flex items-center gap-2 bg-gray-800 p-2 rounded-lg">
+            <div className="flex items-center gap-2 bg-muted/50 p-2 rounded-lg border border-border">
               <button
                 onClick={() => setCurrentWidth(Math.max(1, currentWidth - 1))}
-                className="text-gray-400 hover:text-purple-400 p-1"
+                className="text-muted-foreground hover:text-primary p-1 rounded hover:bg-muted transition-colors"
                 disabled={currentWidth <= 1}
               >
                 <Minus className="w-4 h-4" />
@@ -636,21 +659,21 @@ export const Whiteboard: React.FC = () => {
                 onChange={(e) =>
                   setCurrentWidth(Number.parseInt(e.target.value))
                 }
-                className="w-32 accent-purple-500"
+                className="w-32 accent-primary"
               />
               <button
                 onClick={() => setCurrentWidth(Math.min(20, currentWidth + 1))}
-                className="text-gray-400 hover:text-purple-400 p-1"
+                className="text-muted-foreground hover:text-primary p-1 rounded hover:bg-muted transition-colors"
                 disabled={currentWidth >= 20}
               >
                 <Plus className="w-4 h-4" />
               </button>
-              <span className="text-sm text-gray-300 min-w-[24px] text-center">
+              <span className="text-sm text-foreground min-w-[24px] text-center font-medium">
                 {currentWidth}px
               </span>
             </div>
 
-            <div className="flex items-center gap-2 bg-gray-800 p-2 rounded-lg">
+            <div className="flex items-center gap-2 bg-muted/50 p-2 rounded-lg border border-border">
               <Button
                 variant="outline"
                 size="sm"
@@ -667,7 +690,7 @@ export const Whiteboard: React.FC = () => {
                     });
                   }
                 }}
-                className="flex items-center gap-2 border-gray-700 text-gray-900"
+                className="flex items-center gap-2 border-border text-muted-foreground hover:text-primary hover:bg-muted"
                 disabled={drawingData.length === 0}
                 title="Undo (Ctrl+Z)"
               >
@@ -686,7 +709,7 @@ export const Whiteboard: React.FC = () => {
                     }
                   }
                 }}
-                className="flex items-center gap-2 border-gray-700 text-gray-900"
+                className="flex items-center gap-2 border-border text-muted-foreground hover:text-primary hover:bg-muted"
                 disabled={undoHistory.length === 0}
                 title="Redo (Ctrl+Y)"
               >
@@ -694,7 +717,7 @@ export const Whiteboard: React.FC = () => {
               </Button>
             </div>
 
-            <div className="flex items-center gap-2 bg-gray-800 p-2 rounded-lg">
+            <div className="flex items-center gap-2 bg-muted/50 p-2 rounded-lg border border-border">
               <Button
                 variant="outline"
                 size="sm"
@@ -718,7 +741,7 @@ export const Whiteboard: React.FC = () => {
                     }
                   }
                 }}
-                className="flex items-center gap-2 border-gray-700 text-gray-900"
+                className="flex items-center gap-2 border-border text-muted-foreground hover:text-primary hover:bg-muted"
                 disabled={
                   whiteboards.findIndex((wb) => wb.title === whiteboardTitle) <=
                     0 ||
@@ -729,7 +752,7 @@ export const Whiteboard: React.FC = () => {
                 <ArrowLeft className="w-4 h-4" />
                 Previous
               </Button>
-              <span className="text-gray-300 px-2">
+              <span className="text-foreground px-2 font-medium">
                 {whiteboardTitle || "Whiteboard"}
               </span>
               <Button
@@ -756,7 +779,7 @@ export const Whiteboard: React.FC = () => {
                     }
                   }
                 }}
-                className="flex items-center gap-2 border-gray-700 text-gray-900"
+                className="flex items-center gap-2 border-border text-muted-foreground hover:text-primary hover:bg-muted"
                 disabled={
                   whiteboards.findIndex((wb) => wb.id === whiteboardId) >=
                     whiteboards.length - 1 ||
@@ -770,7 +793,7 @@ export const Whiteboard: React.FC = () => {
             </div>
           </div>
           <div className="relative rounded-lg overflow-hidden">
-            <div className="absolute inset-0 bg-gray-800 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:20px_20px]"></div>
+            <div className="absolute inset-0 bg-muted bg-[linear-gradient(to_right,hsl(var(--border))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border))_1px,transparent_1px)] bg-[size:20px_20px]"></div>
 
             <canvas
               ref={canvasRef}
@@ -787,12 +810,12 @@ export const Whiteboard: React.FC = () => {
 
       {/* Keyboard Shortcuts Dialog */}
       {showShortcutsCard && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-gray-800 border border-gray-700 rounded-xl shadow-xl max-w-md w-full mx-4 p-6">
+        <div className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-card border border-border rounded-xl shadow-xl max-w-md w-full mx-4 p-6">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-2">
-                <Keyboard className="w-5 h-5 text-purple-400" />
-                <h3 className="text-xl font-medium text-gray-100">
+                <Keyboard className="w-5 h-5 text-primary" />
+                <h3 className="text-xl font-medium text-card-foreground">
                   Keyboard Shortcuts
                 </h3>
               </div>
@@ -800,7 +823,7 @@ export const Whiteboard: React.FC = () => {
                 variant="ghost"
                 size="icon"
                 onClick={() => setShowShortcutsCard(false)}
-                className="text-gray-400 hover:text-gray-300"
+                className="text-muted-foreground hover:text-foreground"
               >
                 <X className="w-5 h-5" />
               </Button>
@@ -808,40 +831,40 @@ export const Whiteboard: React.FC = () => {
 
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-3">
-                <div className="bg-gray-900/50 rounded-lg p-3 border border-gray-700">
-                  <h4 className="text-sm font-medium text-purple-400 mb-2">
+                <div className="bg-muted/50 rounded-lg p-3 border border-border">
+                  <h4 className="text-sm font-medium text-primary mb-2">
                     Navigation
                   </h4>
                   <ul className="space-y-2">
                     <li className="flex justify-between">
-                      <span className="text-gray-300">Previous Page</span>
-                      <kbd className="px-2 py-1 bg-gray-900 rounded text-xs text-gray-300 border border-gray-700">
+                      <span className="text-foreground">Previous Page</span>
+                      <kbd className="px-2 py-1 bg-card rounded text-xs text-muted-foreground border border-border">
                         ←
                       </kbd>
                     </li>
                     <li className="flex justify-between">
-                      <span className="text-gray-300">Next Page</span>
-                      <kbd className="px-2 py-1 bg-gray-900 rounded text-xs text-gray-300 border border-gray-700">
+                      <span className="text-foreground">Next Page</span>
+                      <kbd className="px-2 py-1 bg-card rounded text-xs text-muted-foreground border border-border">
                         →
                       </kbd>
                     </li>
                   </ul>
                 </div>
 
-                <div className="bg-gray-900/50 rounded-lg p-3 border border-gray-700">
-                  <h4 className="text-sm font-medium text-purple-400 mb-2">
+                <div className="bg-muted/50 rounded-lg p-3 border border-border">
+                  <h4 className="text-sm font-medium text-primary mb-2">
                     Editing
                   </h4>
                   <ul className="space-y-2">
                     <li className="flex justify-between">
-                      <span className="text-gray-300">Undo</span>
-                      <kbd className="px-2 py-1 bg-gray-900 rounded text-xs text-gray-300 border border-gray-700">
+                      <span className="text-foreground">Undo</span>
+                      <kbd className="px-2 py-1 bg-card rounded text-xs text-muted-foreground border border-border">
                         Ctrl+Z
                       </kbd>
                     </li>
                     <li className="flex justify-between">
-                      <span className="text-gray-300">Redo</span>
-                      <kbd className="px-2 py-1 bg-gray-900 rounded text-xs text-gray-300 border border-gray-700">
+                      <span className="text-foreground">Redo</span>
+                      <kbd className="px-2 py-1 bg-card rounded text-xs text-muted-foreground border border-border">
                         Ctrl+Y
                       </kbd>
                     </li>
@@ -849,7 +872,7 @@ export const Whiteboard: React.FC = () => {
                 </div>
               </div>
 
-              <div className="mt-4 text-xs text-gray-400">
+              <div className="mt-4 text-xs text-muted-foreground">
                 <div className="flex items-center gap-1 mb-1">
                   <Info className="w-3 h-3" />
                   <span>Tips:</span>
@@ -871,17 +894,17 @@ export const Whiteboard: React.FC = () => {
       )}
 
       {showResponseHistory && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-gray-800 border border-gray-700 rounded-xl shadow-xl max-w-4xl w-full mx-4 p-6">
+        <div className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-card border border-border rounded-xl shadow-xl max-w-4xl w-full mx-4 p-6">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-medium text-gray-100">
+              <h3 className="text-xl font-medium text-card-foreground">
                 AI Response History
               </h3>
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={() => setShowResponseHistory(false)}
-                className="text-gray-400 hover:text-gray-300"
+                className="text-muted-foreground hover:text-foreground"
               >
                 <X className="w-5 h-5" />
               </Button>
@@ -889,9 +912,9 @@ export const Whiteboard: React.FC = () => {
             <div className="max-h-[70vh] overflow-y-auto pr-2 custom-scrollbar">
               {aiResponses.length === 0 ? (
                 <div className="text-center py-12">
-                  <MessageSquare className="w-12 h-12 text-gray-500 mx-auto mb-4" />
-                  <p className="text-lg text-gray-300">No responses yet</p>
-                  <p className="text-sm text-gray-400 mt-2">
+                  <MessageSquare className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                  <p className="text-lg text-foreground">No responses yet</p>
+                  <p className="text-sm text-muted-foreground mt-2">
                     Use the "Get AI Response" button to analyze your drawing
                   </p>
                 </div>
@@ -900,16 +923,16 @@ export const Whiteboard: React.FC = () => {
                   {aiResponses.map((response) => (
                     <div
                       key={response.id}
-                      className="bg-gray-900/50 rounded-lg p-6 border border-gray-700"
+                      className="bg-muted/50 rounded-lg p-6 border border-border"
                     >
                       <div className="flex justify-between items-start mb-4">
-                        <span className="text-sm text-gray-400">
+                        <span className="text-sm text-muted-foreground">
                           {new Date(response.created_at).toLocaleString()}
                         </span>
                       </div>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {response.drawing_data && (
-                          <div className="relative w-full aspect-[4/3] bg-white rounded-lg shadow-md overflow-hidden">
+                          <div className="relative w-full aspect-[4/3] bg-card rounded-lg shadow-md overflow-hidden border border-border">
                             <canvas
                               width={800}
                               height={600}
@@ -926,56 +949,56 @@ export const Whiteboard: React.FC = () => {
                           <ReactMarkdown
                             components={{
                               h1: ({ children }) => (
-                                <h1 className="text-2xl font-bold mb-4 pb-2 border-b border-gray-700">
+                                <h1 className="text-2xl font-bold mb-4 pb-2 border-b border-border text-card-foreground">
                                   {children}
                                 </h1>
                               ),
                               h2: ({ children }) => (
-                                <h2 className="text-xl font-semibold mb-3">
+                                <h2 className="text-xl font-semibold mb-3 text-card-foreground">
                                   {children}
                                 </h2>
                               ),
                               h3: ({ children }) => (
-                                <h3 className="text-lg font-semibold mb-2">
+                                <h3 className="text-lg font-semibold mb-2 text-card-foreground">
                                   {children}
                                 </h3>
                               ),
                               p: ({ children }) => (
-                                <p className="mb-4 leading-relaxed text-gray-300">
+                                <p className="mb-4 leading-relaxed text-foreground">
                                   {children}
                                 </p>
                               ),
                               strong: ({ children }) => (
-                                <strong className="font-semibold text-purple-400">
+                                <strong className="font-semibold text-primary">
                                   {children}
                                 </strong>
                               ),
                               blockquote: ({ children }) => (
-                                <blockquote className="border-l-4 border-purple-500 pl-4 italic my-4 text-gray-300">
+                                <blockquote className="border-l-4 border-primary pl-4 italic my-4 text-muted-foreground">
                                   {children}
                                 </blockquote>
                               ),
                               ul: ({ children }) => (
-                                <ul className="list-disc pl-4 space-y-1 mb-4 text-gray-300">
+                                <ul className="list-disc pl-4 space-y-1 mb-4 text-foreground">
                                   {children}
                                 </ul>
                               ),
                               ol: ({ children }) => (
-                                <ol className="list-decimal pl-4 space-y-1 mb-4 text-gray-300">
+                                <ol className="list-decimal pl-4 space-y-1 mb-4 text-foreground">
                                   {children}
                                 </ol>
                               ),
                               code: ({ inline, children }) => {
                                 if (inline) {
                                   return (
-                                    <code className="bg-gray-800 rounded px-1 py-0.5 text-sm font-mono text-purple-300">
+                                    <code className="bg-muted rounded px-1 py-0.5 text-sm font-mono text-primary">
                                       {children}
                                     </code>
                                   );
                                 }
                                 return (
-                                  <pre className="bg-gray-800 rounded-md p-4 my-4 overflow-x-auto">
-                                    <code className="text-sm font-mono">
+                                  <pre className="bg-muted rounded-md p-4 my-4 overflow-x-auto border border-border">
+                                    <code className="text-sm font-mono text-foreground">
                                       {children}
                                     </code>
                                   </pre>
@@ -1011,20 +1034,39 @@ export const Whiteboard: React.FC = () => {
         response={currentResponse}
       />
 
+      {/* Animation keyframes */}
       <style jsx>{`
+        @keyframes float {
+          0% {
+            transform: translateY(0) translateX(0);
+          }
+          25% {
+            transform: translateY(-10px) translateX(10px);
+          }
+          50% {
+            transform: translateY(0) translateX(20px);
+          }
+          75% {
+            transform: translateY(10px) translateX(10px);
+          }
+          100% {
+            transform: translateY(0) translateX(0);
+          }
+        }
+
         .custom-scrollbar::-webkit-scrollbar {
           width: 8px;
         }
         .custom-scrollbar::-webkit-scrollbar-track {
-          background: rgba(31, 41, 55, 0.5);
+          background: hsl(var(--muted));
           border-radius: 10px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: rgba(139, 92, 246, 0.5);
+          background: hsl(var(--primary) / 0.5);
           border-radius: 10px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: rgba(139, 92, 246, 0.7);
+          background: hsl(var(--primary) / 0.7);
         }
       `}</style>
     </div>

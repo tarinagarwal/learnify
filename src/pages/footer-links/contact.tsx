@@ -19,6 +19,8 @@ import {
   MessageSquare,
   Send,
   CheckCircle,
+  Clock,
+  Sparkles,
 } from "lucide-react";
 
 export default function ContactPage() {
@@ -54,12 +56,12 @@ export default function ContactPage() {
   ];
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-950 text-gray-100">
+    <div className="flex flex-col min-h-screen bg-background text-foreground">
       {/* Hero Section */}
-      <section className="relative pt-24 py-20 md:py-32 bg-gradient-to-br from-gray-950 to-gray-900 overflow-hidden">
+      <section className="relative pt-24 py-12 md:py-20 bg-gradient-to-br from-muted to-primary/10 overflow-hidden">
         {/* Animated grid background */}
         <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff0a_1px,transparent_1px),linear-gradient(to_bottom,#ffffff0a_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--border))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border))_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
         </div>
 
         {/* Animated particles */}
@@ -67,20 +69,13 @@ export default function ContactPage() {
           {[...Array(20)].map((_, i) => (
             <div
               key={i}
-              className="absolute rounded-full"
+              className="absolute rounded-full bg-primary/20"
               style={{
                 width: `${Math.random() * 6 + 2}px`,
                 height: `${Math.random() * 6 + 2}px`,
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
-                backgroundColor: `rgba(${Math.random() * 100 + 155}, ${
-                  Math.random() * 100 + 155
-                }, 255, ${Math.random() * 0.5 + 0.5})`,
-                boxShadow: `0 0 ${Math.random() * 10 + 5}px rgba(${
-                  Math.random() * 100 + 155
-                }, ${Math.random() * 100 + 155}, 255, ${
-                  Math.random() * 0.5 + 0.5
-                })`,
+                boxShadow: `0 0 ${Math.random() * 10 + 5}px hsl(var(--primary) / 0.3)`,
                 animation: `float ${Math.random() * 10 + 20}s linear infinite`,
                 animationDelay: `${Math.random() * 10}s`,
               }}
@@ -89,10 +84,14 @@ export default function ContactPage() {
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-300 to-blue-400 pb-4">
+          <div className="inline-flex items-center justify-center px-4 py-2 border border-accent text-sm font-medium rounded-full text-foreground bg-accent/20 backdrop-blur-sm mb-4">
+            <MessageSquare className="w-4 h-4 mr-2 text-primary" />
+            We're Here to Help
+          </div>
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary via-accent-foreground to-primary pb-4">
             Get in Touch
           </h1>
-          <p className="mt-6 max-w-2xl mx-auto text-xl text-gray-300 leading-relaxed">
+          <p className="mt-6 max-w-2xl mx-auto text-xl text-muted-foreground leading-relaxed">
             Have questions or feedback? We'd love to hear from you. Our team is
             here to help with any inquiries you might have.
           </p>
@@ -100,25 +99,27 @@ export default function ContactPage() {
       </section>
 
       {/* Contact Form and Info */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-950">
+      <section className="py-12 px-4 sm:px-6 lg:px-8 bg-background">
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12">
             {/* Contact Form */}
-            <Card className="bg-gray-800 border-none hover:shadow-[0_0_15px_rgba(168,85,247,0.15)] transition-all duration-300">
+            <Card className="bg-card/50 backdrop-blur-sm border-border hover:shadow-lg hover:ring-2 hover:ring-primary/20 transition-all duration-300">
               <CardContent className="p-6 sm:p-8">
-                <h2 className="text-2xl font-bold mb-6 text-white">
-                  Send Us a Message
-                </h2>
-
+                <div className="flex items-center mb-6">
+                  <MessageSquare className="h-6 w-6 text-primary mr-3" />
+                  <h2 className="text-2xl font-bold text-card-foreground">
+                    Send Us a Message
+                  </h2>
+                </div>
                 {formSubmitted ? (
                   <div className="flex flex-col items-center justify-center py-12 text-center">
-                    <div className="bg-purple-500/20 p-4 rounded-full mb-4">
-                      <CheckCircle className="h-12 w-12 text-purple-400" />
+                    <div className="bg-primary/20 backdrop-blur-sm p-4 rounded-full mb-4">
+                      <CheckCircle className="h-12 w-12 text-primary" />
                     </div>
-                    <h3 className="text-xl font-semibold mb-2 text-white">
+                    <h3 className="text-xl font-semibold mb-2 text-card-foreground">
                       Message Sent!
                     </h3>
-                    <p className="text-gray-400 max-w-md">
+                    <p className="text-muted-foreground max-w-md">
                       Thank you for reaching out. We've received your message
                       and will get back to you as soon as possible.
                     </p>
@@ -129,7 +130,7 @@ export default function ContactPage() {
                       <div className="space-y-2">
                         <label
                           htmlFor="first-name"
-                          className="text-sm font-medium text-gray-300"
+                          className="text-sm font-medium text-muted-foreground"
                         >
                           First Name
                         </label>
@@ -137,13 +138,13 @@ export default function ContactPage() {
                           id="first-name"
                           placeholder="John"
                           required
-                          className="bg-gray-700 border-gray-600 text-white placeholder:text-gray-400 focus:border-purple-400 focus:ring-purple-400"
+                          className="bg-input border-border text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20"
                         />
                       </div>
                       <div className="space-y-2">
                         <label
                           htmlFor="last-name"
-                          className="text-sm font-medium text-gray-300"
+                          className="text-sm font-medium text-muted-foreground"
                         >
                           Last Name
                         </label>
@@ -151,7 +152,7 @@ export default function ContactPage() {
                           id="last-name"
                           placeholder="Doe"
                           required
-                          className="bg-gray-700 border-gray-600 text-white placeholder:text-gray-400 focus:border-purple-400 focus:ring-purple-400"
+                          className="bg-input border-border text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20"
                         />
                       </div>
                     </div>
@@ -159,7 +160,7 @@ export default function ContactPage() {
                     <div className="space-y-2">
                       <label
                         htmlFor="email"
-                        className="text-sm font-medium text-gray-300"
+                        className="text-sm font-medium text-muted-foreground"
                       >
                         Email
                       </label>
@@ -168,25 +169,25 @@ export default function ContactPage() {
                         type="email"
                         placeholder="john.doe@example.com"
                         required
-                        className="bg-gray-700 border-gray-600 text-white placeholder:text-gray-400 focus:border-purple-400 focus:ring-purple-400"
+                        className="bg-input border-border text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20"
                       />
                     </div>
 
                     <div className="space-y-2">
                       <label
                         htmlFor="inquiry-type"
-                        className="text-sm font-medium text-gray-300"
+                        className="text-sm font-medium text-muted-foreground"
                       >
                         Inquiry Type
                       </label>
                       <Select>
                         <SelectTrigger
                           id="inquiry-type"
-                          className="bg-gray-700 border-gray-600 text-white focus:border-purple-400 focus:ring-purple-400"
+                          className="bg-input border-border text-foreground focus:border-primary focus:ring-2 focus:ring-primary/20"
                         >
                           <SelectValue placeholder="Select an inquiry type" />
                         </SelectTrigger>
-                        <SelectContent className="bg-gray-800 border-gray-700 text-white">
+                        <SelectContent className="bg-card border-border text-card-foreground">
                           <SelectItem value="general">
                             General Question
                           </SelectItem>
@@ -207,7 +208,7 @@ export default function ContactPage() {
                     <div className="space-y-2">
                       <label
                         htmlFor="message"
-                        className="text-sm font-medium text-gray-300"
+                        className="text-sm font-medium text-muted-foreground"
                       >
                         Message
                       </label>
@@ -216,13 +217,13 @@ export default function ContactPage() {
                         placeholder="How can we help you?"
                         rows={5}
                         required
-                        className="bg-gray-700 border-gray-600 text-white placeholder:text-gray-400 focus:border-purple-400 focus:ring-purple-400"
+                        className="bg-input border-border text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20"
                       />
                     </div>
 
                     <Button
                       type="submit"
-                      className="w-full bg-purple-600 hover:bg-purple-700 text-white rounded-full"
+                      className="w-full bg-primary hover:bg-primary/90 text-primary-foreground rounded-full"
                     >
                       <Send className="h-4 w-4 mr-2" />
                       Send Message
@@ -234,33 +235,35 @@ export default function ContactPage() {
 
             {/* Contact Info */}
             <div>
-              <h2 className="text-2xl font-bold mb-6 text-white">
-                Contact Information
-              </h2>
-
+              <div className="flex items-center mb-6">
+                <Mail className="h-6 w-6 text-primary mr-3" />
+                <h2 className="text-2xl font-bold text-foreground">
+                  Contact Information
+                </h2>
+              </div>
               <div className="space-y-6">
                 <div className="flex items-start">
-                  <div className="bg-purple-500/20 p-3 rounded-full mr-4">
-                    <Mail className="h-6 w-6 text-purple-400" />
+                  <div className="bg-primary/20 backdrop-blur-sm p-3 rounded-full mr-4">
+                    <Mail className="h-6 w-6 text-primary" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-medium mb-1 text-white">
+                    <h3 className="text-lg font-medium mb-1 text-foreground">
                       Email
                     </h3>
-                    <p className="text-gray-400">tarinagarwal@gmail.com</p>
+                    <p className="text-muted-foreground">tarinagarwal@gmail.com</p>
                   </div>
                 </div>
 
                 <div className="flex items-start">
-                  <div className="bg-purple-500/20 p-3 rounded-full mr-4">
-                    <MessageSquare className="h-6 w-6 text-purple-400" />
+                  <div className="bg-primary/20 backdrop-blur-sm p-3 rounded-full mr-4">
+                    <MessageSquare className="h-6 w-6 text-primary" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-medium mb-1 text-white">
+                    <h3 className="text-lg font-medium mb-1 text-foreground">
                       Live Chat
                     </h3>
-                    <p className="text-gray-400">Available on our platform</p>
-                    <p className="text-gray-400">
+                    <p className="text-muted-foreground">Available on our platform</p>
+                    <p className="text-muted-foreground">
                       Mon-Fri, 24/7 for subscribers
                     </p>
                   </div>
@@ -268,16 +271,16 @@ export default function ContactPage() {
               </div>
 
               <div className="mt-12">
-                <h3 className="text-xl font-semibold mb-4 text-white">
+                <h3 className="text-xl font-semibold mb-4 text-foreground">
                   Follow Us
                 </h3>
                 <div className="flex space-x-4">
                   <a
                     href="#"
-                    className="bg-gray-800 hover:bg-gray-700 p-3 rounded-full transition-colors hover:shadow-[0_0_15px_rgba(168,85,247,0.15)]"
+                    className="bg-card hover:bg-card/80 p-3 rounded-full transition-colors hover:shadow-lg hover:ring-2 hover:ring-primary/20 border border-border"
                   >
                     <svg
-                      className="h-5 w-5 text-purple-400"
+                      className="h-5 w-5 text-primary"
                       fill="currentColor"
                       viewBox="0 0 24 24"
                       aria-hidden="true"
@@ -291,10 +294,10 @@ export default function ContactPage() {
                   </a>
                   <a
                     href="#"
-                    className="bg-gray-800 hover:bg-gray-700 p-3 rounded-full transition-colors hover:shadow-[0_0_15px_rgba(168,85,247,0.15)]"
+                    className="bg-card hover:bg-card/80 p-3 rounded-full transition-colors hover:shadow-lg hover:ring-2 hover:ring-primary/20 border border-border"
                   >
                     <svg
-                      className="h-5 w-5 text-purple-400"
+                      className="h-5 w-5 text-primary"
                       fill="currentColor"
                       viewBox="0 0 24 24"
                       aria-hidden="true"
@@ -308,10 +311,10 @@ export default function ContactPage() {
                   </a>
                   <a
                     href="#"
-                    className="bg-gray-800 hover:bg-gray-700 p-3 rounded-full transition-colors hover:shadow-[0_0_15px_rgba(168,85,247,0.15)]"
+                    className="bg-card hover:bg-card/80 p-3 rounded-full transition-colors hover:shadow-lg hover:ring-2 hover:ring-primary/20 border border-border"
                   >
                     <svg
-                      className="h-5 w-5 text-purple-400"
+                      className="h-5 w-5 text-primary"
                       fill="currentColor"
                       viewBox="0 0 24 24"
                       aria-hidden="true"
@@ -331,13 +334,13 @@ export default function ContactPage() {
       </section>
 
       {/* FAQs */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-950">
+      <section className="py-12 px-4 sm:px-6 lg:px-8 bg-background">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold mb-4 text-white">
+            <h2 className="text-3xl font-bold mb-4 text-foreground">
               Frequently Asked Questions
             </h2>
-            <p className="max-w-2xl mx-auto text-lg text-gray-300">
+            <p className="max-w-2xl mx-auto text-lg text-muted-foreground">
               Find quick answers to common questions about contacting us.
             </p>
           </div>
@@ -346,13 +349,13 @@ export default function ContactPage() {
             {faqs.map((faq, index) => (
               <Card
                 key={index}
-                className="bg-gray-800 hover:bg-gray-800/80 transition-all duration-300 border-none hover:shadow-[0_0_15px_rgba(168,85,247,0.15)] overflow-hidden"
+                className="bg-card/50 backdrop-blur-sm border-border hover:shadow-lg hover:ring-2 hover:ring-primary/20 transition-all duration-300 overflow-hidden"
               >
                 <CardContent className="p-6">
-                  <h3 className="text-lg font-semibold mb-2 text-white">
+                  <h3 className="text-lg font-semibold mb-2 text-card-foreground">
                     {faq.question}
                   </h3>
-                  <p className="text-gray-400">{faq.answer}</p>
+                  <p className="text-muted-foreground">{faq.answer}</p>
                 </CardContent>
               </Card>
             ))}
@@ -361,16 +364,16 @@ export default function ContactPage() {
       </section>
 
       {/* CTA */}
-      <section className="relative py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-purple-900/40 to-gray-900 text-white overflow-hidden">
+      <section className="relative py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-primary/20 to-muted text-foreground overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff0a_1px,transparent_1px),linear-gradient(to_bottom,#ffffff0a_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--border))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border))_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
         </div>
 
         <div className="relative z-10 max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-300">
+          <h2 className="text-3xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent-foreground">
             Ready to Transform Your Learning?
           </h2>
-          <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
             Join thousands of learners who are already using Learnify to achieve
             their educational goals.
           </p>
@@ -378,10 +381,7 @@ export default function ContactPage() {
       </section>
 
       {/* Add keyframes for floating animation */}
-      <style
-        // @ts-expect-error: 'jsx' prop not recognized by TypeScript for style tag, but needed for styled-jsx
-        jsx
-      >{`
+      <style jsx>{`
         @keyframes float {
           0% {
             transform: translateY(0) translateX(0);

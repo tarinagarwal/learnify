@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import type { Question } from "../types/quiz";
 import {
@@ -9,7 +8,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { CheckCircle, Clock } from "lucide-react";
+import { CheckCircle, Clock, Sparkles } from "lucide-react";
 
 interface Props {
   question: Question;
@@ -45,75 +44,140 @@ export default function QuizQuestion({
   const progressPercentage = ((currentQuestion + 1) / totalQuestions) * 100;
 
   return (
-    <div className="p-6">
-      <div className="mb-8">
-        <div className="flex justify-between items-center mb-2">
-          <div className="flex items-center text-gray-300">
-            <Clock className="h-4 w-4 mr-2 text-purple-400" />
-            <span className="text-sm">
-              Question {currentQuestion + 1} of {totalQuestions}
-            </span>
-          </div>
-          <span className="text-sm font-medium text-purple-400">
-            {Math.round(progressPercentage)}%
-          </span>
-        </div>
-        <Progress
-          value={progressPercentage}
-          className="h-2 bg-gray-700"
-           // @ts-expect-error: 'indicatorClassName' prop is not defined in Progress typings but used for styling
-          indicatorClassName="bg-gradient-to-r from-purple-500 to-purple-400"
-        />
+    <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
+      {/* Animated grid background */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--border))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border))_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
       </div>
 
-      <Card className="bg-gray-800/50 border-gray-700 mb-6">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-xl font-semibold text-gray-100">
-            {question.question}
-          </CardTitle>
-          <CardDescription className="text-gray-400">
-            Select the best answer
-          </CardDescription>
-        </CardHeader>
-      </Card>
-
-      <div className="space-y-3 mb-8">
-        {question.options.map((option, index) => (
-          <Button
-            key={index}
-            onClick={() => handleOptionSelect(option)}
-            variant="outline"
-            className={`w-full justify-start text-left h-auto py-4 px-4 border-gray-600 hover:border-purple-400 hover:bg-gray-700/50 transition-all ${
-              selectedOption === option
-                ? "bg-purple-600/20 border-purple-400 text-gray-100"
-                : "bg-gray-800/30 text-gray-300"
-            }`}
-          >
-            <div className="flex items-center w-full">
-              <div
-                className={`flex-shrink-0 w-5 h-5 rounded-full border ${
-                  selectedOption === option
-                    ? "border-purple-400 bg-purple-600"
-                    : "border-gray-500"
-                } mr-3 flex items-center justify-center`}
-              >
-                {selectedOption === option && (
-                  <CheckCircle className="h-3 w-3 text-white" />
-                )}
-              </div>
-              <span>{option}</span>
-            </div>
-          </Button>
+      {/* Animated particles */}
+      <div className="absolute inset-0 z-0 opacity-30">
+        {[...Array(10)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute rounded-full bg-primary/20"
+            style={{
+              width: `${Math.random() * 6 + 2}px`,
+              height: `${Math.random() * 6 + 2}px`,
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              boxShadow: `0 0 ${Math.random() * 10 + 5}px hsl(var(--primary) / 0.3)`,
+              animation: `float ${Math.random() * 10 + 20}s linear infinite`,
+              animationDelay: `${Math.random() * 10}s`,
+            }}
+          />
         ))}
       </div>
 
-      <Button
-        onClick={handleSubmit}
-        disabled={!selectedOption || isSubmitting}
-        className="w-full bg-purple-600 hover:bg-purple-700 text-white py-6 text-lg"
-      >
-        {isSubmitting ? "Submitting..." : "Submit Answer"}
-      </Button>
+      <div className="max-w-3xl mx-auto relative z-10">
+        <div className="mb-8 bg-card/50 backdrop-blur-sm border border-border rounded-xl p-6 shadow-lg">
+          <div className="flex justify-between items-center mb-4">
+            <div className="flex items-center text-muted-foreground">
+              <div className="p-2 rounded-full bg-primary/20 mr-3">
+                <Clock className="h-5 w-5 text-primary" />
+              </div>
+              <span className="text-sm font-medium">
+                Question {currentQuestion + 1} of {totalQuestions}
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium text-primary bg-primary/20 px-3 py-1 rounded-full border border-primary/30">
+                {Math.round(progressPercentage)}%
+              </span>
+            </div>
+          </div>
+          <Progress
+            value={progressPercentage}
+            className="h-3 bg-muted border border-border rounded-full overflow-hidden"
+            // @ts-expect-error: 'indicatorClassName' prop is not defined in Progress typings but used for styling
+            indicatorClassName="bg-gradient-to-r from-primary to-accent transition-all duration-500 ease-out"
+          />
+        </div>
+
+        <Card className="bg-card/50 backdrop-blur-sm border-border mb-8 shadow-lg hover:shadow-xl hover:ring-2 hover:ring-primary/20 transition-all duration-300">
+          <CardHeader className="pb-6">
+            <div className="flex items-start gap-3">
+              <div className="p-2 rounded-full bg-accent/20 mt-1">
+                <Sparkles className="h-5 w-5 text-accent-foreground" />
+              </div>
+              <div className="flex-1">
+                <CardTitle className="text-xl font-semibold text-card-foreground leading-relaxed">
+                  {question.question}
+                </CardTitle>
+                <CardDescription className="text-muted-foreground mt-2">
+                  Select the best answer from the options below
+                </CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+        </Card>
+
+        <div className="space-y-4 mb-8">
+          {question.options.map((option, index) => (
+            <Button
+              key={index}
+              onClick={() => handleOptionSelect(option)}
+              variant="outline"
+              className={`w-full justify-start text-left h-auto py-6 px-6 border-2 transition-all duration-300 rounded-xl ${
+                selectedOption === option
+                  ? "bg-primary/10 border-primary ring-2 ring-primary/20 text-card-foreground shadow-lg"
+                  : "bg-card/50 backdrop-blur-sm border-border text-muted-foreground hover:border-primary/50 hover:bg-card/80 hover:text-foreground"
+              }`}
+            >
+              <div className="flex items-center w-full">
+                <div
+                  className={`flex-shrink-0 w-6 h-6 rounded-full border-2 transition-all duration-200 ${
+                    selectedOption === option
+                      ? "border-primary bg-primary shadow-md"
+                      : "border-muted-foreground"
+                  } mr-4 flex items-center justify-center`}
+                >
+                  {selectedOption === option && (
+                    <CheckCircle className="h-4 w-4 text-primary-foreground" />
+                  )}
+                </div>
+                <span className="font-medium">{option}</span>
+              </div>
+            </Button>
+          ))}
+        </div>
+
+        <Button
+          onClick={handleSubmit}
+          disabled={!selectedOption || isSubmitting}
+          className="w-full bg-primary hover:bg-primary/90 text-primary-foreground py-8 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
+        >
+          {isSubmitting ? (
+            <div className="flex items-center justify-center">
+              <div className="w-5 h-5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin mr-3"></div>
+              Submitting...
+            </div>
+          ) : (
+            "Submit Answer"
+          )}
+        </Button>
+      </div>
+
+      {/* Animation keyframes */}
+      <style jsx>{`
+        @keyframes float {
+          0% {
+            transform: translateY(0) translateX(0);
+          }
+          25% {
+            transform: translateY(-10px) translateX(10px);
+          }
+          50% {
+            transform: translateY(0) translateX(20px);
+          }
+          75% {
+            transform: translateY(10px) translateX(10px);
+          }
+          100% {
+            transform: translateY(0) translateX(0);
+          }
+        }
+      `}</style>
     </div>
   );
 }

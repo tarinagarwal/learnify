@@ -35,7 +35,7 @@ export default function ForgotPassword() {
         type: "success",
       });
       setEmail("");
-    } catch (error: unknown) {
+    } catch (error: any) {
       setAlert({
         show: true,
         title: "Error",
@@ -48,7 +48,7 @@ export default function ForgotPassword() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-950 text-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[hsl(var(--background))] text-[hsl(var(--foreground))] py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md mx-auto">
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center p-3 bg-purple-500/20 backdrop-blur-sm rounded-full mb-4">
@@ -57,18 +57,17 @@ export default function ForgotPassword() {
           <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-300">
             Reset Password
           </h1>
-          <p className="mt-2 text-gray-400">
-            Enter your email address and we'll send you instructions to reset
-            your password.
+          <p className="mt-2 text-sm text-[hsl(var(--muted-foreground))]">
+            Enter your email address and we'll send you instructions to reset your password.
           </p>
         </div>
 
-        <div className="bg-gray-800/30 backdrop-blur-sm border border-gray-700 rounded-xl p-6">
+        <div className="bg-[hsl(var(--card))] text-[hsl(var(--card-foreground))] backdrop-blur-sm border border-[hsl(var(--border))] rounded-xl p-6">
           <form onSubmit={handleResetPassword} className="space-y-6">
             <div>
               <label
                 htmlFor="email"
-                className="block text-sm font-medium text-gray-300 mb-1"
+                className="block text-sm font-medium text-[hsl(var(--muted-foreground))] mb-1"
               >
                 Email address
               </label>
@@ -78,7 +77,7 @@ export default function ForgotPassword() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-gray-700/50 border-gray-600 text-gray-100"
+                className="w-full bg-[hsl(var(--input))] border-[hsl(var(--border))] text-[hsl(var(--foreground))]"
                 placeholder="Enter your email"
               />
             </div>

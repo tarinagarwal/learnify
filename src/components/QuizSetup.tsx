@@ -30,18 +30,13 @@ interface Props {
 
 export default function QuizSetup({ onStart, initialConfig }: Props) {
   const [topic, setTopic] = useState(initialConfig?.topic || "");
-  const [difficulty, setDifficulty] = useState(
-    initialConfig?.difficulty || "medium"
-  );
-  const [numQuestions, setNumQuestions] = useState(
-    initialConfig?.numQuestions || 5
-  );
+  const [difficulty, setDifficulty] = useState(initialConfig?.difficulty || "medium");
+  const [numQuestions, setNumQuestions] = useState(initialConfig?.numQuestions || 5);
   const [quizType, setQuizType] = useState<"topic" | "pdf">("topic");
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  
   useEffect(() => {
     const storedPdfContent = sessionStorage.getItem("pdfContent");
     const storedPdfName = sessionStorage.getItem("pdfName");
@@ -55,15 +50,11 @@ export default function QuizSetup({ onStart, initialConfig }: Props) {
         numQuestions,
         pdfContent: storedPdfContent,
       });
-      sessionStorage.removeItem("pdfContent");
-      sessionStorage.removeItem("pdfName");
-      sessionStorage.removeItem("pdfUrl");
+      sessionStorage.clear();
     } else if (storedTopic) {
       setTopic(storedTopic);
-      sessionStorage.removeItem("quizTopic");
-      sessionStorage.removeItem("quizContent");
+      sessionStorage.clear();
     }
-// eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handlePdfChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -84,7 +75,7 @@ export default function QuizSetup({ onStart, initialConfig }: Props) {
         pdfContent: pdfText,
       });
     } catch (error) {
-      console.error("Error in processing file",error)
+      console.error("Error in processing file", error);
       setError("Error processing PDF file. Please try again.");
     } finally {
       setLoading(false);
@@ -109,7 +100,7 @@ export default function QuizSetup({ onStart, initialConfig }: Props) {
         onStart({ topic, difficulty, numQuestions });
       }
     } catch (error) {
-      console.error("Error in processing file",error)
+      console.error("Error in processing file", error);
       setError("Error processing PDF file. Please try again.");
     } finally {
       setLoading(false);
@@ -118,47 +109,34 @@ export default function QuizSetup({ onStart, initialConfig }: Props) {
 
   const popularTopics = [
     { name: "JavaScript Fundamentals", icon: <Zap className="h-4 w-4" /> },
-    {
-      name: "Machine Learning Basics",
-      icon: <Lightbulb className="h-4 w-4" />,
-    },
+    { name: "Machine Learning Basics", icon: <Lightbulb className="h-4 w-4" /> },
     { name: "World History", icon: <FileText className="h-4 w-4" /> },
   ];
 
   return (
     <div className="p-6">
       <CardHeader className="px-0 pt-0">
-        <CardTitle className="text-2xl font-bold text-gray-100 mb-2">
+        <CardTitle className="text-2xl font-bold text-foreground mb-2">
           Quiz Setup
         </CardTitle>
-        <CardDescription className="text-gray-400">
+        <CardDescription className="text-muted-foreground">
           Choose a topic or upload a PDF to generate quiz questions
         </CardDescription>
       </CardHeader>
+
       <CardContent className="px-0 pb-0">
-        <Tabs
-          defaultValue="topic"
-          onValueChange={(value) => setQuizType(value as "topic" | "pdf")}
-        >
-          <TabsList className="grid grid-cols-2 mb-6 bg-gray-700/50">
-            <TabsTrigger
-              value="topic"
-              className="data-[state=active]:bg-purple-600 data-[state=active]:text-white"
-            >
-              <Lightbulb className="h-4 w-4 mr-2" />
-              By Topic
+        <Tabs defaultValue="topic" onValueChange={(value) => setQuizType(value as "topic" | "pdf")}>
+          <TabsList className="grid grid-cols-2 mb-6 bg-muted rounded-lg">
+            <TabsTrigger value="topic" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              <Lightbulb className="h-4 w-4 mr-2" /> By Topic
             </TabsTrigger>
-            <TabsTrigger
-              value="pdf"
-              className="data-[state=active]:bg-purple-600 data-[state=active]:text-white"
-            >
-              <FileText className="h-4 w-4 mr-2" />
-              From PDF
+            <TabsTrigger value="pdf" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              <FileText className="h-4 w-4 mr-2" /> From PDF
             </TabsTrigger>
           </TabsList>
 
           {error && (
-            <div className="bg-red-900/50 border border-red-500 text-red-200 px-4 py-3 rounded-lg mb-6">
+            <div className="bg-destructive/20 border border-destructive text-destructive px-4 py-3 rounded-lg mb-6">
               {error}
             </div>
           )}
@@ -166,9 +144,7 @@ export default function QuizSetup({ onStart, initialConfig }: Props) {
           <TabsContent value="topic">
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="topic" className="text-gray-300">
-                  Topic
-                </Label>
+                <Label htmlFor="topic">Topic</Label>
                 <Input
                   type="text"
                   id="topic"
@@ -176,24 +152,24 @@ export default function QuizSetup({ onStart, initialConfig }: Props) {
                   onChange={(e) => setTopic(e.target.value)}
                   required
                   readOnly={!!initialConfig?.topic}
-                  className="bg-gray-700/50 border-gray-600 text-gray-100 focus:ring-purple-500 focus:border-purple-500"
                   placeholder="Enter a topic for your quiz"
+                  className="bg-background text-foreground border border-border"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label className="text-gray-300">Popular Topics</Label>
+                <Label>Popular Topics</Label>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-                  {popularTopics.map((popularTopic, index) => (
+                  {popularTopics.map((item, i) => (
                     <Button
-                      key={index}
+                      key={i}
                       type="button"
                       variant="outline"
-                      onClick={() => setTopic(popularTopic.name)}
-                      className="justify-start border-gray-600 text-gray-900 hover:text-purple-400"
+                      onClick={() => setTopic(item.name)}
+                      className="justify-start"
                     >
-                      {popularTopic.icon}
-                      <span className="ml-2">{popularTopic.name}</span>
+                      {item.icon}
+                      <span className="ml-2">{item.name}</span>
                     </Button>
                   ))}
                 </div>
@@ -201,43 +177,21 @@ export default function QuizSetup({ onStart, initialConfig }: Props) {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label htmlFor="difficulty" className="text-gray-300">
-                    Difficulty
-                  </Label>
+                  <Label htmlFor="difficulty">Difficulty</Label>
                   <Select value={difficulty} onValueChange={setDifficulty}>
-                    <SelectTrigger
-                      id="difficulty"
-                      className="bg-gray-700/50 border-gray-600 text-gray-100 focus:ring-purple-500 focus:border-purple-500"
-                    >
+                    <SelectTrigger id="difficulty" className="bg-background text-foreground border border-border">
                       <SelectValue placeholder="Select difficulty" />
                     </SelectTrigger>
-                    <SelectContent className="bg-gray-800 border-gray-700 text-gray-100">
-                      <SelectItem
-                        value="easy"
-                        className="focus:bg-purple-600 focus:text-white"
-                      >
-                        Easy
-                      </SelectItem>
-                      <SelectItem
-                        value="medium"
-                        className="focus:bg-purple-600 focus:text-white"
-                      >
-                        Medium
-                      </SelectItem>
-                      <SelectItem
-                        value="hard"
-                        className="focus:bg-purple-600 focus:text-white"
-                      >
-                        Hard
-                      </SelectItem>
+                    <SelectContent className="bg-background text-foreground border border-border">
+                      <SelectItem value="easy">Easy</SelectItem>
+                      <SelectItem value="medium">Medium</SelectItem>
+                      <SelectItem value="hard">Hard</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="numQuestions" className="text-gray-300">
-                    Number of Questions
-                  </Label>
+                  <Label htmlFor="numQuestions">Number of Questions</Label>
                   <Input
                     type="number"
                     id="numQuestions"
@@ -245,7 +199,7 @@ export default function QuizSetup({ onStart, initialConfig }: Props) {
                     max="10"
                     value={numQuestions}
                     onChange={(e) => setNumQuestions(Number(e.target.value))}
-                    className="bg-gray-700/50 border-gray-600 text-gray-100 focus:ring-purple-500 focus:border-purple-500"
+                    className="bg-background text-foreground border border-border"
                   />
                 </div>
               </div>
@@ -253,7 +207,7 @@ export default function QuizSetup({ onStart, initialConfig }: Props) {
               <Button
                 type="submit"
                 disabled={loading || !topic}
-                className="w-full bg-purple-600 hover:bg-purple-700 text-white"
+                className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
               >
                 {loading ? "Processing..." : "Start Quiz"}
               </Button>
@@ -263,83 +217,55 @@ export default function QuizSetup({ onStart, initialConfig }: Props) {
           <TabsContent value="pdf">
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="pdf-upload" className="text-gray-300">
-                  Upload PDF
-                </Label>
-                <div className="flex items-center justify-center w-full">
-                  <Label
-                    htmlFor="pdf-upload"
-                    className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-600 border-dashed rounded-lg cursor-pointer hover:bg-gray-800/50 transition-colors"
-                  >
-                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                      <div className="p-3 mb-3 rounded-full bg-gray-700/50">
-                        <Upload className="w-8 h-8 text-purple-400" />
-                      </div>
-                      <p className="mb-2 text-sm text-gray-300">
-                        <span className="font-semibold">Click to upload</span>{" "}
-                        or drag and drop
-                      </p>
-                      <p className="text-xs text-gray-400">PDF (MAX. 10MB)</p>
+                <Label htmlFor="pdf-upload">Upload PDF</Label>
+                <Label
+                  htmlFor="pdf-upload"
+                  className="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed border-border rounded-lg cursor-pointer hover:bg-muted/60 transition-colors"
+                >
+                  <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                    <div className="p-3 mb-3 rounded-full bg-muted">
+                      <Upload className="w-8 h-8 text-primary" />
                     </div>
-                    <Input
-                      id="pdf-upload"
-                      type="file"
-                      accept=".pdf"
-                      className="hidden"
-                      onChange={handlePdfChange}
-                      required={quizType === "pdf"}
-                    />
-                  </Label>
-                </div>
-                {pdfFile && (
-                  <div className="flex items-center mt-2 p-2 bg-gray-700/30 rounded-lg">
-                    <FileText className="h-5 w-5 text-purple-400 mr-2" />
-                    <p className="text-sm text-gray-300 truncate">
-                      {pdfFile.name}
+                    <p className="mb-2 text-sm text-muted-foreground">
+                      <span className="font-semibold">Click to upload</span> or drag and drop
                     </p>
+                    <p className="text-xs text-muted-foreground">PDF (MAX. 10MB)</p>
+                  </div>
+                  <Input
+                    id="pdf-upload"
+                    type="file"
+                    accept=".pdf"
+                    className="hidden"
+                    onChange={handlePdfChange}
+                    required={quizType === "pdf"}
+                  />
+                </Label>
+
+                {pdfFile && (
+                  <div className="flex items-center mt-2 p-2 bg-muted rounded-lg">
+                    <FileText className="h-5 w-5 text-primary mr-2" />
+                    <p className="text-sm text-foreground truncate">{pdfFile.name}</p>
                   </div>
                 )}
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label htmlFor="difficulty" className="text-gray-300">
-                    Difficulty
-                  </Label>
+                  <Label htmlFor="difficulty">Difficulty</Label>
                   <Select value={difficulty} onValueChange={setDifficulty}>
-                    <SelectTrigger
-                      id="difficulty"
-                      className="bg-gray-700/50 border-gray-600 text-gray-100 focus:ring-purple-500 focus:border-purple-500"
-                    >
+                    <SelectTrigger id="difficulty" className="bg-background text-foreground border border-border">
                       <SelectValue placeholder="Select difficulty" />
                     </SelectTrigger>
-                    <SelectContent className="bg-gray-800 border-gray-700 text-gray-100">
-                      <SelectItem
-                        value="easy"
-                        className="focus:bg-purple-600 focus:text-white"
-                      >
-                        Easy
-                      </SelectItem>
-                      <SelectItem
-                        value="medium"
-                        className="focus:bg-purple-600 focus:text-white"
-                      >
-                        Medium
-                      </SelectItem>
-                      <SelectItem
-                        value="hard"
-                        className="focus:bg-purple-600 focus:text-white"
-                      >
-                        Hard
-                      </SelectItem>
+                    <SelectContent className="bg-background text-foreground border border-border">
+                      <SelectItem value="easy">Easy</SelectItem>
+                      <SelectItem value="medium">Medium</SelectItem>
+                      <SelectItem value="hard">Hard</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="numQuestions" className="text-gray-300">
-                    Number of Questions
-                  </Label>
+                  <Label htmlFor="numQuestions">Number of Questions</Label>
                   <Input
                     type="number"
                     id="numQuestions"
@@ -347,7 +273,7 @@ export default function QuizSetup({ onStart, initialConfig }: Props) {
                     max="10"
                     value={numQuestions}
                     onChange={(e) => setNumQuestions(Number(e.target.value))}
-                    className="bg-gray-700/50 border-gray-600 text-gray-100 focus:ring-purple-500 focus:border-purple-500"
+                    className="bg-background text-foreground border border-border"
                   />
                 </div>
               </div>
@@ -355,7 +281,7 @@ export default function QuizSetup({ onStart, initialConfig }: Props) {
               <Button
                 type="submit"
                 disabled={loading || !pdfFile}
-                className="w-full bg-purple-600 hover:bg-purple-700 text-white"
+                className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
               >
                 {loading ? "Processing..." : "Start Quiz"}
               </Button>

@@ -19,7 +19,6 @@ export default function ResetPassword() {
   }>({ show: false, title: "", message: "", type: "info" });
 
   useEffect(() => {
-    // Check if we have the access token in the URL
     const hash = window.location.hash;
     if (!hash || !hash.includes("access_token=")) {
       navigate("/login");
@@ -55,11 +54,10 @@ export default function ResetPassword() {
         type: "success",
       });
 
-      // Redirect to login after 2 seconds
       setTimeout(() => {
         navigate("/login");
       }, 2000);
-    } catch (error: unknown) {
+    } catch (error: any) {
       setAlert({
         show: true,
         title: "Error",
@@ -72,7 +70,7 @@ export default function ResetPassword() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-950 text-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[hsl(var(--background))] text-[hsl(var(--foreground))] py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md mx-auto">
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center p-3 bg-purple-500/20 backdrop-blur-sm rounded-full mb-4">
@@ -81,15 +79,17 @@ export default function ResetPassword() {
           <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-300">
             Set New Password
           </h1>
-          <p className="mt-2 text-gray-400">Enter your new password below</p>
+          <p className="mt-2 text-sm text-[hsl(var(--muted-foreground))]">
+            Enter your new password below
+          </p>
         </div>
 
-        <div className="bg-gray-800/30 backdrop-blur-sm border border-gray-700 rounded-xl p-6">
+        <div className="bg-[hsl(var(--card))] text-[hsl(var(--card-foreground))] backdrop-blur-sm border border-[hsl(var(--border))] rounded-xl p-6">
           <form onSubmit={handleResetPassword} className="space-y-6">
             <div>
               <label
                 htmlFor="newPassword"
-                className="block text-sm font-medium text-gray-300 mb-1"
+                className="block text-sm font-medium text-[hsl(var(--muted-foreground))] mb-1"
               >
                 New Password
               </label>
@@ -99,7 +99,7 @@ export default function ResetPassword() {
                 required
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
-                className="w-full bg-gray-700/50 border-gray-600 text-gray-100"
+                className="w-full bg-[hsl(var(--input))] border-[hsl(var(--border))] text-[hsl(var(--foreground))]"
                 placeholder="Enter new password"
               />
             </div>
@@ -107,7 +107,7 @@ export default function ResetPassword() {
             <div>
               <label
                 htmlFor="confirmPassword"
-                className="block text-sm font-medium text-gray-300 mb-1"
+                className="block text-sm font-medium text-[hsl(var(--muted-foreground))] mb-1"
               >
                 Confirm New Password
               </label>
@@ -117,7 +117,7 @@ export default function ResetPassword() {
                 required
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="w-full bg-gray-700/50 border-gray-600 text-gray-100"
+                className="w-full bg-[hsl(var(--input))] border-[hsl(var(--border))] text-[hsl(var(--foreground))]"
                 placeholder="Confirm new password"
               />
             </div>

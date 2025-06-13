@@ -9,6 +9,7 @@ import {
   Loader2,
   Bookmark,
   BookmarkCheck,
+  Sparkles,
 } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import {
@@ -101,10 +102,9 @@ export default function Courses() {
   });
 
   // Effects
-  
   useEffect(() => {
     fetchCourses();
-   // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab]);
 
   useEffect(() => {
@@ -334,20 +334,22 @@ export default function Courses() {
 
   if (loading || bookmarksLoading) {
     return (
-      <div className="min-h-screen bg-gray-950 text-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="relative py-16 px-4 sm:px-6 lg:px-8 mb-12 rounded-2xl overflow-hidden bg-gradient-to-br from-gray-900 to-gray-800">
+          <div className="relative py-16 px-4 sm:px-6 lg:px-8 mb-12 rounded-2xl overflow-hidden bg-gradient-to-br from-muted to-primary/10">
             {/* Animated grid background */}
             <div className="absolute inset-0 z-0">
-              <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff0a_1px,transparent_1px),linear-gradient(to_bottom,#ffffff0a_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
+              <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--border))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border))_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
             </div>
 
             <div className="relative z-10 text-center">
-              <Book className="mx-auto h-16 w-16 text-purple-400" />
-              <h2 className="mt-2 text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-300 to-blue-400">
+              <div className="inline-flex items-center justify-center p-3 bg-primary/20 backdrop-blur-sm rounded-full mb-4">
+                <Book className="w-12 h-12 text-primary" />
+              </div>
+              <h2 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary via-accent-foreground to-primary">
                 Courses
               </h2>
-              <p className="mt-2 text-xl text-gray-300 max-w-2xl mx-auto">
+              <p className="mt-2 text-xl text-muted-foreground max-w-2xl mx-auto">
                 Expand your knowledge with interactive courses
               </p>
             </div>
@@ -359,17 +361,17 @@ export default function Courses() {
               .map((_, i) => (
                 <Card
                   key={i}
-                  className="animate-pulse bg-gray-800/30 backdrop-blur-sm border-gray-700"
+                  className="animate-pulse bg-card/50 backdrop-blur-sm border-border"
                 >
                   <CardHeader>
-                    <div className="h-48 bg-gray-700/50 rounded-md mb-4" />
-                    <div className="h-6 bg-gray-700/50 rounded w-3/4 mb-2" />
-                    <div className="h-4 bg-gray-700/50 rounded w-1/2" />
+                    <div className="h-48 bg-muted rounded-md mb-4" />
+                    <div className="h-6 bg-muted rounded w-3/4 mb-2" />
+                    <div className="h-4 bg-muted rounded w-1/2" />
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-2">
-                      <div className="h-8 bg-gray-700/50 rounded"></div>
-                      <div className="h-8 bg-gray-700/50 rounded"></div>
+                      <div className="h-8 bg-muted rounded"></div>
+                      <div className="h-8 bg-muted rounded"></div>
                     </div>
                   </CardContent>
                 </Card>
@@ -381,21 +383,44 @@ export default function Courses() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-950 text-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         {/* Page Header with animated background */}
-        <div className="relative py-16 px-4 sm:px-6 lg:px-8 mb-12 rounded-2xl overflow-hidden bg-gradient-to-br from-gray-900 to-gray-800">
+        <div className="relative py-16 px-4 sm:px-6 lg:px-8 mb-12 rounded-2xl overflow-hidden bg-gradient-to-br from-muted to-primary/10">
           {/* Animated grid background */}
           <div className="absolute inset-0 z-0">
-            <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff0a_1px,transparent_1px),linear-gradient(to_bottom,#ffffff0a_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--border))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border))_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
+          </div>
+
+          {/* Animated particles */}
+          <div className="absolute inset-0 opacity-30">
+            {[...Array(10)].map((_, i) => (
+              <div
+                key={i}
+                className="absolute rounded-full bg-primary/20"
+                style={{
+                  width: `${Math.random() * 6 + 2}px`,
+                  height: `${Math.random() * 6 + 2}px`,
+                  left: `${Math.random() * 100}%`,
+                  top: `${Math.random() * 100}%`,
+                  boxShadow: `0 0 ${Math.random() * 10 + 5}px hsl(var(--primary) / 0.3)`,
+                  animation: `float ${
+                    Math.random() * 10 + 20
+                  }s linear infinite`,
+                  animationDelay: `${Math.random() * 10}s`,
+                }}
+              />
+            ))}
           </div>
 
           <div className="relative z-10 text-center">
-            <Book className="mx-auto h-16 w-16 text-purple-400" />
-            <h2 className="mt-2 text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-300 to-blue-400">
+            <div className="inline-flex items-center justify-center p-3 bg-primary/20 backdrop-blur-sm rounded-full mb-4">
+              <Book className="w-12 h-12 text-primary" />
+            </div>
+            <h2 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary via-accent-foreground to-primary">
               Courses
             </h2>
-            <p className="mt-2 text-xl text-gray-300 max-w-2xl mx-auto">
+            <p className="mt-2 text-xl text-muted-foreground max-w-2xl mx-auto">
               Expand your knowledge with interactive courses
             </p>
           </div>
@@ -408,18 +433,18 @@ export default function Courses() {
                 value={searchQuery}
                 onChange={setSearchQuery}
                 placeholder="Search courses..."
-                className="bg-gray-800/50 border-gray-700 text-gray-100"
+                className="bg-input border-border text-foreground placeholder:text-muted-foreground"
               />
-              <TabsList className="bg-gray-800/50">
+              <TabsList className="bg-muted">
                 <TabsTrigger
                   value="all"
-                  className="data-[state=active]:bg-purple-600 data-[state=active]:text-white text-gray-300"
+                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-muted-foreground"
                 >
                   All Courses
                 </TabsTrigger>
                 <TabsTrigger
                   value="my-courses"
-                  className="data-[state=active]:bg-purple-600 data-[state=active]:text-white text-gray-300"
+                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-muted-foreground"
                 >
                   My Courses
                 </TabsTrigger>
@@ -432,8 +457,8 @@ export default function Courses() {
                 onClick={() => setShowBookmarked(!showBookmarked)}
                 className={
                   showBookmarked
-                    ? "bg-purple-600 hover:bg-purple-700 text-white"
-                    : "border-gray-600 text-gray-300 hover:bg-gray-800"
+                    ? "bg-primary hover:bg-primary/90 text-primary-foreground"
+                    : "border-border text-primary hover:bg-primary/10"
                 }
               >
                 {showBookmarked ? (
@@ -446,23 +471,23 @@ export default function Courses() {
 
               <Dialog>
                 <DialogTrigger asChild>
-                  <Button className="bg-purple-600 hover:bg-purple-700 text-white">
+                  <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
                     <Plus className="h-4 w-4 mr-2" />
                     Create Course
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="bg-gray-800 border-gray-700 text-gray-100">
+                <DialogContent className="bg-card border-border text-card-foreground">
                   <DialogHeader>
-                    <DialogTitle className="text-gray-100">
+                    <DialogTitle className="text-card-foreground">
                       Create New Course
                     </DialogTitle>
-                    <DialogDescription className="text-gray-400">
+                    <DialogDescription className="text-muted-foreground">
                       Generate a comprehensive course on any topic.
                     </DialogDescription>
                   </DialogHeader>
                   <div className="space-y-4 py-4">
                     <div className="space-y-2">
-                      <Label htmlFor="topic" className="text-gray-300">
+                      <Label htmlFor="topic" className="text-muted-foreground">
                         Course Topic
                       </Label>
                       <Input
@@ -470,16 +495,16 @@ export default function Courses() {
                         placeholder="Enter a topic for the course"
                         value={topic}
                         onChange={(e) => setTopic(e.target.value)}
-                        className="bg-gray-700/50 border-gray-600 text-gray-100 focus:ring-purple-500 focus:border-purple-500"
+                        className="bg-input border-border text-foreground focus:ring-primary focus:border-primary"
                       />
                       {error && (
-                        <p className="text-sm text-red-400 mt-1">{error}</p>
+                        <p className="text-sm text-destructive mt-1">{error}</p>
                       )}
                     </div>
                     <Button
                       onClick={handleCreateCourse}
                       disabled={generating || !topic.trim()}
-                      className="w-full bg-purple-600 hover:bg-purple-700 text-white"
+                      className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
                     >
                       {generating ? (
                         <>
@@ -498,15 +523,15 @@ export default function Courses() {
 
           <TabsContent value="all">
             {filteredCourses.length === 0 ? (
-              <Card className="text-center p-8 bg-gray-800/30 backdrop-blur-sm border-gray-700">
+              <Card className="text-center p-8 bg-card/50 backdrop-blur-sm border-border">
                 <CardContent>
-                  <Book className="mx-auto h-12 w-12 text-gray-500 mb-4" />
-                  <p className="text-xl text-gray-300">
+                  <Book className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
+                  <p className="text-xl text-card-foreground">
                     {showBookmarked
                       ? "No bookmarked courses found"
                       : "No courses found"}
                   </p>
-                  <p className="mt-2 text-gray-400">
+                  <p className="mt-2 text-muted-foreground">
                     {showBookmarked
                       ? "Bookmark some courses to see them here"
                       : "Try a different search term or create a new course"}
@@ -520,34 +545,34 @@ export default function Courses() {
                     <Card
                       key={course.id}
                       onClick={() => handleCourseClick(course)}
-                      className={`transition-all duration-300 bg-gray-800/30 backdrop-blur-sm border-gray-700 hover:shadow-[0_0_15px_rgba(168,85,247,0.15)] flex flex-col cursor-pointer ${
+                      className={`transition-all duration-300 bg-card/50 backdrop-blur-sm border-border hover:shadow-lg hover:ring-2 hover:ring-primary/20 flex flex-col cursor-pointer ${
                         selectedCourse?.id === course.id
-                          ? "ring-2 ring-purple-500"
+                          ? "ring-2 ring-primary"
                           : ""
                       }`}
                     >
                       <CardHeader>
                         <div className="flex justify-between items-start">
-                          <CardTitle className="text-gray-100">
+                          <CardTitle className="text-card-foreground">
                             {course.title}
                           </CardTitle>
                           <Button
                             variant="ghost"
                             size="icon"
-                            className="h-8 w-8 text-gray-300 hover:text-purple-400 hover:bg-transparent"
+                            className="h-8 w-8 text-muted-foreground hover:text-primary hover:bg-muted"
                             onClick={(e) => {
                               e.stopPropagation();
                               toggleBookmark(course.id);
                             }}
                           >
                             {isBookmarked(course.id) ? (
-                              <BookmarkCheck className="h-5 w-5 text-purple-400" />
+                              <BookmarkCheck className="h-5 w-5 text-primary" />
                             ) : (
                               <Bookmark className="h-5 w-5" />
                             )}
                           </Button>
                         </div>
-                        <CardDescription className="text-gray-400">
+                        <CardDescription className="text-muted-foreground">
                           {course.description}
                         </CardDescription>
                       </CardHeader>
@@ -571,7 +596,7 @@ export default function Courses() {
                         <PaginationItem>
                           <PaginationPrevious
                             onClick={previousPage}
-                            className="text-gray-300 hover:text-purple-400 border-gray-700 hover:border-purple-400"
+                            className="text-muted-foreground hover:text-foreground border-border hover:bg-muted"
                           />
                         </PaginationItem>
                         {(() => {
@@ -600,10 +625,8 @@ export default function Courses() {
                           return pagesToShow.map((page, index) => {
                             if (page === "...") {
                               return (
-                                // @ts-expect-error: PaginationItem likely does not accept 'disabled' as a prop, but it works correctly at runtime
-
                                 <PaginationItem key={`dots-${index}`} disabled>
-                                  <span className="px-2 text-gray-400">
+                                  <span className="px-2 text-muted-foreground">
                                     ...
                                   </span>
                                 </PaginationItem>
@@ -612,13 +635,12 @@ export default function Courses() {
                             return (
                               <PaginationItem key={page}>
                                 <PaginationLink
-                                  // @ts-expect-error: PaginationLink may not have 'onClick' in its type definition, but it's needed for page navigation
                                   onClick={() => goToPage(page)}
                                   isActive={currentPage === page}
                                   className={
                                     currentPage === page
-                                      ? "bg-purple-600 text-white border-purple-600"
-                                      : "text-gray-300 border-gray-700 hover:text-purple-400 hover:border-purple-400"
+                                      ? "bg-primary text-primary-foreground border-primary"
+                                      : "text-muted-foreground border-border hover:text-foreground hover:bg-muted"
                                   }
                                 >
                                   {page}
@@ -630,7 +652,7 @@ export default function Courses() {
                         <PaginationItem>
                           <PaginationNext
                             onClick={nextPage}
-                            className="text-gray-300 hover:text-purple-400 border-gray-700 hover:border-purple-400"
+                            className="text-muted-foreground hover:text-foreground border-border hover:bg-muted"
                           />
                         </PaginationItem>
                       </PaginationContent>
@@ -643,13 +665,13 @@ export default function Courses() {
 
           <TabsContent value="my-courses">
             {filteredCourses.length === 0 ? (
-              <Card className="text-center p-8 bg-gray-800/30 backdrop-blur-sm border-gray-700">
+              <Card className="text-center p-8 bg-card/50 backdrop-blur-sm border-border">
                 <CardContent>
-                  <Book className="mx-auto h-12 w-12 text-gray-500 mb-4" />
-                  <p className="text-xl text-gray-300">
+                  <Book className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
+                  <p className="text-xl text-card-foreground">
                     No courses created yet
                   </p>
-                  <p className="mt-2 text-gray-400">
+                  <p className="mt-2 text-muted-foreground">
                     Create your first course to get started
                   </p>
                 </CardContent>
@@ -660,34 +682,34 @@ export default function Courses() {
                   <Card
                     key={course.id}
                     onClick={() => handleCourseClick(course)}
-                    className={`transition-all duration-300 bg-gray-800/30 backdrop-blur-sm border-gray-700 hover:shadow-[0_0_15px_rgba(168,85,247,0.15)] flex flex-col cursor-pointer ${
+                    className={`transition-all duration-300 bg-card/50 backdrop-blur-sm border-border hover:shadow-lg hover:ring-2 hover:ring-primary/20 flex flex-col cursor-pointer ${
                       selectedCourse?.id === course.id
-                        ? "ring-2 ring-purple-500"
+                        ? "ring-2 ring-primary"
                         : ""
                     }`}
                   >
                     <CardHeader>
                       <div className="flex justify-between items-start">
-                        <CardTitle className="text-gray-100">
+                        <CardTitle className="text-card-foreground">
                           {course.title}
                         </CardTitle>
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="h-8 w-8 text-gray-300 hover:text-purple-400 hover:bg-transparent"
+                          className="h-8 w-8 text-muted-foreground hover:text-primary hover:bg-muted"
                           onClick={(e) => {
                             e.stopPropagation();
                             toggleBookmark(course.id);
                           }}
                         >
                           {isBookmarked(course.id) ? (
-                            <BookmarkCheck className="h-5 w-5 text-purple-400" />
+                            <BookmarkCheck className="h-5 w-5 text-primary" />
                           ) : (
                             <Bookmark className="h-5 w-5" />
                           )}
                         </Button>
                       </div>
-                      <CardDescription className="text-gray-400">
+                      <CardDescription className="text-muted-foreground">
                         {course.description}
                       </CardDescription>
                     </CardHeader>
@@ -709,14 +731,14 @@ export default function Courses() {
 
         {selectedCourse && (
           <Card
-            className="mt-8 bg-gray-800/30 backdrop-blur-sm border-gray-700"
+            className="mt-8 bg-card/50 backdrop-blur-sm border-border"
             ref={chaptersRef}
           >
             <CardHeader>
-              <CardTitle className="text-gray-100">
+              <CardTitle className="text-card-foreground">
                 {selectedCourse.title}
               </CardTitle>
-              <CardDescription className="text-gray-400">
+              <CardDescription className="text-muted-foreground">
                 {selectedCourse.description}
               </CardDescription>
               <div className="mt-2">
@@ -732,7 +754,7 @@ export default function Courses() {
               </div>
             </CardHeader>
             <CardContent>
-              <h3 className="text-lg font-semibold mb-2 text-gray-100">
+              <h3 className="text-lg font-semibold mb-2 text-card-foreground">
                 Chapters
               </h3>
               {selectedCourse.chapters?.length ? (
@@ -745,15 +767,15 @@ export default function Courses() {
                           `/courses/${selectedCourse.id}/chapters/${chapter.id}`
                         )
                       }
-                      className="w-full text-left px-4 py-3 rounded-md bg-gray-800/50 hover:bg-gray-700/50 text-gray-300 hover:text-purple-400 transition-colors flex items-center justify-between group"
+                      className="w-full text-left px-4 py-3 rounded-md bg-muted hover:bg-muted/80 text-foreground hover:text-primary transition-colors flex items-center justify-between group border border-border hover:border-primary"
                     >
                       <span>{chapter.title}</span>
-                      <ChevronRight className="h-5 w-5 text-gray-500 group-hover:text-purple-400 transition-colors" />
+                      <ChevronRight className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors" />
                     </button>
                   ))}
                 </div>
               ) : (
-                <p className="text-gray-400">No chapters found.</p>
+                <p className="text-muted-foreground">No chapters found.</p>
               )}
             </CardContent>
           </Card>

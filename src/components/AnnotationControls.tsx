@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { createAnnotation } from '../services/annotations';
-import { BookOpen, Palette, MessageSquare } from 'lucide-react';
+import { BookOpen, Palette, MessageSquare, Sparkles, Loader2 } from 'lucide-react';
 
 interface AnnotationControlsProps {
   pdfId: string;
@@ -46,10 +46,12 @@ export const AnnotationControls: React.FC<AnnotationControlsProps> = ({
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
-      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 px-6 py-4 border-b border-gray-200">
-        <h3 className="text-lg font-semibold text-gray-800 flex items-center">
-          <BookOpen className="w-5 h-5 mr-2 text-blue-600" />
+    <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl shadow-lg overflow-hidden hover:shadow-xl hover:ring-2 hover:ring-primary/20 transition-all duration-300">
+      <div className="bg-gradient-to-r from-muted to-primary/10 px-6 py-4 border-b border-border">
+        <h3 className="text-lg font-semibold text-card-foreground flex items-center">
+          <div className="p-1.5 bg-primary/20 rounded-full mr-3">
+            <BookOpen className="w-5 h-5 text-primary" />
+          </div>
           Annotation Tools
         </h3>
       </div>
@@ -61,32 +63,48 @@ export const AnnotationControls: React.FC<AnnotationControlsProps> = ({
             disabled={isHighlighting || isSubmitting}
             className={`w-full flex items-center justify-center px-4 py-3 rounded-lg font-medium transition-all duration-200 ${
               isHighlighting || isSubmitting
-                ? 'bg-yellow-100 text-yellow-800 border-2 border-yellow-300 cursor-not-allowed'
-                : 'bg-blue-600 hover:bg-blue-700 text-white shadow-md hover:shadow-lg'
+                ? 'bg-yellow-500/10 text-yellow-600 border-2 border-yellow-500/30 cursor-not-allowed'
+                : 'bg-primary hover:bg-primary/90 text-primary-foreground shadow-md hover:shadow-lg'
             }`}
           >
-            <Palette className="w-4 h-4 mr-2" />
+            {isHighlighting || isSubmitting ? (
+              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+            ) : (
+              <Palette className="w-4 h-4 mr-2" />
+            )}
             {isHighlighting ? 'Highlighting...' : 'Highlight Text'}
           </button>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-foreground mb-2">
             Add Comment
           </label>
-          <textarea
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
-            placeholder="Add your thoughts, notes, or questions here..."
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none transition-all duration-200"
-            rows={4}
-            disabled={isSubmitting}
-          />
+          <div className="relative">
+            <MessageSquare className="absolute left-3 top-3 h-4 w-4 text-muted-foreground pointer-events-none" />
+            <textarea
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              placeholder="Add your thoughts, notes, or questions here..."
+              className="w-full pl-10 pr-3 py-3 bg-input border border-border text-foreground placeholder:text-muted-foreground rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 resize-none transition-all duration-200"
+              rows={4}
+              disabled={isSubmitting}
+            />
+          </div>
         </div>
 
-        <div className="text-xs text-gray-500 bg-gray-50 p-3 rounded-lg">
-          <p className="mb-1"><strong>Tip:</strong> Click "Highlight Text" to add a highlight at the current position.</p>
-          <p>Add comments to your highlights for better organization and context.</p>
+        <div className="bg-muted/50 border border-border p-4 rounded-lg">
+          <div className="flex items-start gap-3">
+            <div className="p-1 bg-primary/20 rounded-full flex-shrink-0 mt-0.5">
+              <Sparkles className="h-3 w-3 text-primary" />
+            </div>
+            <div className="text-xs text-muted-foreground">
+              <p className="mb-1 font-medium text-foreground">
+                <strong>Tip:</strong> Click "Highlight Text" to add a highlight at the current position.
+              </p>
+              <p>Add comments to your highlights for better organization and context.</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

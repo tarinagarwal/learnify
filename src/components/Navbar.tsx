@@ -16,9 +16,6 @@ import {
   LucideMessageCircleQuestion,
   Route,
   ChevronDown,
-  // Search,
-  // Bell,
-  // Settings,
   Users,
   Languages,
 } from "lucide-react";
@@ -32,6 +29,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import ThemeButton from "@/components/ui/ThemeButton";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
@@ -47,13 +45,8 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 10) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
+      setScrolled(window.scrollY > 10);
     };
-
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -114,15 +107,11 @@ export default function Navbar() {
     navigate("/");
   };
 
-  // Our custom link for standard nav items
+  // Desktop NavLink
   const NavLink = ({
     to,
     icon: Icon,
     children,
-  }: {
-    to: string;
-    icon?: React.ElementType;
-    children: React.ReactNode;
   }) => {
     const isActive =
       to === "/" ? location.pathname === "/" : location.pathname.startsWith(to);
@@ -131,30 +120,25 @@ export default function Navbar() {
       <Link
         to={to}
         className={cn(
-          "flex items-center space-x-2 text-gray-400 hover:text-purple-400 transition-colors relative group py-2 px-3 rounded-md",
-          isActive && "text-purple-400 font-medium"
+          "flex items-center space-x-2 text-muted-foreground hover:text-primary transition-colors relative group py-2 px-3 rounded-md",
+          isActive && "text-primary font-medium"
         )}
         onClick={() => setIsOpen(false)}
       >
         {Icon && <Icon className="h-4 w-4" />}
         <span>{children}</span>
         {isActive && (
-          <span className="absolute bottom-0 left-1 w-[75%] h-0.5 bg-purple-400 scale-x-100 transition-transform duration-300 ease-out" />
+          <span className="absolute bottom-0 left-1 w-[75%] h-0.5 bg-primary scale-x-100 transition-transform duration-300 ease-out" />
         )}
       </Link>
     );
   };
 
-
-  // Mobile nav link with more padding and larger icons
+  // Mobile NavLink
   const MobileNavLink = ({
     to,
     icon: Icon,
     children,
-  }: {
-    to: string;
-    icon?: React.ElementType;
-    children: React.ReactNode;
   }) => {
     const isActive =
       to === "/" ? location.pathname === "/" : location.pathname.startsWith(to);
@@ -163,8 +147,8 @@ export default function Navbar() {
       <Link
         to={to}
         className={cn(
-          "flex items-center space-x-3 text-gray-300 hover:text-purple-400 transition-colors relative group py-3 px-4 rounded-md hover:bg-gray-800/50",
-          isActive && "text-purple-400 font-medium bg-gray-800/30"
+          "flex items-center space-x-3 text-muted-foreground hover:text-primary transition-colors relative group py-3 px-4 rounded-md hover:bg-muted/50",
+          isActive && "text-primary font-medium bg-muted/30"
         )}
         onClick={() => setIsOpen(false)}
       >
@@ -174,7 +158,6 @@ export default function Navbar() {
     );
   };
 
-  // Group our nav links for better organization
   const navGroups = [
     {
       title: "Learn",
@@ -205,16 +188,16 @@ export default function Navbar() {
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
         scrolled
-          ? "bg-gray-900/90 backdrop-blur-lg border-b border-[#777696] shadow-lg"
-          : "bg-gray-900 backdrop-blur-lg border-b border-[#777696] shadow-lg"
+          ? "bg-background/90 backdrop-blur-lg border-b border-border shadow-lg"
+          : "bg-background backdrop-blur-lg border-b border-border shadow-lg"
       )}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-2">
-              <Brain className="h-8 w-8 text-purple-500" />
-              <span className="text-2xl font-bold text-purple-500">
+              <Brain className="h-8 w-8 text-primary" />
+              <span className="text-2xl font-bold text-primary">
                 Learnify
               </span>
             </Link>
@@ -222,124 +205,114 @@ export default function Navbar() {
 
           {isAuthenticated ? (
             <>
-              {/* DESKTOP NAV LINKS - Now with better organization */}
+              {/* DESKTOP NAV LINKS */}
               <div className="hidden lg:flex lg:items-center lg:space-x-1">
                 <NavLink to="/" icon={Home}>
                   Home
                 </NavLink>
-
-
-                {/* Group navigation links into categories with dropdowns */}
                 {navGroups.map((group) => {
-  // Is any link inside this group active?
-  const isGroupActive = group.links.some(link =>
-    location.pathname.startsWith(link.to)
-  );
-
-  return (
-    <DropdownMenu key={group.title}>
-      <DropdownMenuTrigger asChild>
-        <div
-          className={cn(
-            "flex items-center space-x-1 hover:text-purple-400 transition-colors relative group py-2 px-3 rounded-md cursor-pointer",
-            isGroupActive ? "text-purple-400 font-medium" : "text-gray-300"
-          )}
-        >
-          <span>{group.title}</span>
-          <ChevronDown className="h-4 w-4 opacity-70" />
-          {isGroupActive && (
-            <span className="absolute bottom-0 left-1 w-[75%] h-0.5 bg-purple-400 scale-x-100 transition-transform duration-300 ease-out" />
-          )}
-        </div>
-      </DropdownMenuTrigger>
-
-      <DropdownMenuContent
-        className={cn(
-          "border border-gray-800 transition-colors",
-          isGroupActive ? "bg-gray-800 text-purple-400" : "bg-gray-900 text-gray-300"
-        )}
-      >
-        <DropdownMenuLabel className="text-xs text-gray-500">{group.title}</DropdownMenuLabel>
-        <DropdownMenuSeparator className="bg-gray-800" />
-        {group.links.map((link) => {
-          const isLinkActive = location.pathname.startsWith(link.to);
-          return (
-            <DropdownMenuItem
-              key={link.to}
-              asChild
-              className={cn(
-                "cursor-pointer",
-                isLinkActive ? "bg-gray-700 text-purple-400" : "text-gray-300",
-                "focus:bg-gray-800 focus:text-purple-400"
-              )}
-            >
-              <Link
-                to={link.to}
-                className="flex items-center space-x-2 hover:text-purple-400"
-                onClick={() => setIsOpen(false)}
-              >
-                {link.icon && <link.icon className="h-4 w-4" />}
-                <span>{link.label}</span>
-              </Link>
-            </DropdownMenuItem>
-          );
-        })}
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
-})}
-
+                  const isGroupActive = group.links.some(link =>
+                    location.pathname.startsWith(link.to)
+                  );
+                  return (
+                    <DropdownMenu key={group.title}>
+                      <DropdownMenuTrigger asChild>
+                        <div
+                          className={cn(
+                            "flex items-center space-x-1 hover:text-primary transition-colors relative group py-2 px-3 rounded-md cursor-pointer",
+                            isGroupActive ? "text-primary font-medium" : "text-muted-foreground"
+                          )}
+                        >
+                          <span>{group.title}</span>
+                          <ChevronDown className="h-4 w-4 opacity-70" />
+                          {isGroupActive && (
+                            <span className="absolute bottom-0 left-1 w-[75%] h-0.5 bg-primary scale-x-100 transition-transform duration-300 ease-out" />
+                          )}
+                        </div>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent
+                        className={cn(
+                          "border border-border bg-card/90 backdrop-blur-sm transition-colors",
+                          isGroupActive ? "text-primary" : "text-muted-foreground"
+                        )}
+                      >
+                        <DropdownMenuLabel className="text-xs text-muted-foreground">{group.title}</DropdownMenuLabel>
+                        <DropdownMenuSeparator className="bg-border" />
+                        {group.links.map((link) => {
+                          const isLinkActive = location.pathname.startsWith(link.to);
+                          return (
+                            <DropdownMenuItem
+                              key={link.to}
+                              asChild
+                              className={cn(
+                                "cursor-pointer",
+                                isLinkActive ? "bg-muted text-primary" : "text-card-foreground",
+                                "focus:bg-muted focus:text-primary"
+                              )}
+                            >
+                              <Link
+                                to={link.to}
+                                className="flex items-center space-x-2 hover:text-primary"
+                                onClick={() => setIsOpen(false)}
+                              >
+                                {link.icon && <link.icon className="h-4 w-4" />}
+                                <span>{link.label}</span>
+                              </Link>
+                            </DropdownMenuItem>
+                          );
+                        })}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  );
+                })}
               </div>
 
               {/* USER ACTIONS & MOBILE MENU TOGGLE */}
               <div className="flex items-center space-x-1">
-                {/* Action buttons */}
-
                 {/* User dropdown */}
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button
                       variant="ghost"
-                      className="relative h-8 w-8 rounded-full overflow-hidden border border-gray-700 hover:border-purple-400 transition-colors"
+                      className="relative h-8 w-8 rounded-full overflow-hidden border border-border hover:border-primary transition-colors"
                     >
                       <Avatar className="h-8 w-8">
                         <AvatarImage
                           src={`https://avatar.vercel.sh/${userName}.png`}
                           alt={userName}
                         />
-                        <AvatarFallback className="bg-gray-800 text-purple-400">
+                        <AvatarFallback className="bg-muted text-primary">
                           {userName.charAt(0)}
                         </AvatarFallback>
                       </Avatar>
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent
-                    className="w-56 bg-gray-900 border border-gray-800"
+                    className="w-56 bg-card/90 backdrop-blur-sm border border-border"
                     align="end"
                     forceMount
                   >
                     <DropdownMenuLabel className="font-normal">
                       <div className="flex flex-col space-y-1">
-                        <p className="text-sm font-medium leading-none text-white">
+                        <p className="text-sm font-medium leading-none text-card-foreground">
                           {userName}
                         </p>
-                        <p className="text-xs leading-none text-gray-400">
+                        <p className="text-xs leading-none text-muted-foreground">
                           {isExpert ? "Expert" : "Student"}
                         </p>
                       </div>
                     </DropdownMenuLabel>
-                    <DropdownMenuSeparator className="bg-gray-800" />
+                    <DropdownMenuSeparator className="bg-border" />
                     <DropdownMenuItem
-                      className="focus:bg-gray-800 focus:text-purple-400 cursor-pointer text-gray-300"
+                      className="focus:bg-muted focus:text-primary cursor-pointer text-card-foreground"
                       onClick={() => navigate("/profile")}
                     >
                       <UserCircle className="mr-2 h-4 w-4" />
                       <span>Profile</span>
                     </DropdownMenuItem>
-
-                    <DropdownMenuSeparator className="bg-gray-800" />
+                    <DropdownMenuSeparator className="bg-border" />
                     <DropdownMenuItem
-                      className="focus:bg-gray-800 focus:text-purple-400 cursor-pointer text-gray-300"
+                      className="focus:bg-muted focus:text-destructive cursor-pointer text-card-foreground"
                       onClick={handleLogout}
                     >
                       <LogOut className="mr-2 h-4 w-4" />
@@ -354,49 +327,46 @@ export default function Navbar() {
                     <Button
                       variant="default"
                       size="icon"
-                      className="lg:hidden text-gray-400 hover:text-purple-400 rounded-full"
+                      className="lg:hidden text-muted-foreground hover:text-primary rounded-full"
                     >
                       <Menu className="h-5 w-5" />
                     </Button>
                   </SheetTrigger>
                   <SheetContent
                     side="right"
-                    className="w-[85%] sm:w-[350px] bg-gray-900 border-l border-gray-800 p-0"
+                    className="w-[85%] sm:w-[350px] bg-card/90 backdrop-blur-sm border-l border-border p-0"
                   >
                     <div className="flex flex-col h-full">
                       {/* Header with user info */}
-                      <div className="p-4 border-b border-gray-800 bg-gray-950">
+                      <div className="p-4 border-b border-border bg-muted/30">
                         <div className="flex items-center space-x-3">
-                          <Avatar className="h-10 w-10 border-2 border-purple-500">
+                          <Avatar className="h-10 w-10 border-2 border-primary">
                             <AvatarImage
                               src={`https://avatar.vercel.sh/${userName}.png`}
                               alt={userName}
                             />
-                            <AvatarFallback className="bg-gray-800 text-purple-400">
+                            <AvatarFallback className="bg-muted text-primary">
                               {userName.charAt(0)}
                             </AvatarFallback>
                           </Avatar>
                           <div>
-                            <h3 className="text-white font-medium">
+                            <h3 className="text-card-foreground font-medium">
                               {userName}
                             </h3>
-                            <p className="text-xs text-gray-400">
+                            <p className="text-xs text-muted-foreground">
                               {isExpert ? "Expert" : "Student"}
                             </p>
                           </div>
                         </div>
                       </div>
-
                       {/* Navigation links */}
                       <div className="flex-1 overflow-auto py-4 px-2">
                         <MobileNavLink to="/" icon={Home}>
                           Home
                         </MobileNavLink>
-
-                        {/* Group navigation by categories */}
                         {navGroups.map((group) => (
                           <div key={group.title} className="mt-6">
-                            <h4 className="text-xs uppercase text-gray-500 font-semibold px-4 mb-2">
+                            <h4 className="text-xs uppercase text-muted-foreground font-semibold px-4 mb-2">
                               {group.title}
                             </h4>
                             <div className="space-y-1">
@@ -413,13 +383,12 @@ export default function Navbar() {
                           </div>
                         ))}
                       </div>
-
                       {/* Footer with actions */}
-                      <div className="p-4 border-t border-gray-800 bg-gray-950">
+                      <div className="p-4 border-t border-border bg-muted/30">
                         <Button
                           variant="outline"
                           onClick={handleLogout}
-                          className="w-full bg-gray-800 hover:bg-gray-700 text-white border-gray-700"
+                          className="w-full bg-card hover:bg-muted text-card-foreground border-border hover:text-destructive"
                         >
                           <LogOut className="mr-2 h-4 w-4" />
                           Log out
@@ -428,15 +397,15 @@ export default function Navbar() {
                     </div>
                   </SheetContent>
                 </Sheet>
+                <ThemeButton />
               </div>
             </>
           ) : (
-            /* IF NOT AUTHENTICATED */
             <div className="flex items-center space-x-2 sm:space-x-4">
               <Button
                 variant="ghost"
                 asChild
-                className="text-gray-300 hover:text-purple-400 hover:bg-gray-800/50 rounded-full px-3 sm:px-4"
+                className="text-muted-foreground hover:text-primary hover:bg-muted/50 rounded-full px-3 sm:px-4"
               >
                 <Link to="/login" className="flex items-center">
                   <LogIn className="h-4 w-4 sm:mr-2" />
@@ -445,13 +414,14 @@ export default function Navbar() {
               </Button>
               <Button
                 asChild
-                className="bg-purple-600 hover:bg-purple-700 text-white rounded-full px-3 sm:px-6"
+                className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full px-3 sm:px-6"
               >
                 <Link to="/signup" className="flex items-center">
                   <UserPlus className="h-4 w-4 sm:mr-2" />
                   <span className="hidden sm:inline">Sign Up</span>
                 </Link>
               </Button>
+              <ThemeButton />
             </div>
           )}
         </div>
