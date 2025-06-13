@@ -5,8 +5,10 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 import { UserPlus, Brain, Sparkles, Zap, Target, Award } from "lucide-react";
+import PasswordInput from "../components/ui/passwordinput";
 
 export default function Signup() {
+  
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -41,7 +43,7 @@ export default function Signup() {
       if (profileError) throw profileError;
 
       navigate("/email-confirmation");
-    } catch (error: any) {
+    } catch (error: unknown) {
       setError(error.message);
     } finally {
       setLoading(false);
@@ -87,14 +89,11 @@ export default function Signup() {
                 height: `${Math.random() * 6 + 2}px`,
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
-                backgroundColor: `rgba(${Math.random() * 100 + 155}, ${
-                  Math.random() * 100 + 155
-                }, 255, ${Math.random() * 0.5 + 0.5})`,
-                boxShadow: `0 0 ${Math.random() * 10 + 5}px rgba(${
-                  Math.random() * 100 + 155
-                }, ${Math.random() * 100 + 155}, 255, ${
-                  Math.random() * 0.5 + 0.5
-                })`,
+                backgroundColor: `rgba(${Math.random() * 100 + 155}, ${Math.random() * 100 + 155
+                  }, 255, ${Math.random() * 0.5 + 0.5})`,
+                boxShadow: `0 0 ${Math.random() * 10 + 5}px rgba(${Math.random() * 100 + 155
+                  }, ${Math.random() * 100 + 155}, 255, ${Math.random() * 0.5 + 0.5
+                  })`,
                 animation: `float ${Math.random() * 10 + 20}s linear infinite`,
                 animationDelay: `${Math.random() * 10}s`,
               }}
@@ -197,21 +196,8 @@ export default function Signup() {
                 />
               </div>
 
-              <div>
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium text-gray-300"
-                >
-                  Password
-                </label>
-                <input
-                  id="password"
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="mt-1 block w-full bg-gray-700/50 border border-gray-600 rounded-lg shadow-sm py-2 px-3 text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                />
+              <div className="relative">
+                <PasswordInput password={password} setPassword={setPassword} />
                 <p className="mt-1 text-xs text-gray-400">
                   Password must be at least 6 characters long
                 </p>
@@ -278,7 +264,7 @@ export default function Signup() {
 
       {/* Animation keyframes */}
       <style
-        //@ts-ignore
+        // @ts-expect-error: 'jsx' prop not recognized by TypeScript for style tag, but needed for styled-jsx
         jsx
       >{`
         @keyframes float {

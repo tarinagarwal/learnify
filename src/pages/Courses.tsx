@@ -101,8 +101,10 @@ export default function Courses() {
   });
 
   // Effects
+  
   useEffect(() => {
     fetchCourses();
+   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab]);
 
   useEffect(() => {
@@ -598,7 +600,8 @@ export default function Courses() {
                           return pagesToShow.map((page, index) => {
                             if (page === "...") {
                               return (
-                                //@ts-ignore
+                                // @ts-expect-error: PaginationItem likely does not accept 'disabled' as a prop, but it works correctly at runtime
+
                                 <PaginationItem key={`dots-${index}`} disabled>
                                   <span className="px-2 text-gray-400">
                                     ...
@@ -609,7 +612,7 @@ export default function Courses() {
                             return (
                               <PaginationItem key={page}>
                                 <PaginationLink
-                                  //@ts-ignore
+                                  // @ts-expect-error: PaginationLink may not have 'onClick' in its type definition, but it's needed for page navigation
                                   onClick={() => goToPage(page)}
                                   isActive={currentPage === page}
                                   className={

@@ -104,8 +104,8 @@ export default function Community() {
         .split(",")
         .map((tag) => tag.trim())
         .filter((tag) => tag);
-
-      const { data, error } = await supabase
+      // checking errors hence data is removed as not used
+      const { error } = await supabase
         .from("communities")
         .insert([
           {

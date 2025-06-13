@@ -4,11 +4,15 @@ import {
   Download,
   Eraser,
   History,
+  Info,
+  Keyboard,
   MessageSquare,
   Minus,
   Palette,
   Plus,
+  Redo,
   Save,
+  Undo,
   X,
 } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
@@ -45,6 +49,7 @@ export const Whiteboard: React.FC = () => {
   const [currentWidth, setCurrentWidth] = useState(2);
   const [currentPoints, setCurrentPoints] = useState<Point[]>([]);
   const { drawingData, addStroke, clearDrawing } = useBlackboardStore();
+  const [undoHistory, setUndoHistory] = useState<DrawingData[]>([]);
   const [alert, setAlert] = useState<{
     show: boolean;
     title: string;
@@ -55,9 +60,11 @@ export const Whiteboard: React.FC = () => {
   const [showResponseHistory, setShowResponseHistory] = useState(false);
   const [aiResponses, setAiResponses] = useState<AIResponse[]>([]);
   const [showResponseDialog, setShowResponseDialog] = useState(false);
+  const [showShortcutsCard, setShowShortcutsCard] = useState(false);
+
   const [currentResponse, setCurrentResponse] = useState<string>("");
   const [notebookId, setNotebookId] = useState<string | null>(null);
-  const [whiteboards, setWhiteboards] = useState<any[]>([]);
+  const [whiteboards, setWhiteboards] = useState<unknown[]>([]);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -65,6 +72,7 @@ export const Whiteboard: React.FC = () => {
   const whiteboardId = searchParams.get("id");
   const whiteboardTitle = searchParams.get("title");
 
+  
   useEffect(() => {
     if (!whiteboardId) {
       navigate("/dashboard");
@@ -76,6 +84,7 @@ export const Whiteboard: React.FC = () => {
     if (notebookId) {
       loadNotebookWhiteboards(notebookId);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [whiteboardId, navigate, notebookId]);
 
   const loadWhiteboardData = async () => {
@@ -133,6 +142,7 @@ export const Whiteboard: React.FC = () => {
   };
 
   // handle key press to navigate to next and previous page
+ 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       // Skip if user is typing in an input field
@@ -196,12 +206,41 @@ export const Whiteboard: React.FC = () => {
           }
         }
       }
+      // Handle Ctrl+Z / Cmd+Z for undo last stroke
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "z") {
+        e.preventDefault();
+        if (drawingData.length > 0) {
+          const newDrawingData = [...drawingData];
+          const lastStroke = newDrawingData.pop();
+          if (lastStroke) {
+            setUndoHistory((prev) => [...prev, lastStroke]);
+          }
+          clearDrawing();
+          newDrawingData.forEach((stroke) => {
+            addStroke(stroke);
+          });
+        }
+      }
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "y") {
+        e.preventDefault();
+        // Handle Ctrl+Y / Cmd+Y for redo
+        if (undoHistory.length > 0) {
+          e.preventDefault();
+          const newUndoHistory = [...undoHistory];
+          const strokeToRestore = newUndoHistory.pop();
+          if (strokeToRestore) {
+            addStroke(strokeToRestore);
+            setUndoHistory(newUndoHistory);
+          }
+        }
+      }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [whiteboards, whiteboardId, loading, navigate, searchParams]);
 
   const getPointFromEvent = (
@@ -282,6 +321,8 @@ export const Whiteboard: React.FC = () => {
         color: currentColor,
         width: currentWidth,
       });
+      // Clear the undo history when a new stroke is added
+      setUndoHistory([]);
     }
     setCurrentPoints([]);
   };
@@ -297,6 +338,8 @@ export const Whiteboard: React.FC = () => {
         .eq("id", whiteboardId);
 
       if (error) throw error;
+
+      setUndoHistory([]);
 
       setAlert({
         show: true,
@@ -392,30 +435,31 @@ export const Whiteboard: React.FC = () => {
     "#a78bfa",
     "#f472b6",
   ];
-
+  
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    canvas.addEventListener("touchstart", startDrawing as any);
-    canvas.addEventListener("touchmove", draw as any);
+    canvas.addEventListener("touchstart", startDrawing as unknown);
+    canvas.addEventListener("touchmove", draw as unknown);
     canvas.addEventListener("touchend", endDrawing);
-    canvas.addEventListener("pointerdown", startDrawing as any);
-    canvas.addEventListener("pointermove", draw as any);
+    canvas.addEventListener("pointerdown", startDrawing as unknown);
+    canvas.addEventListener("pointermove", draw as unknown);
     canvas.addEventListener("pointerup", endDrawing);
     canvas.addEventListener("pointerout", endDrawing);
     canvas.addEventListener("touchstart", (e) => e.preventDefault());
     canvas.addEventListener("touchmove", (e) => e.preventDefault());
 
     return () => {
-      canvas.removeEventListener("touchstart", startDrawing as any);
-      canvas.removeEventListener("touchmove", draw as any);
+      canvas.removeEventListener("touchstart", startDrawing as unknown);
+      canvas.removeEventListener("touchmove", draw as unknown);
       canvas.removeEventListener("touchend", endDrawing);
-      canvas.removeEventListener("pointerdown", startDrawing as any);
-      canvas.removeEventListener("pointermove", draw as any);
+      canvas.removeEventListener("pointerdown", startDrawing as unknown);
+      canvas.removeEventListener("pointermove", draw as unknown);
       canvas.removeEventListener("pointerup", endDrawing);
       canvas.removeEventListener("pointerout", endDrawing);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDrawing, currentColor, currentWidth, currentPoints]);
 
   useEffect(() => {
@@ -457,7 +501,7 @@ export const Whiteboard: React.FC = () => {
     if (!ctx) return;
 
     ctx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-    ctx.fillStyle = "white";
+    ctx.fillStyle = "#1f2937";
     ctx.fillRect(0, 0, canvasElement.width, canvasElement.height);
 
     data.forEach((path) => {
@@ -495,6 +539,16 @@ export const Whiteboard: React.FC = () => {
           </div>
 
           <div className="flex flex-col gap-3 sm:flex-row sm:gap-3">
+            <Button
+              variant="outline"
+              onClick={() => setShowShortcutsCard(true)}
+              className="flex items-center gap-2 border-gray-700 text-gray-900"
+              title="Keyboard Shortcuts"
+            >
+              <Keyboard className="w-4 h-4" />
+              Shortcuts
+            </Button>
+
             <Button
               variant="outline"
               onClick={clearDrawing}
@@ -601,6 +655,50 @@ export const Whiteboard: React.FC = () => {
                 variant="outline"
                 size="sm"
                 onClick={() => {
+                  if (drawingData.length > 0) {
+                    const newDrawingData = [...drawingData];
+                    const lastStroke = newDrawingData.pop();
+                    if (lastStroke) {
+                      setUndoHistory((prev) => [...prev, lastStroke]);
+                    }
+                    clearDrawing();
+                    newDrawingData.forEach((stroke) => {
+                      addStroke(stroke);
+                    });
+                  }
+                }}
+                className="flex items-center gap-2 border-gray-700 text-gray-900"
+                disabled={drawingData.length === 0}
+                title="Undo (Ctrl+Z)"
+              >
+                <Undo className="w-4 h-4" />
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  if (undoHistory.length > 0) {
+                    const newUndoHistory = [...undoHistory];
+                    const strokeToRestore = newUndoHistory.pop();
+                    if (strokeToRestore) {
+                      addStroke(strokeToRestore);
+                      setUndoHistory(newUndoHistory);
+                    }
+                  }
+                }}
+                className="flex items-center gap-2 border-gray-700 text-gray-900"
+                disabled={undoHistory.length === 0}
+                title="Redo (Ctrl+Y)"
+              >
+                <Redo className="w-4 h-4" />
+              </Button>
+            </div>
+
+            <div className="flex items-center gap-2 bg-gray-800 p-2 rounded-lg">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
                   saveWhiteboard();
                   if (whiteboards.length > 0) {
                     const currentIndex = whiteboards.findIndex(
@@ -686,6 +784,91 @@ export const Whiteboard: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Keyboard Shortcuts Dialog */}
+      {showShortcutsCard && (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-gray-800 border border-gray-700 rounded-xl shadow-xl max-w-md w-full mx-4 p-6">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-2">
+                <Keyboard className="w-5 h-5 text-purple-400" />
+                <h3 className="text-xl font-medium text-gray-100">
+                  Keyboard Shortcuts
+                </h3>
+              </div>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setShowShortcutsCard(false)}
+                className="text-gray-400 hover:text-gray-300"
+              >
+                <X className="w-5 h-5" />
+              </Button>
+            </div>
+
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-3">
+                <div className="bg-gray-900/50 rounded-lg p-3 border border-gray-700">
+                  <h4 className="text-sm font-medium text-purple-400 mb-2">
+                    Navigation
+                  </h4>
+                  <ul className="space-y-2">
+                    <li className="flex justify-between">
+                      <span className="text-gray-300">Previous Page</span>
+                      <kbd className="px-2 py-1 bg-gray-900 rounded text-xs text-gray-300 border border-gray-700">
+                        ←
+                      </kbd>
+                    </li>
+                    <li className="flex justify-between">
+                      <span className="text-gray-300">Next Page</span>
+                      <kbd className="px-2 py-1 bg-gray-900 rounded text-xs text-gray-300 border border-gray-700">
+                        →
+                      </kbd>
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="bg-gray-900/50 rounded-lg p-3 border border-gray-700">
+                  <h4 className="text-sm font-medium text-purple-400 mb-2">
+                    Editing
+                  </h4>
+                  <ul className="space-y-2">
+                    <li className="flex justify-between">
+                      <span className="text-gray-300">Undo</span>
+                      <kbd className="px-2 py-1 bg-gray-900 rounded text-xs text-gray-300 border border-gray-700">
+                        Ctrl+Z
+                      </kbd>
+                    </li>
+                    <li className="flex justify-between">
+                      <span className="text-gray-300">Redo</span>
+                      <kbd className="px-2 py-1 bg-gray-900 rounded text-xs text-gray-300 border border-gray-700">
+                        Ctrl+Y
+                      </kbd>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="mt-4 text-xs text-gray-400">
+                <div className="flex items-center gap-1 mb-1">
+                  <Info className="w-3 h-3" />
+                  <span>Tips:</span>
+                </div>
+                <ul className="list-disc pl-4 space-y-1">
+                  <li>
+                    Arrow keys navigate between pages while automatically saving
+                    your work
+                  </li>
+                  <li>
+                    Keyboard shortcuts won't work when typing in text fields
+                  </li>
+                  <li>For Mac users, use Command (⌘) instead of Ctrl</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {showResponseHistory && (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50">

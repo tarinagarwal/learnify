@@ -61,7 +61,7 @@ export default function QuizQuestion({
         <Progress
           value={progressPercentage}
           className="h-2 bg-gray-700"
-          //@ts-ignore
+           // @ts-expect-error: 'indicatorClassName' prop is not defined in Progress typings but used for styling
           indicatorClassName="bg-gradient-to-r from-purple-500 to-purple-400"
         />
       </div>

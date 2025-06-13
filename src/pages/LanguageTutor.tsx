@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+//import { useNavigate } from "react-router-dom"; currently un used hence commeneted
 import {
   getTutorResponse,
   analyzeGrammar,
@@ -72,26 +72,30 @@ export default function LanguageTutor() {
   >([]);
   const [topic, setTopic] = useState("");
   const [currentSessionId, setCurrentSessionId] = useState<string | null>(null);
-  const [chatSessions, setChatSessions] = useState<any[]>([]);
+  const [chatSessions, setChatSessions] = useState<unknown[]>([]);
   const [showHistory, setShowHistory] = useState(false);
   const [savedVocabulary, setSavedVocabulary] = useState<VocabularyItem[]>([]);
   const [savedExercises, setSavedExercises] = useState<PracticeExercise[]>([]);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
-  const navigate = useNavigate();
+//  const navigate = useNavigate(); navigate is not used currently so commenting it temporary
 
+  
   useEffect(() => {
     fetchChatSessions();
     if (activeTab === "saved") {
       fetchSavedItems();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab]);
 
+  
   useEffect(() => {
     if (currentSessionId) {
       fetchMessages();
     }
+   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentSessionId]);
 
   const fetchSavedItems = async () => {
@@ -128,6 +132,7 @@ export default function LanguageTutor() {
         description: "Vocabulary item saved successfully",
       });
     } catch (error) {
+      console.error("Failed to save vocabulary item:", error);
       toast({
         title: "Error",
         description: "Failed to save vocabulary item",
@@ -149,6 +154,7 @@ export default function LanguageTutor() {
         description: "Exercise saved successfully",
       });
     } catch (error) {
+      console.error("Failed to save exercise item:", error);
       toast({
         title: "Error",
         description: "Failed to save exercise",
@@ -261,6 +267,7 @@ export default function LanguageTutor() {
       setMessages((prev) => [...prev, assistantMessage]);
       await saveMessage("assistant", response);
     } catch (error) {
+      console.error("Failed to get response:", error);
       toast({
         title: "Error",
         description: "Failed to get tutor response. Please try again.",
@@ -279,6 +286,7 @@ export default function LanguageTutor() {
       const corrections = await analyzeGrammar(grammarText);
       setGrammarCorrections(corrections);
     } catch (error) {
+      console.error("Failed to analyze grammer:", error);
       toast({
         title: "Error",
         description: "Failed to analyze grammar. Please try again.",
@@ -297,6 +305,7 @@ export default function LanguageTutor() {
       const exercises = await generateVocabularyExercises(userLevel, topic, 5);
       setVocabularyItems(exercises);
     } catch (error) {
+      console.error("Failed to generate exercises:", error);
       toast({
         title: "Error",
         description:
@@ -319,6 +328,7 @@ export default function LanguageTutor() {
       );
       setPracticeExercises(exercises);
     } catch (error) {
+      console.error("Failed to generate exercises:", error);
       toast({
         title: "Error",
         description: "Failed to generate practice exercises. Please try again.",
@@ -339,7 +349,7 @@ export default function LanguageTutor() {
       const audio = new Audio(audioUrl);
       await audio.play();
     } catch (error) {
-      throw error;
+      console.error("Audio play failed:", error);
     }
   };
 
@@ -716,6 +726,7 @@ export default function LanguageTutor() {
                                             item.audioUrl
                                           );
                                         } catch (error) {
+                                          console.error("Audio play failed:", error);
                                           toast({
                                             title: "Error",
                                             description: "Failed to play audio",

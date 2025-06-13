@@ -30,11 +30,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SearchBar } from "@/components/SearchBar";
-import { useNavigate } from "react-router-dom";
+//import { useNavigate } from "react-router-dom"; currently un used hence commented
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function Roadmaps() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate(); commented as was not used and causing eslint error 
   const [roadmaps, setRoadmaps] = useState<Roadmap[]>([]);
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
@@ -44,8 +44,10 @@ export default function Roadmaps() {
   const [selectedRoadmap, setSelectedRoadmap] = useState<Roadmap | null>(null);
   const [activeTab, setActiveTab] = useState("all"); // "all" | "my-roadmaps"
 
+ 
   useEffect(() => {
     fetchRoadmaps();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab]);
 
   const fetchRoadmaps = async () => {
@@ -143,7 +145,7 @@ export default function Roadmaps() {
     );
   }
 
-  const renderStages = (stages: any[] = []) => {
+  const renderStages = (stages: unknown[] = []) => {
     if (!Array.isArray(stages) || stages.length === 0) {
       return (
         <Card className="text-center p-8 bg-gray-800/30 backdrop-blur-sm border-gray-700">
@@ -187,7 +189,7 @@ export default function Roadmaps() {
             <CardContent>
               <div className="space-y-4">
                 {Array.isArray(stage.skills) &&
-                  stage.skills.map((skill: any, i: number) => (
+                  stage.skills.map((skill: unknown, i: number) => (
                     <div key={i}>
                       <h4 className="font-medium text-gray-200">
                         {skill.name}
@@ -214,7 +216,7 @@ export default function Roadmaps() {
             <CardContent>
               <div className="space-y-4">
                 {Array.isArray(stage.resources) &&
-                  stage.resources.map((resource: any, i: number) => (
+                  stage.resources.map((resource: unknown, i: number) => (
                     <div
                       key={i}
                       className="border-b border-gray-700 pb-4 last:border-0"
@@ -273,7 +275,7 @@ export default function Roadmaps() {
           </h3>
           <div className="grid gap-4 md:grid-cols-2">
             {Array.isArray(stage.projects) &&
-              stage.projects.map((project: any, i: number) => (
+              stage.projects.map((project: unknown, i: number) => (
                 <Card
                   key={i}
                   className="bg-gray-800/30 backdrop-blur-sm border-gray-700"
@@ -347,7 +349,7 @@ export default function Roadmaps() {
             <CardContent>
               <div className="space-y-4">
                 {Array.isArray(stage.best_practices) &&
-                  stage.best_practices.map((practice: any, i: number) => (
+                  stage.best_practices.map((practice: unknown, i: number) => (
                     <div key={i}>
                       <h4 className="font-medium text-gray-200">
                         {practice.title}
@@ -381,7 +383,7 @@ export default function Roadmaps() {
             <CardContent>
               <div className="space-y-4">
                 {Array.isArray(stage.common_pitfalls) &&
-                  stage.common_pitfalls.map((pitfall: any, i: number) => (
+                  stage.common_pitfalls.map((pitfall: unknown, i: number) => (
                     <div key={i}>
                       <h4 className="font-medium text-red-400">
                         {pitfall.issue}
@@ -461,7 +463,7 @@ export default function Roadmaps() {
                     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                       {Array.isArray(selectedRoadmap.content?.tools) &&
                         selectedRoadmap.content.tools.map(
-                          (tool: any, index: number) => (
+                          (tool: unknown, index: number) => (
                             <Card
                               key={index}
                               className="bg-gray-800/30 backdrop-blur-sm border-gray-700"
@@ -564,7 +566,7 @@ export default function Roadmaps() {
                     <div className="grid gap-6 md:grid-cols-2">
                       {Array.isArray(selectedRoadmap.content?.certifications) &&
                         selectedRoadmap.content.certifications.map(
-                          (cert: any, index: number) => (
+                          (cert: unknown, index: number) => (
                             <Card
                               key={index}
                               className="bg-gray-800/30 backdrop-blur-sm border-gray-700"
@@ -666,7 +668,7 @@ export default function Roadmaps() {
                                 selectedRoadmap.content?.career_path?.roles
                               ) &&
                                 selectedRoadmap.content.career_path.roles.map(
-                                  (role: any, i: number) => (
+                                  (role: unknown, i: number) => (
                                     <span
                                       key={i}
                                       className="px-3 py-1 bg-purple-900/20 text-purple-300 border border-purple-700/50 rounded-full"
@@ -690,7 +692,7 @@ export default function Roadmaps() {
                                   ?.skills_required
                               ) &&
                                 selectedRoadmap.content.career_path.skills_required.map(
-                                  (skill: any, i: number) => (
+                                  (skill: unknown, i: number) => (
                                     <div
                                       key={i}
                                       className="flex items-center gap-2 bg-gray-700/50 p-2 rounded"
@@ -884,7 +886,7 @@ export default function Roadmaps() {
                         <div className="space-y-2">
                           {Array.isArray(roadmap.content?.stages) &&
                             roadmap.content.stages.map(
-                              (stage: any, index: number) => (
+                              (stage: unknown, index: number) => (
                                 <div
                                   key={index}
                                   className="flex items-center gap-2"

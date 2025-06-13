@@ -1,14 +1,12 @@
-import { getDocument, GlobalWorkerOptions } from 'pdfjs-dist';
+import { getDocument, GlobalWorkerOptions, version as pdfjsVersion } from 'pdfjs-dist';
 import type { PDFDocumentProxy } from 'pdfjs-dist';
 import 'pdfjs-dist/build/pdf.worker.mjs';
 
 // Set worker path
-//@ts-ignore
-GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsVersion}/pdf.worker.min.js`;
 
 export async function generatePdfThumbnail(pdfUrl: string): Promise<string> {
   try {
-    // Create a temporary proxy URL to handle CORS
     const response = await fetch(pdfUrl);
     const blob = await response.blob();
     const dataUrl = URL.createObjectURL(blob);
@@ -18,18 +16,18 @@ export async function generatePdfThumbnail(pdfUrl: string): Promise<string> {
       cMapUrl: 'https://cdn.jsdelivr.net/npm/pdfjs-dist/cmaps/',
       cMapPacked: true,
     });
-    
+
     const pdf: PDFDocumentProxy = await loadingTask.promise;
     const page = await pdf.getPage(1);
-    
+
     const viewport = page.getViewport({ scale: 1.0 });
     const canvas = document.createElement('canvas');
     const context = canvas.getContext('2d');
-    
+
     if (!context) {
       throw new Error('Could not get canvas context');
     }
-
+    
     // Scale down for thumbnail
     const scale = 400 / viewport.width;
     const scaledViewport = page.getViewport({ scale });
@@ -41,13 +39,12 @@ export async function generatePdfThumbnail(pdfUrl: string): Promise<string> {
       canvasContext: context,
       viewport: scaledViewport,
     }).promise;
-
-    const thumbnail = canvas.toDataURL('image/jpeg', 0.7);
     
     // Cleanup
+    const thumbnail = canvas.toDataURL('image/jpeg', 0.7);
     URL.revokeObjectURL(dataUrl);
     await pdf.destroy();
-    
+
     return thumbnail;
   } catch (error) {
     console.error('Error generating PDF thumbnail:', error);

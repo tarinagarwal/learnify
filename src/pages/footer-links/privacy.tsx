@@ -433,7 +433,8 @@ export default function PrivacyPage() {
 
       {/* Add keyframes for floating animation */}
       <style
-        //@ts-ignore
+        // @ts-expect-error: 'jsx' prop not recognized by TypeScript for style tag, but needed for styled-jsx
+
         jsx
       >{`
         @keyframes float {

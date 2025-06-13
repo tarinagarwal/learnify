@@ -1,14 +1,14 @@
 "use client";
 
+import { Copy, Download, Maximize, Minimize, X } from "lucide-react";
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
-import { X, Download, Maximize, Minimize, Copy } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 
 interface ResponseDialogProps {
   isOpen: boolean;
   onClose: () => void;
-  drawingData: any[];
+  drawingData: unknown[];
   response?: string;
 }
 
@@ -31,7 +31,7 @@ export const ResponseDialog: React.FC<ResponseDialogProps> = ({
     if (!ctx) return;
 
     // Set white background
-    ctx.fillStyle = "white";
+    ctx.fillStyle = "#30455c";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // Draw all paths
@@ -42,7 +42,7 @@ export const ResponseDialog: React.FC<ResponseDialogProps> = ({
 
         ctx.beginPath();
         ctx.moveTo(path.points[0].x, path.points[0].y);
-        path.points.slice(1).forEach((point: any) => {
+        path.points.slice(1).forEach((point: unknown) => {
           if (typeof point.x === "number" && typeof point.y === "number") {
             ctx.lineTo(point.x, point.y);
           }
@@ -176,7 +176,7 @@ export const ResponseDialog: React.FC<ResponseDialogProps> = ({
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
             {/* Drawing Canvas */}
-            <div className="relative bg-white rounded-lg shadow-md overflow-hidden h-[300px] md:h-auto">
+            <div className="relative bg-30455c rounded-lg shadow-md overflow-hidden h-[300px] md:h-auto">
               <canvas
                 ref={canvasRef}
                 width={800}

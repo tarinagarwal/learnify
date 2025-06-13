@@ -3,7 +3,6 @@
 import type React from "react";
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -16,14 +15,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
-  Brain,
   Mail,
-  Phone,
-  MapPin,
   MessageSquare,
   Send,
   CheckCircle,
-  ChevronRight,
 } from "lucide-react";
 
 export default function ContactPage() {
@@ -384,7 +379,7 @@ export default function ContactPage() {
 
       {/* Add keyframes for floating animation */}
       <style
-        //@ts-ignore
+        // @ts-expect-error: 'jsx' prop not recognized by TypeScript for style tag, but needed for styled-jsx
         jsx
       >{`
         @keyframes float {
