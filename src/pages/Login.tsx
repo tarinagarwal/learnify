@@ -16,10 +16,18 @@ export default function Login() {
 
   // Optional: Redirect if already logged in
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
+  const checkSession = async () => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
       if (session) navigate("/");
-    });
-  }, []);
+    } catch (err) {
+      console.error("Error checking session", err);
+    }
+  };
+
+  checkSession();
+}, [navigate]);
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
