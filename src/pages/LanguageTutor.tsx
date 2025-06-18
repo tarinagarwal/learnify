@@ -371,7 +371,9 @@ export default function LanguageTutor() {
               height: `${Math.random() * 6 + 2}px`,
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
+
               boxShadow: `0 0 ${Math.random() * 10 + 5}px hsl(var(--primary) / 0.3)`,
+
               animation: `float ${Math.random() * 10 + 20}s linear infinite`,
               animationDelay: `${Math.random() * 10}s`,
             }}
@@ -413,36 +415,50 @@ export default function LanguageTutor() {
             onValueChange={setActiveTab}
             className="w-full"
           >
+
             <TabsList className="mb-6 grid grid-cols-4 bg-muted p-1 rounded-full">
               <TabsTrigger
                 value="chat"
                 className="flex items-center gap-2 rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-muted-foreground"
+
               >
                 <MessageCircle className="w-4 h-4" />
-                Chat
+                <span>Chat</span>
               </TabsTrigger>
+
               <TabsTrigger
                 value="grammar"
+
                 className="flex items-center gap-2 rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-muted-foreground"
+
               >
-                <Book className="w-4 h-4" />
-                Grammar Check
+                <Book className="w-3 h-3 md:w-4 md:h-4" />
+                <span>Grammar Check</span>
               </TabsTrigger>
+
               <TabsTrigger
                 value="practice"
+
                 className="flex items-center gap-2 rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-muted-foreground"
+
               >
                 <GraduationCap className="w-4 h-4" />
-                Practice
+                <span>Practice</span>
               </TabsTrigger>
+
               <TabsTrigger
                 value="saved"
+
                 className="flex items-center gap-2 rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-muted-foreground"
+
               >
                 <Bookmark className="w-4 h-4" />
-                Saved
+                <span>Saved</span>
               </TabsTrigger>
             </TabsList>
+
+
+
 
             <TabsContent value="chat">
               <Card className="bg-card/50 backdrop-blur-sm border-border hover:shadow-lg hover:ring-2 hover:ring-primary/20 transition-all duration-300">
@@ -514,18 +530,19 @@ export default function LanguageTutor() {
                           messages.map((message, index) => (
                             <div
                               key={index}
-                              className={`flex ${
-                                message.role === "user"
-                                  ? "justify-end"
-                                  : "justify-start"
-                              }`}
+                              className={`flex ${message.role === "user"
+                                ? "justify-end"
+                                : "justify-start"
+                                }`}
                             >
                               <div
+
                                 className={`max-w-[80%] rounded-lg p-3 ${
                                   message.role === "user"
                                     ? "bg-primary text-primary-foreground"
                                     : "bg-card text-card-foreground"
                                 }`}
+
                               >
                                 <ReactMarkdown>{message.content}</ReactMarkdown>
                               </div>

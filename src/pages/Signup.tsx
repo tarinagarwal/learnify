@@ -1,13 +1,14 @@
 "use client";
 
 import type React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "../lib/supabase";
-import { UserPlus, Brain, Sparkles, Zap, Target, Award } from "lucide-react";
-import PasswordInput from "../components/ui/passwordinput";
+import { UserPlus, Brain, Sparkles, Zap, Target, Award, Eye, EyeOff } from "lucide-react";
 
 export default function Signup() {
+
+
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -49,6 +50,25 @@ export default function Signup() {
     }
   };
 
+  const handleOAuthLogin = async (provider: "google" | "github") => {
+    setError("");
+    setLoading(true);
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider,
+        options: {
+          redirectTo: `${window.location.origin}/`,
+        },
+      });
+
+      if (error) throw error;
+    } catch (error: any) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const benefits = [
     {
       icon: <Sparkles className="h-5 w-5 text-primary" />,
@@ -69,15 +89,15 @@ export default function Signup() {
   ];
 
   return (
+
     <div className="flex min-h-screen bg-background text-foreground">
       {/* Left side - Illustration/Info */}
       <div className="hidden lg:block lg:w-1/2 relative overflow-hidden">
         {/* Animated background */}
         <div className="absolute inset-0 bg-gradient-to-br from-muted to-primary/10">
           <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--border))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border))_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
-        </div>
 
-        {/* Animated particles */}
+        </div>
         <div className="absolute inset-0 opacity-30">
           {[...Array(15)].map((_, i) => (
             <div
@@ -88,7 +108,9 @@ export default function Signup() {
                 height: `${Math.random() * 6 + 2}px`,
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
+
                 boxShadow: `0 0 ${Math.random() * 10 + 5}px hsl(var(--primary) / 0.3)`,
+
                 animation: `float ${Math.random() * 10 + 20}s linear infinite`,
                 animationDelay: `${Math.random() * 10}s`,
               }}
@@ -107,9 +129,11 @@ export default function Signup() {
             <h3 className="text-3xl font-bold mb-6 text-center bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent-foreground">
               Join the Future of Learning
             </h3>
+
             <p className="text-muted-foreground mb-8 text-center">
               Create your account and start your personalized learning journey
               today.
+
             </p>
 
             <div className="grid grid-cols-2 gap-4">
@@ -131,7 +155,7 @@ export default function Signup() {
         </div>
       </div>
 
-      {/* Right side - Form */}
+      {/* Right Section - Signup Form */}
       <div className="w-full lg:w-1/2 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <div className="flex justify-center">
@@ -157,10 +181,12 @@ export default function Signup() {
               )}
 
               <div>
+
                 <label
                   htmlFor="name"
                   className="block text-sm font-medium text-muted-foreground"
                 >
+
                   Full Name
                 </label>
                 <input
@@ -174,10 +200,12 @@ export default function Signup() {
               </div>
 
               <div>
+
                 <label
                   htmlFor="email"
                   className="block text-sm font-medium text-muted-foreground"
                 >
+
                   Email address
                 </label>
                 <input
@@ -191,8 +219,10 @@ export default function Signup() {
               </div>
 
               <div className="relative">
+
                 <PasswordInput password={password} setPassword={setPassword} />
                 <p className="mt-1 text-xs text-muted-foreground">
+
                   Password must be at least 6 characters long
                 </p>
               </div>
@@ -205,10 +235,12 @@ export default function Signup() {
                   required
                   className="h-4 w-4 bg-input border-border rounded text-primary focus:ring-primary"
                 />
+
                 <label
                   htmlFor="terms"
                   className="ml-2 block text-sm text-muted-foreground"
                 >
+
                   I agree to the{" "}
                   <Link to="/terms" className="text-primary hover:text-primary/80 transition-colors">
                     Terms of Service
@@ -231,33 +263,69 @@ export default function Signup() {
               </div>
             </form>
 
-            <div className="mt-6">
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-border" />
+              {/* Social Auth */}
+              <div className="mt-6 flex gap-4">
+                {/* Google Auth Button */}
+                <button
+                  onClick={() => handleOAuthLogin("google")}
+                  type="button"
+                  className="w-full sm:w-1/2 flex items-center justify-center gap-2 py-2 px-4 border border-gray-600 rounded-lg shadow-sm text-sm font-medium text-white bg-gray-900 hover:bg-gray-800 transition-colors duration-200"
+                >
+                  <img
+                    src="https://www.svgrepo.com/show/475656/google-color.svg"
+                    alt="Google"
+                    className="w-5 h-5"
+                  />
+                  Google
+                </button>
+
+                {/* GitHub Auth Button */}
+                <button
+                  type="button"
+                  onClick={() => handleOAuthLogin("github")}
+                  className="flex-1 flex items-center justify-center gap-2 py-2 px-4 border border-gray-600 rounded-lg shadow-sm text-sm font-medium text-white bg-gray-900 hover:bg-gray-800 transition"
+                >
+                  <img
+                    src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+                    alt="GitHub"
+                    className="w-5 h-5 bg-white rounded-full"
+                  />
+                  <span>GitHub</span>
+                </button>
+              </div>
+
+              {/* Sign in redirect with theme toggle styles */}
+              <div className="mt-6">
+                <div className="relative">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-border" />
+                  </div>
+                  <div className="relative flex justify-center text-sm">
+                    <span className="px-2 bg-card/50 backdrop-blur-sm text-muted-foreground">
+                      Already have an account?
+                    </span>
+                  </div>
                 </div>
-                <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-card/50 backdrop-blur-sm text-muted-foreground">
-                    Already have an account?
-                  </span>
+
+                <div className="mt-6">
+                  <Link
+                    to="/login"
+                    className="w-full flex justify-center py-2 px-4 border border-border rounded-lg shadow-sm text-sm font-medium text-primary bg-card/50 backdrop-blur-sm hover:bg-primary/10 hover:text-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-200"
+                  >
+                    Sign in
+                  </Link>
                 </div>
               </div>
 
-              <div className="mt-6">
-                <Link
-                  to="/login"
-                  className="w-full flex justify-center py-2 px-4 border border-border rounded-lg shadow-sm text-sm font-medium text-primary bg-card/50 backdrop-blur-sm hover:bg-primary/10 hover:text-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-200"
-                >
-                  Sign in
-                </Link>
-              </div>
             </div>
           </div>
         </div>
       </div>
 
       {/* Animation keyframes */}
+
       <style jsx>{`
+
         @keyframes float {
           0% {
             transform: translateY(0) translateX(0);
