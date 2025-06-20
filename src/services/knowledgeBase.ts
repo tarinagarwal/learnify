@@ -1,5 +1,5 @@
 import { supabase } from '../lib/supabase';
-import { generateGroqResponse } from './groq';
+import { generateGroqResponse, MODELS } from './groq';
 
 export interface KnowledgeItem {
   id: string;
@@ -438,7 +438,7 @@ async function streamGroqResponse(
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'llama-3.1-70b-versatile',
+        model: MODELS.LLAMA_70B_VERSATILE,
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: userQuery }
