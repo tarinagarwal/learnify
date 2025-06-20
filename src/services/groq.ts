@@ -5,6 +5,12 @@ import type { CourseOutline } from "../types/course";
 // DEBUG: Enhanced logging for API key validation
 console.log('🔧 GROQ DEBUG: Checking API key configuration...');
 const apiKey = import.meta.env.VITE_GROQ_API_KEY;
+// Define all models as constants at the top
+export const MODELS = {
+  LLAMA_70B_VERSATILE: "llama-3.3-70b-versatile",
+  LLAMA_8B: "llama3-8b-8192",
+};
+
 
 if (!apiKey) {
   console.error("❌ GROQ API key is not configured in environment variables");
@@ -56,7 +62,7 @@ export async function generateGroqResponse(
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'llama3-8b-8192',
+        model: MODELS.LLAMA_8B,
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: userQuery }
@@ -106,7 +112,7 @@ export async function streamGroqResponse(
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'llama3-8b-8192',
+        model: MODELS.LLAMA_8B,
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: userQuery }
@@ -227,7 +233,7 @@ Example format:
 
     const completion = await groq.chat.completions.create({
       messages: [{ role: "user", content: prompt }],
-      model: "llama-3.1-70b-versatile",
+      model: MODELS.LLAMA_70B_VERSATILE,
       temperature: 0.7,
       max_tokens: 2048,
     });
@@ -281,7 +287,7 @@ Format longer responses with appropriate Markdown:
         { role: "system", content: systemPrompt },
         { role: "user", content: userQuestion },
       ],
-      model: "llama-3.1-70b-versatile",
+      model: MODELS.LLAMA_70B_VERSATILE,
       temperature: 0.7,
       max_tokens: 2048,
     });
@@ -325,7 +331,7 @@ Make sure the outline is:
 
     const completion = await groq.chat.completions.create({
       messages: [{ role: "user", content: prompt }],
-      model: "llama-3.1-70b-versatile",
+      model: MODELS.LLAMA_70B_VERSATILE,
       temperature: 0.7,
       max_tokens: 2048,
       stream: false,
@@ -390,7 +396,7 @@ Use appropriate Markdown formatting:
 
     const completion = await groq.chat.completions.create({
       messages: [{ role: "user", content: prompt }],
-      model: "llama-3.1-70b-versatile",
+      model: MODELS.LLAMA_70B_VERSATILE,
       temperature: 0.7,
       max_tokens: 4096,
     });
@@ -521,7 +527,7 @@ Format:
 
     const completion = await groq.chat.completions.create({
       messages: [{ role: "user", content: prompt }],
-      model: "llama-3.1-70b-versatile",
+      model: MODELS.LLAMA_70B_VERSATILE,
       temperature: 0.7,
       max_tokens: 4096,
       top_p: 0.9,
@@ -579,7 +585,7 @@ export const generateResponse = async (imageData: string): Promise<string> => {
       Focus only on the content visible in the drawing. If there is any question, answer it. Do not provide the information on what's on the whiteboard. Just the question and the answer.`,
               },
             ],
-      model: "llama-3.1-70b-versatile",
+      model: MODELS.LLAMA_70B_VERSATILE,
       temperature: 0.7,
       max_tokens: 2048,
       top_p: 1,
@@ -748,7 +754,7 @@ Ensure all analysis is based on the verified score of ${score}/${
 
     const completion = await groq.chat.completions.create({
       messages: [{ role: "user", content: prompt }],
-      model: "llama-3.1-70b-versatile",
+      model: MODELS.LLAMA_70B_VERSATILE,
       temperature: 0.7,
       max_tokens: 4096,
       top_p: 0.9,
