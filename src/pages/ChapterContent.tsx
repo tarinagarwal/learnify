@@ -243,6 +243,9 @@ export default function ChapterContent() {
                   p: ({ ...props }) => (
                     <p className="mb-4 text-foreground leading-relaxed" {...props} />
                   ),
+                  strong: ({ ...props }) => (
+                  <strong className="font-semibold text-foreground" {...props} />
+                  ),
                   ul: ({ ...props }) => (
                     <ul
                       className="list-disc pl-6 mb-4 text-foreground"
