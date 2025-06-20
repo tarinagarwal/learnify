@@ -66,7 +66,7 @@ Learnify is a cutting-edge, AI-powered learning platform that revolutionizes edu
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/learnify.git
+git clone https://github.com/tarinagarwal/learnify.git
 cd learnify
 ```
 
@@ -76,24 +76,24 @@ cd learnify
 npm install
 ```
 
-3. Create a `.env` file in the root directory:
+3. Install Supabase CLI
+
+```bash
+npm i supabase --save-dev
+```
+
+4. Start Supabase Locally
+
+```bash
+npx supabase start
+```
+
+5. Create a `.env` file in the root directory:
 
 ```env
 VITE_GROQ_API_KEY=your_groq_api_key
 VITE_SUPABASE_URL=your_supabase_url
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
-```
-
-4. Start the local Supabase instance:
-
-```bash
-supabase start
-```
-
-5. Apply database migrations:
-
-```bash
-supabase db push
 ```
 
 6. Start the development server:
