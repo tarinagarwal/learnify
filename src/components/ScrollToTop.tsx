@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Button } from './ui/button';
+import React, { useEffect, useState } from 'react';
 import { ArrowUp } from 'lucide-react';
+import { Button } from '@/components/ui/button'; // adjust if needed
 
 interface ScrollToTopProps {
   scrollDistance?: number;
@@ -13,59 +13,63 @@ const ScrollToTop: React.FC<ScrollToTopProps> = ({
   position = 'bottom-right',
   size = 'md',
 }) => {
-  const [isVisible, setIsVisible] = useState(false);
+  const [visible, setVisible] = useState(false);
 
-  // Handle scroll event to show/hide button
   useEffect(() => {
-    const toggleVisibility = () => {
-      if (window.scrollY > scrollDistance) {
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
-      }
+    const handleScroll = () => {
+      setVisible(window.scrollY > scrollDistance);
     };
 
-    window.addEventListener('scroll', toggleVisibility);
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // initial check
 
-    // Initial check on component mount
-    toggleVisibility();
-
-    return () => window.removeEventListener('scroll', toggleVisibility);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, [scrollDistance]);
 
-  // Scroll to top function
   const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Size and position styles
   const sizeClasses = {
-    sm: 'h-8 w-8',
-    md: 'h-10 w-10',
-    lg: 'h-12 w-12',
+    sm: 'w-8 h-8',
+    md: 'w-11 h-11',
+    lg: 'w-14 h-14',
   };
 
   const positionClasses = {
-    'bottom-right': 'right-4 md:right-6 bottom-4 md:bottom-6',
-    'bottom-left': 'left-4 md:left-6 bottom-4 md:bottom-6',
+    'bottom-right': 'right-5 bottom-20',
+    'bottom-left': 'left-6 bottom-6',
   };
 
   return (
-    <>
-      {isVisible && (
-        <Button
-          onClick={scrollToTop}
-          size="icon"
-          className={`fixed ${positionClasses[position]} ${sizeClasses[size]} rounded-full opacity-70 hover:opacity-100 transition-opacity shadow-md z-50`}
-          aria-label="Scroll to top"
-        >
-          <ArrowUp className="h-5 w-5" />
-        </Button>
-      )}
-    </>
+    <div
+      className={`fixed z-[9999] ${
+        positionClasses[position]
+      } transition-all duration-500 ease-in-out ${
+        visible ? 'opacity-100 scale-100' : 'opacity-0 scale-0'
+      }`}
+    >
+      <Button
+        onClick={scrollToTop}
+        size="icon"
+        className={`
+          rounded-full 
+          ${sizeClasses[size]} 
+          bg-gradient-to-br from-blue-500 to-purple-600 
+          shadow-[0_0_15px_4px_rgba(99,102,241,0.5)] 
+          text-white 
+          transition-all duration-300 
+          hover:scale-110 
+          active:scale-95 
+          hover:shadow-[0_0_25px_8px_rgba(147,51,234,0.6)]
+          focus:outline-none
+        `}
+        aria-label="Scroll to top"
+      >
+        <ArrowUp className="w-5 h-5" />
+      </Button>
+
+    </div>
   );
 };
 
