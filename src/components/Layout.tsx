@@ -30,7 +30,7 @@ export default function Layout() {
       </main>
       
       {/* Floating scroll to top button */}
-      <ScrollToTopButton scrollDistance={300} position="bottom-left" size="md" />
+      <ScrollToTopButton scrollDistance={300} position="bottom-right" size="md" />
 
       {/* AI Knowledge Bot - Replaces the Zapier chatbot */}
       <AIKnowledgeBot />
