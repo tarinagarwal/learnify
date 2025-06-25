@@ -5,6 +5,7 @@ import { AlertDialog } from "../components/AlertDialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { UserCircle, Key, Loader2, Eye, EyeOff } from "lucide-react";
+import { Translate } from "../components/Translate";
 
 export default function Profile() {
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
@@ -119,19 +120,21 @@ export default function Profile() {
           <div className="inline-flex items-center justify-center p-3 bg-purple-500/20 backdrop-blur-sm rounded-full mb-4">
             <UserCircle className="w-8 h-8 text-purple-400" />
           </div>
-          <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-300">
-            Profile Settings
+          <h1 className="text-2xl font-bold mb-4 text-center">
+            <Translate>Profile</Translate>
           </h1>
         </div>
 
         <div className="space-y-6">
           {/* Profile Info */}
           <div className="bg-gray-800/30 backdrop-blur-sm border border-gray-700 rounded-xl p-6">
-            <h2 className="text-xl font-semibold mb-4">Profile Information</h2>
+            <h2 className="text-xl font-semibold mb-4">
+              <Translate>Profile Information</Translate>
+            </h2>
             <div className="space-y-4">
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-1">
-                  Name
+                  <Translate>Name</Translate>
                 </label>
                 <Input
                   id="name"
@@ -141,25 +144,40 @@ export default function Profile() {
                   className="w-full bg-gray-700/50 border-gray-600 text-gray-100"
                 />
               </div>
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-1">
+                  <Translate>Email</Translate>
+                </label>
+                <Input
+                  id="email"
+                  type="email"
+                  value={userEmail}
+                  onChange={(e) => setUserEmail(e.target.value)}
+                  className="w-full bg-gray-700/50 border-gray-600 text-gray-100"
+                  disabled
+                />
+              </div>
               <Button
                 onClick={updateProfile}
                 disabled={loading}
                 className="w-full bg-purple-600 hover:bg-purple-700 text-white"
               >
                 {loading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-                Update Profile
+                <Translate>Update Profile</Translate>
               </Button>
             </div>
           </div>
 
           {/* Password Change */}
           <div className="bg-gray-800/30 backdrop-blur-sm border border-gray-700 rounded-xl p-6">
-            <h2 className="text-xl font-semibold mb-4">Change Password</h2>
+            <h2 className="text-xl font-semibold mb-4">
+              <Translate>Change Password</Translate>
+            </h2>
             <div className="space-y-4">
               {/* Current Password */}
               <div className="relative">
                 <label htmlFor="currentPassword" className="block text-sm font-medium text-gray-300 mb-1">
-                  Current Password
+                  <Translate>Current Password</Translate>
                 </label>
                 <Input
                   id="currentPassword"
@@ -179,7 +197,7 @@ export default function Profile() {
               {/* New Password */}
               <div className="relative">
                 <label htmlFor="newPassword" className="block text-sm font-medium text-gray-300 mb-1">
-                  New Password
+                  <Translate>New Password</Translate>
                 </label>
                 <Input
                   id="newPassword"
@@ -199,7 +217,7 @@ export default function Profile() {
               {/* Confirm Password */}
               <div className="relative">
                 <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-300 mb-1">
-                  Confirm New Password
+                  <Translate>Confirm Password</Translate>
                 </label>
                 <Input
                   id="confirmPassword"
@@ -226,7 +244,7 @@ export default function Profile() {
                 ) : (
                   <Key className="w-4 h-4 mr-2" />
                 )}
-                Update Password
+                <Translate>Change Password</Translate>
               </Button>
             </div>
           </div>

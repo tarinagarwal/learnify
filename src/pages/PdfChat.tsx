@@ -17,6 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/components/ui/use-toast";
+import { Translate } from "../components/Translate";
 
 // Set worker path
 // @ts-expect-error: Setting workerSrc directly may not be recognized by TypeScript typings of pdfjsLib
@@ -213,7 +214,7 @@ export default function PdfChat() {
               <MessageSquare className="w-12 h-12 text-primary" />
             </div>
             <h2 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary via-accent-foreground to-primary">
-              Chat with PDF
+              <Translate>PDF Chat</Translate>
             </h2>
             <p className="mt-2 text-xl text-muted-foreground max-w-2xl mx-auto">
               Upload a PDF and ask questions about its content
@@ -255,7 +256,7 @@ export default function PdfChat() {
                     ) : (
                       <>
                         <Upload className="h-4 w-4 mr-2" />
-                        Upload PDF
+                        <Translate>Upload PDF</Translate>
                       </>
                     )}
                   </Button>

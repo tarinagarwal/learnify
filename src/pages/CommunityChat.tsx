@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Translate } from "../components/Translate";
 
 interface Message {
   id: string;
@@ -242,7 +243,9 @@ export default function CommunityChat() {
             <div className="absolute inset-0 rounded-full border-t-4 border-primary animate-spin"></div>
             <Sparkles className="absolute inset-0 m-auto h-8 w-8 text-primary" />
           </div>
-          <p className="mt-6 text-xl text-foreground">Loading Community...</p>
+          <p className="mt-6 text-xl text-foreground">
+            <Translate>Loading Community...</Translate>
+          </p>
         </div>
       </div>
     );
@@ -282,7 +285,7 @@ export default function CommunityChat() {
             className="mb-4 text-muted-foreground hover:text-primary hover:bg-muted"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Communities
+            <Translate>Back to Communities</Translate>
           </Button>
 
           <Card className="bg-card/50 backdrop-blur-sm border-border shadow-lg">
@@ -296,7 +299,7 @@ export default function CommunityChat() {
                     {community?.title}
                   </CardTitle>
                   <p className="text-sm text-muted-foreground mt-1">
-                    Community Discussion
+                    <Translate>Community Discussion</Translate>
                   </p>
                 </div>
               </div>
@@ -324,10 +327,13 @@ export default function CommunityChat() {
                 <div className="flex flex-col items-center justify-center h-full text-center">
                   <MessageSquare className="h-16 w-16 text-muted-foreground mb-6" />
                   <h3 className="text-xl font-semibold text-foreground mb-2">
-                    Start the Conversation
+                    <Translate>Start the Conversation</Translate>
                   </h3>
                   <p className="text-muted-foreground max-w-md">
-                    No messages yet. Be the first to start the conversation and share your thoughts with the community!
+                    <Translate>
+                      No messages yet. Be the first to start the conversation and
+                      share your thoughts with the community!
+                    </Translate>
                   </p>
                 </div>
               ) : (
@@ -358,7 +364,9 @@ export default function CommunityChat() {
                           }`}
                         >
                           <ThumbsUp className="h-4 w-4" />
-                          <span className="text-sm font-medium">{message.upvotes}</span>
+                          <span className="text-sm font-medium">
+                            {message.upvotes}
+                          </span>
                         </button>
                         <button
                           onClick={() => handleVote(message.id, "downvote")}
@@ -369,7 +377,9 @@ export default function CommunityChat() {
                           }`}
                         >
                           <ThumbsDown className="h-4 w-4" />
-                          <span className="text-sm font-medium">{message.downvotes}</span>
+                          <span className="text-sm font-medium">
+                            {message.downvotes}
+                          </span>
                         </button>
                       </div>
                     </div>
@@ -400,6 +410,7 @@ export default function CommunityChat() {
             className="bg-primary hover:bg-primary/90 text-primary-foreground px-6 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Send className="h-4 w-4" />
+            <Translate>Send</Translate>
           </Button>
         </div>
       </div>

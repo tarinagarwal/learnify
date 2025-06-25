@@ -45,6 +45,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { Translate } from "../components/Translate";
 
 interface Resource {
   id: string;
@@ -325,11 +326,13 @@ export default function Resources() {
           <div className="relative z-10 text-center">
             <Book className="mx-auto h-16 w-16 text-primary" />
             <h2 className="mt-2 text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary via-accent-foreground to-primary">
-              Learning Resources
+              <Translate>Learning Resources</Translate>
             </h2>
             <p className="mt-2 text-xl text-muted-foreground max-w-2xl mx-auto">
-              Explore and share educational materials to enhance your learning
-              journey
+              <Translate>
+                Explore and share educational materials to enhance your learning
+                journey
+              </Translate>
             </p>
           </div>
         </div>
@@ -371,22 +374,22 @@ export default function Resources() {
               <DialogTrigger asChild>
                 <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
                   <Plus className="h-4 w-4 mr-2" />
-                  Add Resource
+                  <Translate>Upload PDF</Translate>
                 </Button>
               </DialogTrigger>
               <DialogContent className="bg-card border-border text-card-foreground">
                 <DialogHeader>
                   <DialogTitle className="text-card-foreground">
-                    Upload New Resource
+                    <Translate>Upload New Resource</Translate>
                   </DialogTitle>
                   <DialogDescription className="text-muted-foreground">
-                    Share your knowledge by uploading a PDF resource.
+                    <Translate>Provide details and upload your PDF resource.</Translate>
                   </DialogDescription>
                 </DialogHeader>
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
                     <Label htmlFor="name" className="text-muted-foreground">
-                      Name
+                      <Translate>Title</Translate>
                     </Label>
                     <Input
                       id="name"
@@ -400,7 +403,7 @@ export default function Resources() {
                   </div>
                   <div>
                     <Label htmlFor="description" className="text-muted-foreground">
-                      Description
+                      <Translate>Description</Translate>
                     </Label>
                     <Textarea
                       id="description"
@@ -446,7 +449,7 @@ export default function Resources() {
                     disabled={uploading}
                     className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
                   >
-                    {uploading ? "Uploading..." : "Upload"}
+                    {uploading ? "Uploading..." : <Translate>Upload</Translate>}
                   </Button>
                 </form>
               </DialogContent>
@@ -559,14 +562,14 @@ export default function Resources() {
                           className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground"
                         >
                           <MessageSquare className="h-4 w-4 mr-2" />
-                          Chat with PDF
+                          <Translate>Chat with PDF</Translate>
                         </Button>
                         <Button
                           onClick={() => handlePdfAction(resource, "quiz")}
                           className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground"
                         >
                           <Brain className="h-4 w-4 mr-2" />
-                          Generate Quiz
+                          <Translate>Generate Quiz</Translate>
                         </Button>
                       </div>
                       <Button
@@ -580,7 +583,7 @@ export default function Resources() {
                           rel="noopener noreferrer"
                         >
                           <Download className="h-4 w-4 mr-2" />
-                          Download PDF
+                          <Translate>Download PDF</Translate>
                         </a>
                       </Button>
                     </div>

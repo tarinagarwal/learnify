@@ -19,6 +19,7 @@ import { useAuthStore } from "../store/authStore";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
+import { Translate } from "../components/Translate";
 
 interface DashboardStats {
   totalWhiteboards: number;
@@ -334,10 +335,13 @@ export const Dashboard: React.FC = () => {
               <BookOpen className="h-16 w-16 text-primary" />
             </div>
             <h2 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary via-accent-foreground to-primary">
-              Dashboard
+              <Translate>Dashboard</Translate>
             </h2>
             <p className="mt-2 text-xl text-muted-foreground">
-              Manage your notebooks and whiteboards
+              <Translate>
+                Manage your notebooks, whiteboards, and track your learning
+                progress here.
+              </Translate>
             </p>
           </div>
         </div>
@@ -351,7 +355,7 @@ export const Dashboard: React.FC = () => {
                   <PencilRuler className="w-6 h-6" />
                 </div>
                 <h3 className="text-lg font-medium text-card-foreground">
-                  Individual Whiteboards
+                  <Translate>Individual Whiteboards</Translate>
                 </h3>
               </div>
               <p className="text-3xl font-bold text-card-foreground">
@@ -365,7 +369,9 @@ export const Dashboard: React.FC = () => {
                 <div className="p-2 rounded-full bg-primary/20 text-primary">
                   <Book className="w-6 h-6" />
                 </div>
-                <h3 className="text-lg font-medium text-card-foreground">Notebooks</h3>
+                <h3 className="text-lg font-medium text-card-foreground">
+                  <Translate>Notebooks</Translate>
+                </h3>
               </div>
               <p className="text-3xl font-bold text-card-foreground">
                 {stats.totalNotebooks}
@@ -379,7 +385,7 @@ export const Dashboard: React.FC = () => {
                   <BookOpen className="w-6 h-6" />
                 </div>
                 <h3 className="text-lg font-medium text-card-foreground">
-                  Notebook Pages
+                  <Translate>Notebook Pages</Translate>
                 </h3>
               </div>
               <p className="text-3xl font-bold text-card-foreground">
@@ -394,7 +400,7 @@ export const Dashboard: React.FC = () => {
                   <MessageSquare className="w-6 h-6" />
                 </div>
                 <h3 className="text-lg font-medium text-card-foreground">
-                  AI Responses
+                  <Translate>AI Responses</Translate>
                 </h3>
               </div>
               <p className="text-3xl font-bold text-card-foreground">
@@ -407,13 +413,15 @@ export const Dashboard: React.FC = () => {
         {/* Notebooks Section */}
         <div className="mb-12">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-foreground">Your Notebooks</h2>
+            <h2 className="text-2xl font-bold text-foreground">
+              <Translate>Your Notebooks</Translate>
+            </h2>
             <Button
               onClick={() => setShowNewNotebookDialog(true)}
               className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground"
             >
               <Plus className="w-5 h-5" />
-              New Notebook
+              <Translate>Create New Notebook</Translate>
             </Button>
           </div>
 
@@ -421,9 +429,13 @@ export const Dashboard: React.FC = () => {
             <Card className="text-center p-8 bg-card/50 backdrop-blur-sm border-border">
               <CardContent>
                 <Book className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
-                <p className="text-xl text-card-foreground">No notebooks yet</p>
+                <p className="text-xl text-card-foreground">
+                  <Translate>No notebooks yet</Translate>
+                </p>
                 <p className="mt-2 text-muted-foreground">
-                  Create your first notebook to get started
+                  <Translate>
+                    Create your first notebook to get started
+                  </Translate>
                 </p>
               </CardContent>
             </Card>
@@ -459,7 +471,7 @@ export const Dashboard: React.FC = () => {
                       </div>
                     </div>
                     <p className="text-sm text-muted-foreground mb-4">
-                      Created:{" "}
+                      <Translate>Created:</Translate>{" "}
                       {new Date(notebook.created_at).toLocaleDateString()}
                     </p>
                     <div className="flex items-center gap-2">
@@ -475,7 +487,8 @@ export const Dashboard: React.FC = () => {
                         ></div>
                       </div>
                       <span className="text-sm text-muted-foreground whitespace-nowrap">
-                        {notebook.whiteboards?.length || 0} pages
+                        {notebook.whiteboards?.length || 0}{" "}
+                        <Translate>pages</Translate>
                       </span>
                     </div>
                   </div>
@@ -489,14 +502,14 @@ export const Dashboard: React.FC = () => {
         <div>
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold text-foreground">
-              Your Whiteboards
+              <Translate>Your Whiteboards</Translate>
             </h2>
             <Button
               onClick={() => setShowNewBoardDialog(true)}
               className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground"
             >
               <Plus className="w-5 h-5" />
-              New Whiteboard
+              <Translate>Create New Whiteboard</Translate>
             </Button>
           </div>
 
@@ -504,9 +517,13 @@ export const Dashboard: React.FC = () => {
             <Card className="text-center p-8 bg-card/50 backdrop-blur-sm border-border">
               <CardContent>
                 <PencilRuler className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
-                <p className="text-xl text-card-foreground">No whiteboards yet</p>
+                <p className="text-xl text-card-foreground">
+                  <Translate>No whiteboards yet</Translate>
+                </p>
                 <p className="mt-2 text-muted-foreground">
-                  Create your first whiteboard to get started
+                  <Translate>
+                    Create your first whiteboard to get started
+                  </Translate>
                 </p>
               </CardContent>
             </Card>
@@ -548,7 +565,7 @@ export const Dashboard: React.FC = () => {
                       </div>
                     </div>
                     <p className="text-sm text-muted-foreground mb-4">
-                      Created:{" "}
+                      <Translate>Created:</Translate>{" "}
                       {new Date(whiteboard.created_at).toLocaleDateString()}
                     </p>
                     <div className="flex items-center gap-2">
@@ -564,7 +581,8 @@ export const Dashboard: React.FC = () => {
                         ></div>
                       </div>
                       <span className="text-sm text-muted-foreground whitespace-nowrap">
-                        {whiteboard.drawing_data.length} strokes
+                        {whiteboard.drawing_data.length}{" "}
+                        <Translate>strokes</Translate>
                       </span>
                     </div>
                   </div>
@@ -579,7 +597,7 @@ export const Dashboard: React.FC = () => {
           <div className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-50">
             <div className="bg-card border border-border rounded-xl shadow-xl max-w-md w-full mx-4 p-6">
               <h3 className="text-xl font-medium text-card-foreground mb-4">
-                Create New Whiteboard
+                <Translate>Create New Whiteboard</Translate>
               </h3>
               <Input
                 type="text"
@@ -597,13 +615,13 @@ export const Dashboard: React.FC = () => {
                   }}
                   className="border-border text-muted-foreground hover:bg-muted"
                 >
-                  Cancel
+                  <Translate>Cancel</Translate>
                 </Button>
                 <Button
                   onClick={handleCreateWhiteboard}
                   className="bg-primary hover:bg-primary/90 text-primary-foreground"
                 >
-                  Create
+                  <Translate>Create</Translate>
                 </Button>
               </div>
             </div>
@@ -615,12 +633,12 @@ export const Dashboard: React.FC = () => {
           <div className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-50">
             <div className="bg-card border border-border rounded-xl shadow-xl max-w-md w-full mx-4 p-6">
               <h3 className="text-xl font-medium text-card-foreground mb-4">
-                Create New Notebook
+                <Translate>Create New Notebook</Translate>
               </h3>
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-muted-foreground mb-1">
-                    Notebook Title
+                    <Translate>Notebook Title</Translate>
                   </label>
                   <Input
                     type="text"
@@ -632,7 +650,7 @@ export const Dashboard: React.FC = () => {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-muted-foreground mb-1">
-                    Number of Pages (max 25)
+                    <Translate>Number of Pages (max 25)</Translate>
                   </label>
                   <Input
                     type="number"
@@ -661,13 +679,13 @@ export const Dashboard: React.FC = () => {
                   }}
                   className="border-border text-muted-foreground hover:bg-muted"
                 >
-                  Cancel
+                  <Translate>Cancel</Translate>
                 </Button>
                 <Button
                   onClick={handleCreateNotebook}
                   className="bg-primary hover:bg-primary/90 text-primary-foreground"
                 >
-                  Create
+                  <Translate>Create</Translate>
                 </Button>
               </div>
             </div>

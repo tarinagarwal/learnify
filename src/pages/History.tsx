@@ -30,6 +30,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { Translate } from "../components/Translate";
 
 interface QuizHistory {
   id: string;
@@ -131,11 +132,11 @@ export default function History() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
             <HistoryIcon className="mx-auto h-16 w-16 text-primary" />
-            <h2 className="mt-2 text-4xl font-bold text-foreground">
-              Your Learning Journey
+            <h2 className="mt-2 text-4xl font-bold text-foreground text-center">
+              <Translate>Your Learning Journey</Translate>
             </h2>
-            <p className="mt-2 text-xl text-muted-foreground">
-              Track your progress and revisit your quiz experiences
+            <p className="mt-2 text-xl text-muted-foreground text-center">
+              <Translate>Track your progress and revisit your quiz experiences</Translate>
             </p>
           </div>
 
@@ -196,10 +197,10 @@ export default function History() {
               <HistoryIcon className="w-12 h-12 text-primary" />
             </div>
             <h2 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary via-accent-foreground to-primary">
-              Your Learning Journey
+              <Translate>Your Learning Journey</Translate>
             </h2>
             <p className="mt-2 text-xl text-muted-foreground max-w-2xl mx-auto">
-              Track your progress and revisit your quiz experiences
+              <Translate>Track your progress and revisit your quiz experiences</Translate>
             </p>
           </div>
         </div>
@@ -236,11 +237,10 @@ export default function History() {
             <CardHeader className="flex flex-row items-center justify-between">
               <div>
                 <CardTitle className="text-2xl text-card-foreground">
-                  {selectedQuiz.topic}
+                  <Translate>{selectedQuiz?.topic}</Translate>
                 </CardTitle>
                 <CardDescription className="text-muted-foreground">
-                  Completed on{" "}
-                  {new Date(selectedQuiz.created_at).toLocaleDateString()}
+                  <Translate>Completed on</Translate> {new Date(selectedQuiz?.created_at ?? '').toLocaleDateString()}
                 </CardDescription>
               </div>
               <Button
@@ -388,25 +388,21 @@ export default function History() {
                       return pagesToShow.map((page, index) => {
                         if (page === "...") {
                           return (
-                            <PaginationItem key={`dots-${index}`} disabled>
-                              <span className="px-2 text-muted-foreground">...</span>
-                            </PaginationItem>
+                            <span key={index} className="px-2">
+                              ...
+                            </span>
                           );
                         }
                         return (
-                          <PaginationItem key={page}>
-                            <PaginationLink
-                              onClick={() => goToPage(page)}
-                              isActive={currentPage === page}
-                              className={
-                                currentPage === page
-                                  ? "bg-primary text-primary-foreground border-primary"
-                                  : "text-muted-foreground border-border hover:bg-muted"
-                              }
-                            >
-                              {page}
-                            </PaginationLink>
-                          </PaginationItem>
+                          <button
+                            key={index}
+                            className={`px-2 ${
+                              currentPage === page ? "font-bold" : ""
+                            }`}
+                            onClick={() => goToPage(page as number)}
+                          >
+                            {page}
+                          </button>
                         );
                       });
                     })()}
@@ -424,27 +420,6 @@ export default function History() {
           </>
         )}
       </div>
-
-      {/* Floating animation keyframes */}
-      <style jsx>{`
-        @keyframes float {
-          0% {
-            transform: translateY(0) translateX(0);
-          }
-          25% {
-            transform: translateY(-10px) translateX(10px);
-          }
-          50% {
-            transform: translateY(0) translateX(20px);
-          }
-          75% {
-            transform: translateY(10px) translateX(10px);
-          }
-          100% {
-            transform: translateY(0) translateX(0);
-          }
-        }
-      `}</style>
     </div>
   );
 }

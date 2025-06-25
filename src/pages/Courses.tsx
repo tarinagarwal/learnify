@@ -9,7 +9,6 @@ import {
   Loader2,
   Bookmark,
   BookmarkCheck,
-
 } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import {
@@ -48,6 +47,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Translate } from "../components/Translate";
 
 interface CourseWithRating extends Course {
   average_rating?: number;
@@ -347,10 +347,12 @@ export default function Courses() {
                 <Book className="w-12 h-12 text-primary" />
               </div>
               <h2 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary via-accent-foreground to-primary">
-                Courses
+                <Translate>Courses</Translate>
               </h2>
               <p className="mt-2 text-xl text-muted-foreground max-w-2xl mx-auto">
-                Expand your knowledge with interactive courses
+                <Translate>
+                  Expand your knowledge with interactive courses
+                </Translate>
               </p>
             </div>
           </div>
@@ -418,10 +420,12 @@ export default function Courses() {
               <Book className="w-12 h-12 text-primary" />
             </div>
             <h2 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary via-accent-foreground to-primary">
-              Courses
+              <Translate>Courses</Translate>
             </h2>
             <p className="mt-2 text-xl text-muted-foreground max-w-2xl mx-auto">
-              Expand your knowledge with interactive courses
+              <Translate>
+                Expand your knowledge with interactive courses
+              </Translate>
             </p>
           </div>
         </div>
@@ -440,13 +444,13 @@ export default function Courses() {
                   value="all"
                   className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-muted-foreground"
                 >
-                  All Courses
+                  <Translate>All Courses</Translate>
                 </TabsTrigger>
                 <TabsTrigger
                   value="my-courses"
                   className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-muted-foreground"
                 >
-                  My Courses
+                  <Translate>My Courses</Translate>
                 </TabsTrigger>
               </TabsList>
             </div>
@@ -466,29 +470,33 @@ export default function Courses() {
                 ) : (
                   <Bookmark className="h-4 w-4 mr-2" />
                 )}
-                {showBookmarked ? "Show All" : "Show Bookmarked"}
+                {showBookmarked ? (
+                  <Translate>Show All</Translate>
+                ) : (
+                  <Translate>Show Bookmarked</Translate>
+                )}
               </Button>
 
               <Dialog>
                 <DialogTrigger asChild>
                   <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
                     <Plus className="h-4 w-4 mr-2" />
-                    Create Course
+                    <Translate>Create Course</Translate>
                   </Button>
                 </DialogTrigger>
                 <DialogContent className="bg-card border-border text-card-foreground">
                   <DialogHeader>
                     <DialogTitle className="text-card-foreground">
-                      Create New Course
+                      <Translate>Create New Course</Translate>
                     </DialogTitle>
                     <DialogDescription className="text-muted-foreground">
-                      Generate a comprehensive course on any topic.
+                      <Translate>Generate a comprehensive course on any topic.</Translate>
                     </DialogDescription>
                   </DialogHeader>
                   <div className="space-y-4 py-4">
                     <div className="space-y-2">
                       <Label htmlFor="topic" className="text-muted-foreground">
-                        Course Topic
+                        <Translate>Course Topic</Translate>
                       </Label>
                       <Input
                         id="topic"
@@ -509,10 +517,10 @@ export default function Courses() {
                       {generating ? (
                         <>
                           <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                          Generating Course...
+                          <Translate>Generating Course...</Translate>
                         </>
                       ) : (
-                        "Create Course"
+                        <Translate>Create Course</Translate>
                       )}
                     </Button>
                   </div>
@@ -554,7 +562,7 @@ export default function Courses() {
                       <CardHeader>
                         <div className="flex justify-between items-start">
                           <CardTitle className="text-card-foreground">
-                            {course.title}
+                            <Translate>{course.title}</Translate>
                           </CardTitle>
                           <Button
                             variant="ghost"
@@ -573,7 +581,7 @@ export default function Courses() {
                           </Button>
                         </div>
                         <CardDescription className="text-muted-foreground">
-                          {course.description}
+                          <Translate>{course.description}</Translate>
                         </CardDescription>
                       </CardHeader>
                       <CardContent className="mt-auto">
@@ -691,7 +699,7 @@ export default function Courses() {
                     <CardHeader>
                       <div className="flex justify-between items-start">
                         <CardTitle className="text-card-foreground">
-                          {course.title}
+                          <Translate>{course.title}</Translate>
                         </CardTitle>
                         <Button
                           variant="ghost"
@@ -710,7 +718,7 @@ export default function Courses() {
                         </Button>
                       </div>
                       <CardDescription className="text-muted-foreground">
-                        {course.description}
+                        <Translate>{course.description}</Translate>
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="mt-auto">
@@ -755,7 +763,7 @@ export default function Courses() {
             </CardHeader>
             <CardContent>
               <h3 className="text-lg font-semibold mb-2 text-card-foreground">
-                Chapters
+                <Translate>Chapters</Translate>
               </h3>
               {selectedCourse.chapters?.length ? (
                 <div className="space-y-2">

@@ -15,6 +15,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import ReactMarkdown from "react-markdown";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import { Translate } from "../components/Translate";
 
 export default function QuizAnalytics() {
   const { id } = useParams();
@@ -190,8 +191,9 @@ export default function QuizAnalytics() {
             </Button>
             <div className="flex items-center">
               <Brain className="h-8 w-8 text-purple-400 mr-3" />
-              <h1 className="text-2xl font-bold text-gray-100">
-                AI Mentor Analysis
+              <h1 className="text-2xl font-bold mb-4 flex items-center gap-2 text-center">
+                <Brain className="h-6 w-6 text-primary" />
+                <Translate>Quiz Analytics</Translate>
               </h1>
             </div>
           </div>
@@ -203,7 +205,7 @@ export default function QuizAnalytics() {
               className="border-gray-700 text-gray-700 hover:text-purple-400"
             >
               <Printer className="h-4 w-4 mr-2" />
-              Print
+              <Translate>Print</Translate>
             </Button>
 
             <Button
@@ -212,7 +214,7 @@ export default function QuizAnalytics() {
               className="border-gray-700 text-gray-700 hover:text-purple-400"
             >
               <Download className="h-4 w-4 mr-2" />
-              Download PDF
+              <Translate>Download PDF</Translate>
             </Button>
 
             <Button
@@ -221,7 +223,7 @@ export default function QuizAnalytics() {
               className="border-gray-700 text-gray-700 hover:text-purple-400"
             >
               <Share2 className="h-4 w-4 mr-2" />
-              Share
+              <Translate>Share</Translate>
             </Button>
           </div>
         </div>

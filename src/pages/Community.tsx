@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Translate } from "../components/Translate";
 
 interface Community {
   id: string;
@@ -146,7 +147,9 @@ export default function Community() {
             <div className="absolute inset-0 rounded-full border-t-4 border-primary animate-spin"></div>
             <Sparkles className="absolute inset-0 m-auto h-8 w-8 text-primary" />
           </div>
-          <p className="mt-6 text-xl text-foreground">Loading Communities...</p>
+          <p className="mt-6 text-xl text-foreground">
+            <Translate>Loading Communities...</Translate>
+          </p>
         </div>
       </div>
     );
@@ -188,10 +191,12 @@ export default function Community() {
               <Users className="h-16 w-16 text-primary" />
             </div>
             <h2 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary via-accent-foreground to-primary">
-              Community Learning
+              <Translate>Community Learning</Translate>
             </h2>
             <p className="mt-2 text-xl text-muted-foreground max-w-2xl mx-auto">
-              Connect with other learners, share knowledge, and learn together
+              <Translate>
+                Connect with other learners, share knowledge, and learn together
+              </Translate>
             </p>
           </div>
         </div>
@@ -211,7 +216,7 @@ export default function Community() {
             className="bg-primary hover:bg-primary/90 text-primary-foreground"
           >
             <Plus className="h-4 w-4 mr-2" />
-            Create Community
+            <Translate>Create Community</Translate>
           </Button>
         </div>
 
@@ -219,7 +224,9 @@ export default function Community() {
           <Card className="text-center p-8 bg-card/50 backdrop-blur-sm border-border">
             <CardContent>
               <Users className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
-              <p className="text-xl text-card-foreground">No communities found</p>
+              <p className="text-xl text-card-foreground">
+                <Translate>No communities found</Translate>
+              </p>
               <p className="mt-2 text-muted-foreground">
                 {searchQuery
                   ? "Try a different search term or create a new community"
@@ -236,7 +243,9 @@ export default function Community() {
                 onClick={() => navigate(`/community/${community.id}`)}
               >
                 <CardHeader>
-                  <CardTitle className="text-card-foreground">{community.title}</CardTitle>
+                  <CardTitle className="text-card-foreground">
+                    {community.title}
+                  </CardTitle>
                   <CardDescription className="text-muted-foreground">
                     {community.description}
                   </CardDescription>
@@ -270,13 +279,13 @@ export default function Community() {
           <DialogContent className="bg-card border-border text-card-foreground">
             <DialogHeader>
               <DialogTitle className="text-card-foreground">
-                Create New Community
+                <Translate>New Community</Translate>
               </DialogTitle>
             </DialogHeader>
             <form onSubmit={handleCreateCommunity} className="space-y-4">
               <div>
                 <Label htmlFor="title" className="text-muted-foreground">
-                  Title
+                  <Translate>Title</Translate>
                 </Label>
                 <Input
                   id="title"
@@ -290,7 +299,7 @@ export default function Community() {
               </div>
               <div>
                 <Label htmlFor="description" className="text-muted-foreground">
-                  Description
+                  <Translate>Description</Translate>
                 </Label>
                 <Textarea
                   id="description"
@@ -304,7 +313,7 @@ export default function Community() {
               </div>
               <div>
                 <Label htmlFor="tags" className="text-muted-foreground">
-                  Tags (comma-separated)
+                  <Translate>Tags</Translate>
                 </Label>
                 <Input
                   id="tags"
@@ -320,7 +329,7 @@ export default function Community() {
                 type="submit"
                 className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
               >
-                Create Community
+                <Translate>Create</Translate>
               </Button>
             </form>
           </DialogContent>

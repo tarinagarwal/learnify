@@ -5,6 +5,7 @@ import { AlertDialog } from "../components/AlertDialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { TimerReset as KeyReset, ArrowLeft, Loader2 } from "lucide-react";
+import { Translate } from "../components/Translate";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -55,10 +56,13 @@ export default function ForgotPassword() {
             <KeyReset className="w-8 h-8 text-purple-400" />
           </div>
           <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-300">
-            Reset Password
+            <Translate>Reset Password</Translate>
           </h1>
           <p className="mt-2 text-sm text-[hsl(var(--muted-foreground))]">
-            Enter your email address and we'll send you instructions to reset your password.
+            <Translate>
+              Enter your email address and we'll send you instructions to reset
+              your password.
+            </Translate>
           </p>
         </div>
 
@@ -69,7 +73,7 @@ export default function ForgotPassword() {
                 htmlFor="email"
                 className="block text-sm font-medium text-[hsl(var(--muted-foreground))] mb-1"
               >
-                Email address
+                <Translate>Email</Translate>
               </label>
               <Input
                 id="email"
@@ -90,7 +94,7 @@ export default function ForgotPassword() {
               {loading ? (
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
               ) : null}
-              Send Reset Instructions
+              <Translate>Send Reset Instructions</Translate>
             </Button>
           </form>
 
@@ -100,7 +104,7 @@ export default function ForgotPassword() {
               className="inline-flex items-center text-sm text-purple-400 hover:text-purple-300"
             >
               <ArrowLeft className="w-4 h-4 mr-1" />
-              Back to Login
+              <Translate>Back to Login</Translate>
             </Link>
           </div>
         </div>

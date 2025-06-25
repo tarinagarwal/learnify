@@ -32,6 +32,7 @@ import { Label } from "@/components/ui/label";
 import { SearchBar } from "@/components/SearchBar";
 //import { useNavigate } from "react-router-dom"; currently un used hence commented
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Translate } from "../components/Translate";
 
 export default function Roadmaps() {
   // const navigate = useNavigate(); commented as was not used and causing eslint error 
@@ -769,10 +770,10 @@ export default function Roadmaps() {
               <div className="relative z-10 text-center">
                 <Route className="mx-auto h-16 w-16 text-primary" />
                 <h2 className="mt-2 text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary via-accent-foreground to-primary">
-                  Learning Roadmaps
+                  <Translate>Learning Roadmaps</Translate>
                 </h2>
                 <p className="mt-2 text-xl text-muted-foreground max-w-2xl mx-auto">
-                  Discover structured learning paths for any technology
+                  <Translate>Follow structured learning paths with detailed guides for any technology or skill.</Translate>
                 </p>
               </div>
             </div>
@@ -810,19 +811,19 @@ export default function Roadmaps() {
                   <DialogTrigger asChild>
                     <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
                       <Plus className="h-4 w-4 mr-2" />
-                      Create Roadmap
+                      <Translate>Create New Roadmap</Translate>
                     </Button>
                   </DialogTrigger>
                   <DialogContent className="bg-card border-border text-card-foreground">
                     <DialogHeader>
                       <DialogTitle className="text-card-foreground">
-                        Create New Roadmap
+                        <Translate>New Roadmap</Translate>
                       </DialogTitle>
                     </DialogHeader>
                     <div className="space-y-4 py-4">
                       <div className="space-y-2">
                         <Label htmlFor="topic" className="text-muted-foreground">
-                          Topic
+                          <Translate>Title</Translate>
                         </Label>
                         <Input
                           id="topic"
@@ -846,7 +847,7 @@ export default function Roadmaps() {
                             Generating Roadmap...
                           </>
                         ) : (
-                          "Create Roadmap"
+                          <Translate>Create</Translate>
                         )}
                       </Button>
                     </div>

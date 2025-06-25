@@ -5,6 +5,7 @@ import { AlertDialog } from "../components/AlertDialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { KeyRound, Loader2 } from "lucide-react";
+import { Translate } from "../components/Translate";
 
 export default function ResetPassword() {
   const navigate = useNavigate();
@@ -76,8 +77,8 @@ export default function ResetPassword() {
           <div className="inline-flex items-center justify-center p-3 bg-purple-500/20 backdrop-blur-sm rounded-full mb-4">
             <KeyRound className="w-8 h-8 text-purple-400" />
           </div>
-          <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-300">
-            Set New Password
+          <h1 className="text-2xl font-bold mb-4 text-center">
+            <Translate>Reset Password</Translate>
           </h1>
           <p className="mt-2 text-sm text-[hsl(var(--muted-foreground))]">
             Enter your new password below
@@ -91,7 +92,7 @@ export default function ResetPassword() {
                 htmlFor="newPassword"
                 className="block text-sm font-medium text-[hsl(var(--muted-foreground))] mb-1"
               >
-                New Password
+                <Translate>New Password</Translate>
               </label>
               <Input
                 id="newPassword"
@@ -109,7 +110,7 @@ export default function ResetPassword() {
                 htmlFor="confirmPassword"
                 className="block text-sm font-medium text-[hsl(var(--muted-foreground))] mb-1"
               >
-                Confirm New Password
+                <Translate>Confirm Password</Translate>
               </label>
               <Input
                 id="confirmPassword"
@@ -130,7 +131,7 @@ export default function ResetPassword() {
               {loading ? (
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
               ) : null}
-              Reset Password
+              <Translate>Reset Password</Translate>
             </Button>
           </form>
         </div>

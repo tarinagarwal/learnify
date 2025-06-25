@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 import { LogIn, CheckCircle, Eye, EyeOff } from "lucide-react";
+import { Translate } from "../components/Translate";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -76,10 +77,10 @@ export default function Login() {
             </div>
           </div>
           <h2 className="mt-6 text-center text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-primary via-accent-foreground to-primary">
-            Welcome Back
+            <Translate>Welcome Back</Translate>
           </h2>
           <p className="mt-2 text-center text-sm text-muted-foreground">
-            Sign in to continue your learning journey
+            <Translate>Sign in to continue your learning journey</Translate>
           </p>
         </div>
 
@@ -99,7 +100,7 @@ export default function Login() {
                   className="block text-sm font-medium text-muted-foreground"
                 >
 
-                  Email address
+                  <Translate>Email</Translate>
                 </label>
                 <input
                   id="email"
@@ -118,7 +119,7 @@ export default function Login() {
                   className="block text-sm font-medium text-muted-foreground"
                 >
 
-                  Password
+                  <Translate>Password</Translate>
                 </label>
                 <input
                   id="password"
@@ -150,7 +151,7 @@ export default function Login() {
                     className="ml-2 block text-sm text-muted-foreground"
                   >
 
-                    Remember me
+                    <Translate>Remember me</Translate>
                   </label>
                 </div>
 
@@ -161,7 +162,7 @@ export default function Login() {
                     className="font-medium text-primary hover:text-primary/80 transition-colors"
                   >
 
-                    Forgot password?
+                    <Translate>Forgot password?</Translate>
                   </Link>
                 </div>
               </div>
@@ -172,7 +173,7 @@ export default function Login() {
                   disabled={loading}
                   className="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-primary-foreground bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 transition-colors duration-200"
                 >
-                  {loading ? "Signing in..." : "Sign in"}
+                  {loading ? "Signing in..." : <Translate>Sign in</Translate>}
                 </button>
               </div>
             </form>
@@ -184,7 +185,7 @@ export default function Login() {
               </div>
               <div className="relative flex justify-center text-sm">
                 <span className="px-2 bg-gray-800/30 backdrop-blur-sm text-gray-400">
-                  or continue with
+                  <Translate>or continue with</Translate>
                 </span>
               </div>
             </div>
@@ -227,7 +228,7 @@ export default function Login() {
                 </div>
                 <div className="relative flex justify-center text-sm">
                   <span className="px-2 bg-card/50 backdrop-blur-sm text-muted-foreground">
-                    Don't have an account?
+                    <Translate>Don't have an account?</Translate>
                   </span>
                 </div>
               </div>
@@ -237,7 +238,7 @@ export default function Login() {
                   to="/signup"
                   className="w-full flex justify-center py-2 px-4 border border-border rounded-lg shadow-sm text-sm font-medium text-primary bg-card/50 backdrop-blur-sm hover:bg-primary/10 hover:text-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-200"
                 >
-                  Create an account
+                  <Translate>Create an account</Translate>
                 </Link>
               </div>
             </div>
@@ -278,11 +279,13 @@ export default function Login() {
         <div className="absolute inset-0 flex flex-col justify-center items-center p-12 z-10">
           <div className="max-w-md text-center">
             <h3 className="text-2xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent-foreground">
-              Transform Your Learning Journey
+              <Translate>Transform Your Learning Journey</Translate>
             </h3>
             <p className="text-muted-foreground mb-8">
-              Experience the power of AI-driven education with interactive
-              courses, smart tools, and a supportive community.
+              <Translate>
+                Experience the power of AI-driven education with interactive
+                courses, smart tools, and a supportive community.
+              </Translate>
             </p>
 
             <div className="space-y-4">

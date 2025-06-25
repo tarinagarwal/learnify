@@ -29,6 +29,7 @@ import {
 import { useAuthStore } from "../store/authStore";
 import { supabase } from "../lib/supabase";
 import { useEffect, useState } from "react";
+import { Translate } from "../components/Translate";
 
 export default function Home() {
   const { user } = useAuthStore();
@@ -219,17 +220,18 @@ export default function Home() {
             <div className="inline-flex items-center justify-center px-4 py-2 border border-accent text-sm font-medium rounded-full text-foreground bg-accent/20 backdrop-blur-sm">
               <span className="flex items-center">
                 <Brain className="w-4 h-4 mr-2 text-primary" />
-                Welcome to the Future of Learning
+                <Translate>Welcome to the Future of Learning</Translate>
               </span>
             </div>
 
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary via-accent-foreground to-primary pb-4">
-              Transform Your Learning Journey
+            <h1 className="text-4xl font-bold mb-4 text-center">
+              <Translate>Transform Your Learning Experience with AI</Translate>
             </h1>
-
-            <p className="max-w-2xl mx-auto text-xl sm:text-2xl text-muted-foreground leading-relaxed">
-              Experience the power of AI-driven education with interactive
-              courses, smart tools, and a supportive community.
+            <p className="text-lg text-muted-foreground mb-8 text-center max-w-2xl mx-auto">
+              <Translate>
+                Learnify empowers you to master new skills with interactive quizzes,
+                AI-driven tools, and a vibrant community. Start your journey today!
+              </Translate>
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -239,14 +241,18 @@ export default function Home() {
                     size="lg"
                     className="bg-primary hover:bg-primary/90 text-primary-foreground text-lg px-8 rounded-full"
                   >
-                    <Link to="/roadmaps">Explore Roadmaps</Link>
+                    <Link to="/roadmaps">
+                      <Translate>Explore Roadmaps</Translate>
+                    </Link>
                   </Button>
                   <Button
                     size="lg"
                     variant="outline"
                     className="text-lg px-8 border-primary text-primary rounded-full hover:bg-primary/10"
                   >
-                    <Link to="/courses">Explore Courses</Link>
+                    <Link to="/courses">
+                      <Translate>Browse Courses</Translate>
+                    </Link>
                   </Button>
                 </>
               ) : (
@@ -276,7 +282,7 @@ export default function Home() {
                   className="flex items-center gap-2 text-sm sm:text-base text-muted-foreground"
                 >
                   <CheckCircle className="w-5 h-5 text-primary shrink-0" />
-                  <span>{highlight}</span>
+                  <span><Translate>{highlight}</Translate></span>
                 </div>
               ))}
             </div>
@@ -292,11 +298,10 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
-              Everything You Need to Excel
+              <Translate>Everything You Need to Excel</Translate>
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Discover our comprehensive suite of learning tools designed to
-              help you achieve your goals.
+              <Translate>Discover our comprehensive suite of learning tools designed to help you achieve your goals.</Translate>
             </p>
           </div>
 
@@ -311,16 +316,16 @@ export default function Home() {
                     <div className="mb-4 transform group-hover:scale-110 transition-transform duration-300">
                       {feature.icon}
                     </div>
-                    <CardTitle className="text-card-foreground group-hover:text-primary transition-colors">
-                      {feature.title}
+                    <CardTitle>
+                      <Translate>{feature.title}</Translate>
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <CardDescription className="text-muted-foreground">
-                      {feature.description}
+                    <CardDescription>
+                      <Translate>{feature.description}</Translate>
                     </CardDescription>
                     <div className="mt-4 flex items-center text-primary opacity-0 group-hover:opacity-100 transition-opacity">
-                      Learn more
+                      <Translate>Learn more</Translate>
                       <ArrowRight className="ml-2 h-4 w-4 transform group-hover:translate-x-1 transition-transform" />
                     </div>
                   </CardContent>
@@ -340,11 +345,10 @@ export default function Home() {
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
-              What Our Users Say
+              <Translate>What Our Users Say</Translate>
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Join thousands of satisfied learners who have transformed their
-              education journey.
+              <Translate>Join thousands of satisfied learners who have transformed their education journey.</Translate>
             </p>
           </div>
 
@@ -358,10 +362,10 @@ export default function Home() {
                   <div className="flex justify-between items-center">
                     <div>
                       <CardTitle className="text-card-foreground">
-                        {testimonial.name}
+                        <Translate>{testimonial.name}</Translate>
                       </CardTitle>
                       <CardDescription className="text-muted-foreground">
-                        {testimonial.role}
+                        <Translate>{testimonial.role}</Translate>
                       </CardDescription>
                     </div>
                     <div className="flex">
@@ -376,7 +380,7 @@ export default function Home() {
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground italic">
-                    "{testimonial.content}"
+                    <Translate>{testimonial.content}</Translate>
                   </p>
                 </CardContent>
               </Card>
@@ -390,30 +394,28 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
-              Why Choose Learnify?
+              <Translate>Why Choose Learnify?</Translate>
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Experience the advantages of our modern learning platform.
+              <Translate>Experience the advantages of our modern learning platform.</Translate>
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {benefits.map((benefit, index) => (
-              <div
-                key={index}
-                className="relative group p-8 rounded-2xl bg-card hover:bg-card/80 border border-border hover:border-primary/20 transition-all duration-300"
-              >
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-transparent to-transparent group-hover:from-primary/5 group-hover:to-primary/10 transition-all duration-300 opacity-0 group-hover:opacity-100" />
-                <div className="relative z-10">
-                  <div className="bg-muted rounded-xl p-3 w-fit mb-4 shadow-sm group-hover:shadow-lg group-hover:ring-2 group-hover:ring-primary/20 transition-all duration-300">
-                    {benefit.icon}
-                  </div>
-                  <h3 className="text-xl font-semibold mb-2 text-card-foreground">
-                    {benefit.title}
-                  </h3>
-                  <p className="text-muted-foreground">{benefit.description}</p>
-                </div>
-              </div>
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4 mt-16">
+            {benefits.map((benefit) => (
+              <Card key={benefit.title} className="bg-card/80 border-border">
+                <CardHeader className="flex flex-col items-center">
+                  {benefit.icon}
+                  <CardTitle className="mt-4 text-lg font-semibold text-center">
+                    <Translate>{benefit.title}</Translate>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription className="text-center">
+                    <Translate>{benefit.description}</Translate>
+                  </CardDescription>
+                </CardContent>
+              </Card>
             ))}
           </div>
         </div>
@@ -427,25 +429,25 @@ export default function Home() {
               <div className="text-4xl md:text-5xl font-bold text-primary mb-2">
                 {profilesCount !== null ? profilesCount : "..."}
               </div>
-              <p className="text-muted-foreground">Active Learners</p>
+              <p className="text-muted-foreground"> <Translate>Active Learners</Translate> </p>
             </div>
             <div className="p-6">
               <div className="text-4xl md:text-5xl font-bold text-primary mb-2">
                 {coursesCount !== null ? coursesCount : "..."}
               </div>
-              <p className="text-muted-foreground">Courses Created</p>
+              <p className="text-muted-foreground"> <Translate>Courses Created</Translate> </p>
             </div>
             <div className="p-6">
               <div className="text-4xl md:text-5xl font-bold text-primary mb-2">
                 {roadmapsCount !== null ? roadmapsCount : "..."}
               </div>
-              <p className="text-muted-foreground">Roadmaps Created</p>
+              <p className="text-muted-foreground"> <Translate>Roadmaps Created</Translate> </p>
             </div>
             <div className="p-6">
               <div className="text-4xl md:text-5xl font-bold text-primary mb-2">
                 24/7
               </div>
-              <p className="text-muted-foreground">Support Available</p>
+              <p className="text-muted-foreground"> <Translate>Support Available</Translate> </p>
             </div>
           </div>
         </div>
@@ -459,11 +461,10 @@ export default function Home() {
 
         <div className="relative z-10 max-w-4xl mx-auto text-center">
           <h2 className="text-3xl sm:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent-foreground">
-            Ready to Start Your Learning Journey?
+            <Translate>Ready to Start Your Learning Journey?</Translate>
           </h2>
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Join thousands of learners who are already transforming their
-            education with Learnify.
+            <Translate>Join thousands of learners who are already transforming their education with Learnify.</Translate>
           </p>
           {user ? (
             <Button
@@ -480,7 +481,7 @@ export default function Home() {
               className="bg-primary hover:bg-primary/90 text-primary-foreground text-lg px-8 rounded-full"
             >
               <Link to="/signup" className="flex items-center">
-                Get Started for Free <ChevronRight className="ml-2 h-5 w-5" />
+                <Translate>Get Started for Free</Translate> <ChevronRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
           )}

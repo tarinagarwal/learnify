@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 import { Mail, Loader2, CheckCircle } from "lucide-react";
+import { Translate } from "../components/Translate";
 
 export default function EmailConfirmation() {
   const [verifying, setVerifying] = useState(true);
@@ -52,11 +53,16 @@ export default function EmailConfirmation() {
           <div className="inline-flex items-center justify-center p-3 bg-purple-500/20 backdrop-blur-sm rounded-full mb-4">
             <Mail className="w-8 h-8 text-purple-400" />
           </div>
-          <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-300">
-            Verify Your Email
+          <h1 className="text-2xl font-bold mb-4 flex items-center gap-2 text-center">
+            <Mail className="h-6 w-6 text-primary" />
+            <Translate>Email Confirmation</Translate>
           </h1>
-          <p className="mt-2 text-sm text-[hsl(var(--muted-foreground))]">
-            Please check your email for a confirmation link
+          <p className="mb-4 text-muted-foreground text-center">
+            <Translate>
+              Please check your email and click the confirmation link to activate
+              your account. You will be redirected automatically after
+              confirmation.
+            </Translate>
           </p>
         </div>
 
@@ -68,7 +74,9 @@ export default function EmailConfirmation() {
                 <div className="absolute inset-0 rounded-full border-t-4 border-purple-400 animate-spin"></div>
                 <Loader2 className="absolute inset-0 m-auto h-8 w-8 text-purple-400" />
               </div>
-              <p className="text-[hsl(var(--muted-foreground))]">Waiting for email confirmation...</p>
+              <p className="text-[hsl(var(--muted-foreground))]">
+                Waiting for email confirmation...
+              </p>
             </div>
           ) : error ? (
             <div className="text-red-400">

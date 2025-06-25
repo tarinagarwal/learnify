@@ -33,6 +33,24 @@ import ThemeButton from "@/components/ui/ThemeButton";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
+import { useLanguageStore } from "../store/languageStore";
+
+const LANGUAGES = [
+  { code: "en", label: "English" },
+  { code: "hi", label: "Hindi" },
+  { code: "bn", label: "Bengali" },
+  { code: "ta", label: "Tamil" },
+  { code: "te", label: "Telugu" },
+  { code: "mr", label: "Marathi" },
+  { code: "gu", label: "Gujarati" },
+  { code: "kn", label: "Kannada" },
+  { code: "ml", label: "Malayalam" },
+  { code: "pa", label: "Punjabi" },
+  { code: "or", label: "Odia" },
+  { code: "as", label: "Assamese" },
+  { code: "ur", label: "Urdu" },
+  // Add more as needed
+];
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -42,6 +60,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { language, setLanguage } = useLanguageStore();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -201,6 +220,33 @@ export default function Navbar() {
                 Learnify
               </span>
             </Link>
+          </div>
+
+          {/* LANGUAGE DROPDOWN - Always visible */}
+          <div className="flex items-center space-x-2">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="flex items-center space-x-2">
+                  <Languages className="h-4 w-4" />
+                  <span>{LANGUAGES.find(l => l.code === language)?.label || "Language"}</span>
+                  <ChevronDown className="h-3 w-3" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                {LANGUAGES.map((lang) => (
+                  <DropdownMenuItem
+                    key={lang.code}
+                    onClick={() => setLanguage(lang.code)}
+                    className={cn(
+                      "cursor-pointer",
+                      language === lang.code && "bg-muted text-primary"
+                    )}
+                  >
+                    {lang.label}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
 
           {isAuthenticated ? (

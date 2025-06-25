@@ -55,6 +55,7 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/lib/supabase";
 import { NewChatDialog } from "@/components/NewChatDialog";
 import ReactMarkdown from "react-markdown";
+import { Translate } from "../components/Translate";
 
 export default function LanguageTutor() {
   const [messages, setMessages] = useState<ConversationMessage[]>([]);
@@ -389,11 +390,13 @@ export default function LanguageTutor() {
               Powered by AI Language Learning
             </div>
             <h1 className="text-4xl sm:text-5xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary via-accent-foreground to-primary pb-4">
-              AI English Tutor
+              <Translate>AI English Tutor</Translate>
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Your personal language learning assistant to help you master
-              English through conversation, practice, and feedback
+              <Translate>
+                Your personal language learning assistant to help you master
+                English through conversation, practice, and feedback
+              </Translate>
             </p>
           </div>
 
@@ -466,7 +469,7 @@ export default function LanguageTutor() {
                   <div className="flex flex-col md:flex-row md:justify-between items-start md:items-center">
                     <CardTitle className="text-card-foreground flex items-center gap-2">
                       <Brain className="h-5 w-5 text-primary" />
-                      Chat with Your Tutor
+                      <Translate>Chat with Your Tutor</Translate>
                     </CardTitle>
                     <div className="mt-4 md:mt-0 flex gap-2 ">
                       <Button
@@ -475,7 +478,7 @@ export default function LanguageTutor() {
                         className="flex items-center gap-2 border-primary text-primary hover:bg-primary/10 rounded-full"
                       >
                         <History className="w-4 h-4" />
-                        History
+                        <Translate>History</Translate>
                       </Button>
                       <NewChatDialog
                         onChatCreated={(sessionId) => {
@@ -487,15 +490,17 @@ export default function LanguageTutor() {
                     </div>
                   </div>
                   <CardDescription className="text-muted-foreground">
-                    Practice conversation and get instant feedback from your AI
-                    language tutor
+                    <Translate>
+                      Practice conversation and get instant feedback from your AI
+                      language tutor
+                    </Translate>
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   {showHistory ? (
                     <div className="space-y-4">
                       <h3 className="text-lg font-semibold mb-4 text-card-foreground">
-                        Chat History
+                        <Translate>Chat History</Translate>
                       </h3>
                       {chatSessions.length > 0 ? (
                         chatSessions.map((session) => (
@@ -516,9 +521,13 @@ export default function LanguageTutor() {
                         ))
                       ) : (
                         <div className="text-center py-8">
-                          <p className="text-muted-foreground">No chat history found</p>
+                          <p className="text-muted-foreground">
+                            No chat history found
+                          </p>
                           <p className="text-muted-foreground text-sm mt-2">
-                            Start a new conversation to begin learning
+                            <Translate>
+                              Start a new conversation to begin learning
+                            </Translate>
                           </p>
                         </div>
                       )}
@@ -552,11 +561,13 @@ export default function LanguageTutor() {
                           <div className="h-full flex flex-col items-center justify-center text-center">
                             <Sparkles className="h-12 w-12 text-primary mb-4" />
                             <h3 className="text-xl font-semibold text-foreground mb-2">
-                              Start Chatting with Your AI Tutor
+                              <Translate>Start Chatting with Your AI Tutor</Translate>
                             </h3>
                             <p className="text-muted-foreground max-w-md">
-                              Ask questions, practice conversations, or get help
-                              with English grammar and vocabulary
+                              <Translate>
+                                Ask questions, practice conversations, or get help
+                                with English grammar and vocabulary
+                              </Translate>
                             </p>
                           </div>
                         )}
@@ -596,11 +607,13 @@ export default function LanguageTutor() {
                 <CardHeader>
                   <CardTitle className="text-card-foreground flex items-center gap-2">
                     <Book className="h-5 w-5 text-primary" />
-                    Grammar Check
+                    <Translate>Grammar Check</Translate>
                   </CardTitle>
                   <CardDescription className="text-muted-foreground">
-                    Get instant feedback on your writing and improve your
-                    grammar skills
+                    <Translate>
+                      Get instant feedback on your writing and improve your
+                      grammar skills
+                    </Translate>
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -619,7 +632,7 @@ export default function LanguageTutor() {
                     {isLoading ? (
                       <Loader2 className="w-4 h-4 animate-spin mr-2" />
                     ) : (
-                      "Check Grammar"
+                      <Translate>Check Grammar</Translate>
                     )}
                   </Button>
                   {grammarCorrections.length > 0 ? (
@@ -661,18 +674,20 @@ export default function LanguageTutor() {
                 <CardHeader>
                   <CardTitle className="text-card-foreground flex items-center gap-2">
                     <GraduationCap className="h-5 w-5 text-primary" />
-                    Practice Exercises
+                    <Translate>Practice Exercises</Translate>
                   </CardTitle>
                   <CardDescription className="text-muted-foreground">
-                    Improve your skills with targeted exercises and vocabulary
-                    practice
+                    <Translate>
+                      Improve your skills with targeted exercises and vocabulary
+                      practice
+                    </Translate>
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="mb-8">
                     <h3 className="text-lg font-semibold mb-4 text-card-foreground flex items-center gap-2">
                       <Book className="h-4 w-4 text-primary" />
-                      Vocabulary Practice
+                      <Translate>Vocabulary Practice</Translate>
                     </h3>
                     <div className="flex gap-2 mb-4">
                       <Input
@@ -689,7 +704,7 @@ export default function LanguageTutor() {
                         {isLoading ? (
                           <Loader2 className="w-4 h-4 animate-spin mr-2" />
                         ) : (
-                          "Generate Vocabulary"
+                          <Translate>Generate Vocabulary</Translate>
                         )}
                       </Button>
                     </div>
@@ -770,7 +785,7 @@ export default function LanguageTutor() {
                             </p>
                             <div className="space-y-2">
                               <p className="text-sm text-primary font-medium">
-                                Examples:
+                                <Translate>Examples:</Translate>
                               </p>
                               <ul className="list-disc list-inside space-y-1 pl-2">
                                 {item.examples.map((example, i) => (
@@ -782,7 +797,7 @@ export default function LanguageTutor() {
                             </div>
                             <div className="mt-2">
                               <p className="text-sm text-primary font-medium">
-                                Synonyms:
+                                <Translate>Synonyms:</Translate>
                               </p>
                               <p className="text-muted-foreground">
                                 {item.synonyms.join(", ")}
@@ -797,7 +812,7 @@ export default function LanguageTutor() {
                   <div>
                     <h3 className="text-lg font-semibold mb-4 text-card-foreground flex items-center gap-2">
                       <GraduationCap className="h-4 w-4 text-primary" />
-                      Practice Exercises
+                      <Translate>Practice Exercises</Translate>
                     </h3>
                     <Button
                       onClick={handleGeneratePractice}
@@ -807,7 +822,7 @@ export default function LanguageTutor() {
                       {isLoading ? (
                         <Loader2 className="w-4 h-4 animate-spin mr-2" />
                       ) : (
-                        "Generate Exercises"
+                        <Translate>Generate Exercises</Translate>
                       )}
                     </Button>
                     {practiceExercises.length > 0 && (
@@ -880,11 +895,13 @@ export default function LanguageTutor() {
                 <CardHeader>
                   <CardTitle className="text-card-foreground flex items-center gap-2">
                     <BookmarkCheck className="h-5 w-5 text-primary" />
-                    Saved Items
+                    <Translate>Saved Items</Translate>
                   </CardTitle>
                   <CardDescription className="text-muted-foreground">
-                    Review your saved vocabulary and exercises for continued
-                    learning
+                    <Translate>
+                      Review your saved vocabulary and exercises for continued
+                      learning
+                    </Translate>
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -892,7 +909,7 @@ export default function LanguageTutor() {
                     <div>
                       <h3 className="text-lg font-semibold mb-4 text-card-foreground flex items-center gap-2">
                         <Book className="h-4 w-4 text-primary" />
-                        Saved Vocabulary
+                        <Translate>Saved Vocabulary</Translate>
                       </h3>
                       {savedVocabulary.length > 0 ? (
                         <div className="space-y-4">
@@ -909,7 +926,7 @@ export default function LanguageTutor() {
                               </p>
                               <div className="space-y-2">
                                 <p className="text-sm text-primary font-medium">
-                                  Examples:
+                                  <Translate>Examples:</Translate>
                                 </p>
                                 <ul className="list-disc list-inside space-y-1 pl-2">
                                   {item.examples.map((example, i) => (
@@ -921,7 +938,7 @@ export default function LanguageTutor() {
                               </div>
                               <div className="mt-2">
                                 <p className="text-sm text-primary font-medium">
-                                  Synonyms:
+                                  <Translate>Synonyms:</Translate>
                                 </p>
                                 <p className="text-muted-foreground">
                                   {item.synonyms.join(", ")}
@@ -934,10 +951,12 @@ export default function LanguageTutor() {
                         <div className="text-center py-8 bg-muted rounded-lg border border-border">
                           <BookmarkCheck className="h-10 w-10 text-muted-foreground mx-auto mb-2" />
                           <p className="text-muted-foreground">
-                            No saved vocabulary items
+                            <Translate>No saved vocabulary items</Translate>
                           </p>
                           <p className="text-muted-foreground text-sm mt-2">
-                            Save vocabulary items to review them later
+                            <Translate>
+                              Save vocabulary items to review them later
+                            </Translate>
                           </p>
                         </div>
                       )}
@@ -946,7 +965,7 @@ export default function LanguageTutor() {
                     <div>
                       <h3 className="text-lg font-semibold mb-4 text-card-foreground flex items-center gap-2">
                         <GraduationCap className="h-4 w-4 text-primary" />
-                        Saved Exercises
+                        <Translate>Saved Exercises</Translate>
                       </h3>
                       {savedExercises.length > 0 ? (
                         <div className="space-y-4">
@@ -991,9 +1010,13 @@ export default function LanguageTutor() {
                       ) : (
                         <div className="text-center py-8 bg-muted rounded-lg border border-border">
                           <BookmarkCheck className="h-10 w-10 text-muted-foreground mx-auto mb-2" />
-                          <p className="text-muted-foreground">No saved exercises</p>
+                          <p className="text-muted-foreground">
+                            <Translate>No saved exercises</Translate>
+                          </p>
                           <p className="text-muted-foreground text-sm mt-2">
-                            Save exercises to practice them later
+                            <Translate>
+                              Save exercises to practice them later
+                            </Translate>
                           </p>
                         </div>
                       )}
