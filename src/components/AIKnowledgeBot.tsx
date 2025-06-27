@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import {  X, Send, Bot, User } from 'lucide-react';
+import { X, Send, Bot, User } from 'lucide-react';
 import { generateAIResponse, generateStreamingResponse } from '../services/knowledgeBase';
 
 // Markdown Content Renderer Component
@@ -7,17 +7,20 @@ const MessageContent: React.FC<{ content: string }> = ({ content }) => {
   const formatContent = (text: string) => {
     return text
       // Bold text: **text** -> <strong>text</strong>
-      .replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-gray-700">$1</strong>')
+      .replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-gray-700 dark:text-gray-200">$1</strong>')
       // Bullet points: • or * at start of line
       .replace(/^[•*]\s+/gm, '• ')
       // Line breaks
       .replace(/\n/g, '<br/>')
       // Links (basic): [text](url) -> <a>text</a>
-      .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="text-blue-600 hover:text-blue-800 underline transition-colors" target="_blank" rel="noopener noreferrer">$1</a>');
+      .replace(
+        /\[([^\]]+)\]\(([^)]+)\)/g,
+        '<a href="$2" class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 underline transition-colors" target="_blank" rel="noopener noreferrer">$1</a>'
+      );
   };
 
   return (
-    <div 
+    <div
       className="formatted-content leading-relaxed"
       dangerouslySetInnerHTML={{ __html: formatContent(content) }}
     />
@@ -39,7 +42,7 @@ export default function AIKnowledgeBot() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [conversationHistory, setConversationHistory] = useState<Array<{role: string, content: string}>>([]);
+  const [conversationHistory, setConversationHistory] = useState<Array<{ role: string, content: string }>>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const streamingMessageId = useRef<string | null>(null);
 
@@ -57,9 +60,9 @@ export default function AIKnowledgeBot() {
         timestamp: new Date(),
         confidence: 'high',
       };
-      setMessages([welcomeMessage,]);
+      setMessages([welcomeMessage]);
     }
-  }, [isOpen,messages.length]);
+  }, [isOpen, messages.length]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -75,7 +78,6 @@ export default function AIKnowledgeBot() {
       timestamp: new Date(),
     };
 
-    // Add user message to conversation history
     const newUserHistory = { role: 'user', content: inputMessage.trim() };
     setConversationHistory(prev => [...prev, newUserHistory]);
 
@@ -84,10 +86,9 @@ export default function AIKnowledgeBot() {
     setInputMessage('');
     setIsLoading(true);
 
-    // Create initial bot message for streaming
     const botMessageId = (Date.now() + 1).toString();
     streamingMessageId.current = botMessageId;
-    
+
     const initialBotMessage: ChatMessage = {
       id: botMessageId,
       content: '',
@@ -99,56 +100,51 @@ export default function AIKnowledgeBot() {
     setMessages(prev => [...prev, initialBotMessage]);
 
     try {
-      // Use streaming response with conversation context
       await generateStreamingResponse(
         currentQuery,
         conversationHistory,
         (chunk: string, sources?: string[], confidence?: 'high' | 'medium' | 'low') => {
-          // Update streaming message
-          setMessages(prev => prev.map(msg => 
-            msg.id === botMessageId 
-              ? { 
-                  ...msg, 
-                  content: msg.content + chunk,
-                  sources: sources || msg.sources,
-                  confidence: confidence || msg.confidence,
-                  isStreaming: chunk.length > 0
-                }
+          setMessages(prev => prev.map(msg =>
+            msg.id === botMessageId
+              ? {
+                ...msg,
+                content: msg.content + chunk,
+                sources: sources || msg.sources,
+                confidence: confidence || msg.confidence,
+                isStreaming: chunk.length > 0
+              }
               : msg
           ));
         }
       );
 
-      // Get final message for conversation history
       const finalMessage = messages.find(m => m.id === botMessageId);
       if (finalMessage) {
         const newBotHistory = { role: 'assistant', content: finalMessage.content };
         setConversationHistory(prev => [...prev, newBotHistory]);
       }
 
-      // Mark streaming as complete
-      setMessages(prev => prev.map(msg => 
-        msg.id === botMessageId 
+      setMessages(prev => prev.map(msg =>
+        msg.id === botMessageId
           ? { ...msg, isStreaming: false }
           : msg
       ));
 
     } catch (error) {
       console.error('Error generating AI response:', error);
-      
-      // Fallback to non-streaming response
+
       try {
         const response = await generateAIResponse(currentQuery);
-        
-        setMessages(prev => prev.map(msg => 
-          msg.id === botMessageId 
+
+        setMessages(prev => prev.map(msg =>
+          msg.id === botMessageId
             ? {
-                ...msg,
-                content: response.content,
-                sources: response.sources,
-                confidence: response.confidence,
-                isStreaming: false
-              }
+              ...msg,
+              content: response.content,
+              sources: response.sources,
+              confidence: response.confidence,
+              isStreaming: false
+            }
             : msg
         ));
 
@@ -157,16 +153,16 @@ export default function AIKnowledgeBot() {
 
       } catch (fallbackError) {
         console.error('Fallback error:', fallbackError);
-        
+
         const errorMessage = "I'm sorry, I'm having trouble processing your request right now. Please try again later or contact our support team.";
-        
-        setMessages(prev => prev.map(msg => 
-          msg.id === botMessageId 
+
+        setMessages(prev => prev.map(msg =>
+          msg.id === botMessageId
             ? {
-                ...msg,
-                content: errorMessage,
-                isStreaming: false
-              }
+              ...msg,
+              content: errorMessage,
+              isStreaming: false
+            }
             : msg
         ));
       }
@@ -186,7 +182,6 @@ export default function AIKnowledgeBot() {
   const clearConversation = () => {
     setMessages([]);
     setConversationHistory([]);
-    // Re-trigger welcome message
     setTimeout(() => {
       const welcomeMessage: ChatMessage = {
         id: Date.now().toString(),
@@ -202,7 +197,7 @@ export default function AIKnowledgeBot() {
   return (
     <div className="fixed bottom-4 right-4 z-50">
       {isOpen ? (
-        <div className="bg-white rounded-lg shadow-xl w-96 max-h-[600px] flex flex-col border border-gray-200">
+        <div className="bg-white dark:bg-zinc-900 rounded-lg shadow-xl w-96 max-h-[600px] flex flex-col border border-gray-200 dark:border-zinc-700">
           {/* Header */}
           <div className="p-4 border-b flex justify-between items-center bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-t-lg">
             <div className="flex items-center space-x-2">
@@ -210,15 +205,15 @@ export default function AIKnowledgeBot() {
               <h3 className="font-medium">AI Learning Assistant</h3>
             </div>
             <div className="flex items-center space-x-2">
-              <button 
+              <button
                 onClick={clearConversation}
                 className="text-white hover:text-gray-200 transition-colors text-xs bg-white/20 px-2 py-1 rounded"
                 title="Clear conversation"
               >
                 Clear
               </button>
-              <button 
-                onClick={() => setIsOpen(false)} 
+              <button
+                onClick={() => setIsOpen(false)}
                 className="text-white hover:text-gray-200 transition-colors"
               >
                 <X className="h-5 w-5" />
@@ -239,11 +234,11 @@ export default function AIKnowledgeBot() {
                       <Bot className="h-4 w-4 text-white" />
                     </div>
                   )}
-                  
+
                   <div
                     className={`rounded-lg px-4 py-2 ${
                       message.isBot
-                        ? 'bg-gray-100 text-gray-800 border border-gray-200'
+                        ? 'bg-gray-100 dark:bg-zinc-800 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-zinc-700'
                         : 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white'
                     }`}
                   >
@@ -253,15 +248,14 @@ export default function AIKnowledgeBot() {
                         <span className="inline-block w-1 h-4 bg-purple-500 animate-pulse ml-1"></span>
                       )}
                     </div>
-                    
-                    {/* Confidence Indicator */}
+
                     {message.confidence && !message.isStreaming && (
                       <div className="mt-2 flex items-center space-x-1">
                         <div className={`w-2 h-2 rounded-full ${
-                          message.confidence === 'high' ? 'bg-green-500' : 
+                          message.confidence === 'high' ? 'bg-green-500' :
                           message.confidence === 'medium' ? 'bg-yellow-500' : 'bg-red-500'
                         }`}></div>
-                        <span className="text-xs text-gray-500 capitalize">
+                        <span className="text-xs text-gray-500 dark:text-gray-400 capitalize">
                           {message.confidence} confidence
                         </span>
                         {conversationHistory.length > 2 && (
@@ -269,11 +263,11 @@ export default function AIKnowledgeBot() {
                         )}
                       </div>
                     )}
-                    
+
                     {message.sources && message.sources.length > 0 && !message.isStreaming && (
-                      <div className="mt-2 pt-2 border-t border-gray-300">
-                        <p className="text-xs text-gray-600 font-medium">Sources:</p>
-                        <ul className="text-xs text-gray-500 space-y-1">
+                      <div className="mt-2 pt-2 border-t border-gray-300 dark:border-zinc-700">
+                        <p className="text-xs text-gray-600 dark:text-gray-400 font-medium">Sources:</p>
+                        <ul className="text-xs text-gray-500 dark:text-gray-300 space-y-1">
                           {message.sources.map((source, index) => (
                             <li key={index} className="flex items-start">
                               <span className="text-purple-500 mr-1">•</span>
@@ -286,8 +280,8 @@ export default function AIKnowledgeBot() {
                   </div>
 
                   {!message.isBot && (
-                    <div className="flex-shrink-0 w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
-                      <User className="h-4 w-4 text-gray-600" />
+                    <div className="flex-shrink-0 w-8 h-8 bg-gray-300 dark:bg-zinc-600 rounded-full flex items-center justify-center">
+                      <User className="h-4 w-4 text-gray-600 dark:text-gray-200" />
                     </div>
                   )}
                 </div>
@@ -300,11 +294,11 @@ export default function AIKnowledgeBot() {
                   <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full flex items-center justify-center">
                     <Bot className="h-4 w-4 text-white" />
                   </div>
-                  <div className="bg-gray-100 rounded-lg px-4 py-2 border border-gray-200">
+                  <div className="bg-gray-100 dark:bg-zinc-800 rounded-lg px-4 py-2 border border-gray-200 dark:border-zinc-700">
                     <div className="flex space-x-1">
                       <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
-                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
                     </div>
                   </div>
                 </div>
@@ -315,7 +309,7 @@ export default function AIKnowledgeBot() {
           </div>
 
           {/* Input */}
-          <div className="p-4 border-t bg-gray-50 rounded-b-lg">
+          <div className="p-4 border-t bg-gray-50 dark:bg-zinc-900 border-gray-200 dark:border-zinc-700 rounded-b-lg">
             <div className="flex space-x-2">
               <input
                 type="text"
@@ -323,7 +317,7 @@ export default function AIKnowledgeBot() {
                 onChange={(e) => setInputMessage(e.target.value)}
                 onKeyPress={handleKeyPress}
                 placeholder="Ask me anything about your learning..."
-                className="flex-1 rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none text-sm"
+                className="flex-1 rounded-md border border-gray-300 dark:border-zinc-600 px-3 py-2 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none text-sm bg-white dark:bg-zinc-800 text-black dark:text-white"
                 disabled={isLoading}
               />
               <button
@@ -335,7 +329,7 @@ export default function AIKnowledgeBot() {
               </button>
             </div>
             <div className="flex justify-between items-center mt-2">
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-gray-500 dark:text-gray-400">
                 Powered by Learnify Knowledge Base
               </p>
               {conversationHistory.length > 0 && (
