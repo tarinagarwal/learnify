@@ -131,27 +131,54 @@ export default function CommunityChat() {
     }
   };
 
-  const subscribeToMessages = () => {
-    const subscription = supabase
-      .channel(`messages:${communityId}`)
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "community_messages",
-          filter: `community_id=eq.${communityId}`,
-        },
-        () => {
-          fetchMessages();
-        }
-      )
-      .subscribe();
+const subscribeToMessages = () => {
+  // Subscribe to community_messages changes
+  const messagesChannel = supabase
+    .channel(`messages:${communityId}`)
+    .on(
+      "postgres_changes",
+      {
+        event: "*",
+        schema: "public",
+        table: "community_messages",
+        filter: `community_id=eq.${communityId}`,
+      },
+      () => fetchMessages()
+    )
+    .subscribe();
 
-    return () => {
-      subscription.unsubscribe();
-    };
+  // Subscribe to message_votes changes for this community's messages
+  const votesChannel = supabase
+    .channel(`message_votes:${communityId}`)
+    .on(
+      "postgres_changes",
+      {
+        event: "*",
+        schema: "public",
+        table: "message_votes",
+      },
+      (payload) => {
+        // Fetch affected message to verify community
+        if (payload.new && 'message_id' in payload.new) {
+          supabase
+            .from('community_messages')
+            .select('community_id')
+            .eq('id', payload.new.message_id)
+          .then(({ data }) => {
+          if (data && data[0]?.community_id === communityId) {
+            fetchMessages();
+          }
+          });
+        }
+      }
+    )
+    .subscribe();
+
+  return () => {
+    messagesChannel.unsubscribe();
+    votesChannel.unsubscribe();
   };
+};
 
   const subscribeToVotes = () => {
     const subscription = supabase
@@ -174,70 +201,78 @@ export default function CommunityChat() {
     };
   };
 
-  const handleVote = async (
-    messageId: string,
-    voteType: "upvote" | "downvote"
-  ) => {
-    try {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (!user) return;
+const handleVote = async (
+  messageId: string,
+  voteType: "upvote" | "downvote"
+) => {
+  try {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
 
-      // Optimistically update UI
-      setMessages(prevMessages => 
-        prevMessages.map(msg => {
-          if (msg.id !== messageId) return msg;
-          
-          const isRemovingVote = msg.userVote === voteType;
-          const wasOppositeVote = msg.userVote && msg.userVote !== voteType;
-          
-          return {
-            ...msg,
-            upvotes: msg.upvotes + (
-              voteType === "upvote" 
-                ? (isRemovingVote ? -1 : 1) 
-                : (wasOppositeVote ? 0 : 0)
-            ),
-            downvotes: msg.downvotes + (
-              voteType === "downvote" 
-                ? (isRemovingVote ? -1 : 1) 
-                : (wasOppositeVote ? 0 : 0)
-            ),
-            userVote: isRemovingVote ? null : voteType
-          };
-        })
-      );
+    const currentMessage = messages.find(m => m.id === messageId);
+    if (!currentMessage) return;
 
-      const message = messages.find((m) => m.id === messageId);
-      if (!message) return;
+    // Optimistic UI update
+    setMessages(prevMessages => 
+      prevMessages.map(msg => {
+        if (msg.id !== messageId) return msg;
 
-      if (message.userVote === voteType) {
-        // Remove vote
-        await supabase
-          .from("message_votes")
-          .delete()
-          .eq("message_id", messageId)
-          .eq("user_id", user.id);
-      } else {
-        // Upsert vote
-        await supabase.from("message_votes").upsert(
-          {
-            message_id: messageId,
-            user_id: user.id,
-            vote_type: voteType,
-          },
-          {
-            onConflict: "message_id,user_id",
+        let newUpvotes = msg.upvotes;
+        let newDownvotes = msg.downvotes;
+        let newUserVote: 'upvote' | 'downvote' | null = voteType;
+
+        if (msg.userVote === voteType) {
+          newUserVote = null;
+          if (voteType === 'upvote') newUpvotes--;
+          else newDownvotes--;
+        } 
+        else if (msg.userVote) {
+          if (voteType === 'upvote') {
+            newUpvotes++;
+            newDownvotes--;
+          } else {
+            newUpvotes--;
+            newDownvotes++;
           }
-        );
-      }
-    } catch (error) {
-      console.error("Error voting:", error);
-      // Revert optimistic update on error
-      fetchMessages();
+        } 
+        else {
+          if (voteType === 'upvote') newUpvotes++;
+          else newDownvotes++;
+        }
+
+        return {
+          ...msg,
+          upvotes: newUpvotes,
+          downvotes: newDownvotes,
+          userVote: newUserVote
+        };
+      })
+    );
+
+    if (currentMessage.userVote === voteType) {
+      // Remove existing vote
+      await supabase
+        .from("message_votes")
+        .delete()
+        .eq("message_id", messageId)
+        .eq("user_id", user.id);
+    } else {
+      // Add/update vote
+      await supabase.from("message_votes").upsert(
+        {
+          message_id: messageId,
+          user_id: user.id,
+          vote_type: voteType,
+        },
+        { onConflict: "message_id,user_id" }
+      );
     }
-  };
+  } catch (error) {
+    console.error("Error voting:", error);
+    // Revert to server state on error
+    fetchMessages();
+  }
+};
 
   const sendMessage = async () => {
     if (!newMessage.trim() || !communityId) return;
