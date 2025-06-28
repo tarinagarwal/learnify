@@ -1,22 +1,5 @@
 "use client";
 
-import type React from "react";
-import { useState, useEffect } from "react";
-import {
-  Book,
-  Download,
-  MessageSquare,
-  Brain,
-  Bookmark,
-  BookmarkCheck,
-  Search,
-  Plus,
-  X,
-} from "lucide-react";
-import { supabase } from "../lib/supabase";
-import { generatePdfThumbnail } from "../utils/pdfThumbnail";
-import { useNavigate } from "react-router-dom";
-import { extractTextFromPdf } from "../utils/pdfExtractor";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -35,9 +18,6 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { usePagination } from "@/hooks/use-pagination";
-import { useBookmarks } from "@/hooks/use-bookmarks";
 import {
   Pagination,
   PaginationContent,
@@ -46,7 +26,26 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { Textarea } from "@/components/ui/textarea";
+import { useBookmarks } from "@/hooks/use-bookmarks";
+import { usePagination } from "@/hooks/use-pagination";
+import {
+  Book,
+  Bookmark,
+  BookmarkCheck,
+  Brain,
+  Download,
+  MessageSquare,
+  Plus,
+  Search
+} from "lucide-react";
+import type React from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Translate } from "../components/Translate";
+import { supabase } from "../lib/supabase";
+import { extractTextFromPdf } from "../utils/pdfExtractor";
+import { generatePdfThumbnail } from "../utils/pdfThumbnail";
 
 interface Resource {
   id: string;
@@ -373,7 +372,7 @@ export default function Resources() {
             </Button>
 
             {/* Dialog for uploading a new resource */}
-            <Dialog open={isDialogOpen}>
+            <Dialog open={isDialogOpen} onOpenChange={setisDialogOpen}>
               <DialogTrigger asChild>
                 <Button
                   className="bg-primary hover:bg-primary/90 text-primary-foreground"
@@ -386,13 +385,6 @@ export default function Resources() {
                 </Button>
               </DialogTrigger>
               <DialogContent className="bg-card border-border text-card-foreground">
-                <button
-                  className="absolute top-4 right-4 text-muted-foreground hover:text-foreground"
-                  aria-label="Close"
-                  onClick={() => setisDialogOpen(false)}
-                >
-                  <X className="h-5 w-5" />
-                </button>
                 <DialogHeader>
                   <DialogTitle className="text-card-foreground">
                     <Translate>Upload New Resource</Translate>
