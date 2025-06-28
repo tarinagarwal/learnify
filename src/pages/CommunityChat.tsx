@@ -1,22 +1,22 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { supabase } from "../lib/supabase";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   ArrowLeft,
-  Send,
-  ThumbsUp,
-  ThumbsDown,
   MessageSquare,
+  Send,
   Sparkles,
+  ThumbsDown,
+  ThumbsUp,
   Users,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { Translate } from "../components/Translate";
+import { supabase } from "../lib/supabase";
 
 interface Message {
   id: string;
@@ -56,7 +56,7 @@ export default function CommunityChat() {
       subscribeToMessages();
       subscribeToVotes();
     }
-   // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [communityId]);
 
   useEffect(() => {
@@ -184,6 +184,31 @@ export default function CommunityChat() {
       } = await supabase.auth.getUser();
       if (!user) return;
 
+      // Optimistically update UI
+      setMessages(prevMessages => 
+        prevMessages.map(msg => {
+          if (msg.id !== messageId) return msg;
+          
+          const isRemovingVote = msg.userVote === voteType;
+          const wasOppositeVote = msg.userVote && msg.userVote !== voteType;
+          
+          return {
+            ...msg,
+            upvotes: msg.upvotes + (
+              voteType === "upvote" 
+                ? (isRemovingVote ? -1 : 1) 
+                : (wasOppositeVote ? 0 : 0)
+            ),
+            downvotes: msg.downvotes + (
+              voteType === "downvote" 
+                ? (isRemovingVote ? -1 : 1) 
+                : (wasOppositeVote ? 0 : 0)
+            ),
+            userVote: isRemovingVote ? null : voteType
+          };
+        })
+      );
+
       const message = messages.find((m) => m.id === messageId);
       if (!message) return;
 
@@ -209,6 +234,8 @@ export default function CommunityChat() {
       }
     } catch (error) {
       console.error("Error voting:", error);
+      // Revert optimistic update on error
+      fetchMessages();
     }
   };
 
@@ -221,13 +248,25 @@ export default function CommunityChat() {
       } = await supabase.auth.getUser();
       if (!user) return;
 
-      const { error } = await supabase.from("community_messages").insert({
+      const { data, error } = await supabase.from("community_messages").insert({
         community_id: communityId,
         user_id: user.id,
         content: newMessage.trim(),
-      });
+      }).select();
 
       if (error) throw error;
+
+      const newMsg = {
+        ...data[0],
+        user: {
+          name: user.user_metadata?.name || "User",
+        },
+        upvotes: 0,
+        downvotes: 0,
+        userVote: null,
+      };
+      setMessages((prevMessages) => [...prevMessages, newMsg]);
+
       setNewMessage("");
     } catch (error) {
       console.error("Error sending message:", error);
@@ -269,7 +308,9 @@ export default function CommunityChat() {
               height: `${Math.random() * 6 + 2}px`,
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
-              boxShadow: `0 0 ${Math.random() * 10 + 5}px hsl(var(--primary) / 0.3)`,
+              boxShadow: `0 0 ${
+                Math.random() * 10 + 5
+              }px hsl(var(--primary) / 0.3)`,
               animation: `float ${Math.random() * 10 + 20}s linear infinite`,
               animationDelay: `${Math.random() * 10}s`,
             }}
@@ -331,8 +372,8 @@ export default function CommunityChat() {
                   </h3>
                   <p className="text-muted-foreground max-w-md">
                     <Translate>
-                      No messages yet. Be the first to start the conversation and
-                      share your thoughts with the community!
+                      No messages yet. Be the first to start the conversation
+                      and share your thoughts with the community!
                     </Translate>
                   </p>
                 </div>
