@@ -1,21 +1,5 @@
 "use client";
 
-import type React from "react";
-import { useState, useEffect } from "react";
-import {
-  Book,
-  Download,
-  MessageSquare,
-  Brain,
-  Bookmark,
-  BookmarkCheck,
-  Search,
-  Plus,
-} from "lucide-react";
-import { supabase } from "../lib/supabase";
-import { generatePdfThumbnail } from "../utils/pdfThumbnail";
-import { useNavigate } from "react-router-dom";
-import { extractTextFromPdf } from "../utils/pdfExtractor";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -34,9 +18,6 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { usePagination } from "@/hooks/use-pagination";
-import { useBookmarks } from "@/hooks/use-bookmarks";
 import {
   Pagination,
   PaginationContent,
@@ -45,7 +26,26 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { Textarea } from "@/components/ui/textarea";
+import { useBookmarks } from "@/hooks/use-bookmarks";
+import { usePagination } from "@/hooks/use-pagination";
+import {
+  Book,
+  Bookmark,
+  BookmarkCheck,
+  Brain,
+  Download,
+  MessageSquare,
+  Plus,
+  Search
+} from "lucide-react";
+import type React from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Translate } from "../components/Translate";
+import { supabase } from "../lib/supabase";
+import { extractTextFromPdf } from "../utils/pdfExtractor";
+import { generatePdfThumbnail } from "../utils/pdfThumbnail";
 
 interface Resource {
   id: string;
@@ -70,6 +70,7 @@ export default function Resources() {
   const [thumbnails, setThumbnails] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
+  const [isDialogOpen, setisDialogOpen] = useState<boolean>(false);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [showBookmarked, setShowBookmarked] = useState(false);
@@ -251,6 +252,7 @@ export default function Resources() {
 
       if (error) throw error;
 
+      setisDialogOpen(false);
       // Reset the form
       setFormData({
         name: "",
@@ -370,9 +372,14 @@ export default function Resources() {
             </Button>
 
             {/* Dialog for uploading a new resource */}
-            <Dialog>
+            <Dialog open={isDialogOpen} onOpenChange={setisDialogOpen}>
               <DialogTrigger asChild>
-                <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
+                <Button
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground"
+                  onClick={() => {
+                    setisDialogOpen(true);
+                  }}
+                >
                   <Plus className="h-4 w-4 mr-2" />
                   <Translate>Upload PDF</Translate>
                 </Button>
@@ -464,10 +471,7 @@ export default function Resources() {
             {Array(6)
               .fill(0)
               .map((_, i) => (
-                <Card
-                  key={i}
-                  className="animate-pulse bg-card border-border"
-                >
+                <Card key={i} className="animate-pulse bg-card border-border">
                   <CardHeader>
                     <div className="h-48 bg-muted rounded-md mb-4" />
                     <div className="h-6 bg-muted rounded w-3/4 mb-2" />
