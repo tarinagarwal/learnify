@@ -48,8 +48,18 @@ Learnify is a cutting-edge, AI-powered learning platform that revolutionizes edu
  - **Graceful Degradation**: Provides dynamic mock responses (`src/services/mockAI.ts`) when both primary and fallback services fail.
  - **Real-Time Monitoring**: Displays AI service health (feature, provider, duration, status, error) on the admin dashboard (`/admin`) using Supabase Realtime (`src/components/MonitoringDashboard.tsx`).
  - **Access Control**: Restricts the admin dashboard to users with the `admin` role (`src/hooks/useAuth.ts`).
+ 
+ ## 📬 Contact Form Mailing Service 
+ - **Contact Form**: Users can send messages directly to the developer via the contact form on the website.
+ - **Nodemailer Integration**: The backend uses [Nodemailer](https://nodemailer.com/) to send emails from the contact form to the developer's email address.
+ - **Environment Variables**: Email credentials and recipient addresses are securely managed using environment variables in the `.env` file:
+ - `test_dev_mail_id` – SMTP sender email address
+ - `test_dev_mail_password` – SMTP app password (for Gmail, use an App Password)
+ - `devs_mail_id` – Developer's recipient email address
+ - **Backend API**: The mailing service is exposed at `POST /api/contact` (see `contact_api.cjs`). The frontend form submits user data to this endpoint.
+ - **Security**: Sensitive credentials are never exposed in frontend code.
 
-
+ 
 ### Prerequisites
 
 - Node.js (v18 or higher)
@@ -58,6 +68,7 @@ Learnify is a cutting-edge, AI-powered learning platform that revolutionizes edu
 - Supabase CLI (`npm install -g supabase`)
 - Supabase account
 - GROQ API key
+- Bhashini API key
 
 ### 🔐 OAuth Setup (Google & GitHub)
 
@@ -83,6 +94,10 @@ cd learnify
 npm install
 ```
 
+```bash
+    npm install express cors nodemailer dotenv
+```
+
 3. Install Supabase CLI
 
 ```bash
@@ -102,6 +117,21 @@ VITE_GROQ_API_KEY=your_groq_api_key
 VITE_SUPABASE_URL=your_supabase_url
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 TRANSLATION_BHASHINI_API_KEY=your_bhshini_api_key
+test_dev_mail_id=your_gmail_address@gmail.com
+test_dev_mail_password=your_gmail_app_password
+devs_mail_id=developer_recipient@gmail.com
+```
+
+4. Start the local Supabase instance:
+
+```bash
+supabase start
+```
+
+5. Apply database migrations:
+
+```bash
+supabase db push
 ```
 
 6. Start the development server:
@@ -114,6 +144,12 @@ npm run dev
 
 ```bash
 python ./translation_api.py
+```
+
+8. Start the backend mailing API:
+
+```bash
+    node contact_api.cjs
 ```
 
 ### Database Setup

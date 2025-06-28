@@ -24,12 +24,56 @@ import {
 
 export default function ContactPage() {
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    inquiryType: '',
+    message: '',
+  });
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { id, value } = e.target;
+    setFormData((prev) => ({ ...prev, [id.replace('-', '')]: value }));
+  };
+
+  const handleSelectChange = (value: string) => {
+    setFormData((prev) => ({ ...prev, inquiryType: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // In a real application, you would handle the form submission here
-    setFormSubmitted(true);
-    setTimeout(() => setFormSubmitted(false), 5000);
+    setLoading(true);
+    setError('');
+    try {
+      // Use full URL if needed (adjust if your backend runs on a different port)
+      const res = await fetch('http://localhost:5500/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      if (res.ok) {
+        setFormSubmitted(true);
+        setFormData({ firstName: '', lastName: '', email: '', inquiryType: '', message: '' });
+        setTimeout(() => setFormSubmitted(false), 5000);
+      } else {
+        let data = {};
+        try {
+          data = await res.json();
+        } catch (jsonErr) {
+          console.error('Non-JSON error response:', await res.text());
+        }
+        setError((data && data.error) || 'Failed to send message.');
+        console.error('Contact form error:', data);
+      }
+    } catch (err) {
+      setError('Failed to send message.');
+      console.error('Contact form fetch error:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const faqs = [
@@ -134,9 +178,11 @@ export default function ContactPage() {
                           First Name
                         </label>
                         <Input
-                          id="first-name"
+                          id="firstName"
                           placeholder="John"
                           required
+                          value={formData.firstName}
+                          onChange={handleChange}
                           className="bg-input border-border text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20"
                         />
                       </div>
@@ -148,9 +194,11 @@ export default function ContactPage() {
                           Last Name
                         </label>
                         <Input
-                          id="last-name"
+                          id="lastName"
                           placeholder="Doe"
                           required
+                          value={formData.lastName}
+                          onChange={handleChange}
                           className="bg-input border-border text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20"
                         />
                       </div>
@@ -168,6 +216,8 @@ export default function ContactPage() {
                         type="email"
                         placeholder="john.doe@example.com"
                         required
+                        value={formData.email}
+                        onChange={handleChange}
                         className="bg-input border-border text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20"
                       />
                     </div>
@@ -179,7 +229,7 @@ export default function ContactPage() {
                       >
                         Inquiry Type
                       </label>
-                      <Select>
+                      <Select value={formData.inquiryType} onValueChange={handleSelectChange}>
                         <SelectTrigger
                           id="inquiry-type"
                           className="bg-input border-border text-foreground focus:border-primary focus:ring-2 focus:ring-primary/20"
@@ -216,16 +266,18 @@ export default function ContactPage() {
                         placeholder="How can we help you?"
                         rows={5}
                         required
+                        value={formData.message}
+                        onChange={handleChange}
                         className="bg-input border-border text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20"
                       />
                     </div>
-
+                    {error && <div className="text-red-500 text-sm">{error}</div>}
                     <Button
                       type="submit"
                       className="w-full bg-primary hover:bg-primary/90 text-primary-foreground rounded-full"
+                      disabled={loading}
                     >
-                      <Send className="h-4 w-4 mr-2" />
-                      Send Message
+                      {loading ? 'Sending...' : (<><Send className="h-4 w-4 mr-2" />Send Message</>)}
                     </Button>
                   </form>
                 )}

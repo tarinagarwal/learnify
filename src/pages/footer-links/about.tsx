@@ -198,26 +198,30 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {teamMembers.map((member, index) => (
-              <div key={index} className="group">
-                <div className="relative mb-4 overflow-hidden rounded-xl bg-card/50 backdrop-blur-sm border border-border">
-                  <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                  <img
-                    src=""
-                    width={300}
-                    height={300}
-                    alt={member.name}
-                    className="w-full h-auto aspect-square object-cover"
-                  />
+          <div className="flex justify-center">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 justify-center">
+              {teamMembers.map((member, index) => (
+                <div key={index} className="group flex flex-col items-center text-center justify-center">
+                  <a href="https://tarinagarwal.in/home" target="_blank" rel="noopener noreferrer" className="block w-full">
+                    <div className="relative mb-4 overflow-hidden rounded-xl bg-card/50 backdrop-blur-sm border border-border w-full flex justify-center">
+                      <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                      <img
+                        src={member.image}
+                        width={300}
+                        height={300}
+                        alt={member.name}
+                        className="w-full h-auto aspect-square object-cover max-w-[300px] mx-auto"
+                      />
+                    </div>
+                  </a>
+                  <h3 className="text-xl font-semibold text-card-foreground mt-2">
+                    {member.name}
+                  </h3>
+                  <p className="text-primary font-medium">{member.role}</p>
+                  <p className="mt-2 text-muted-foreground">{member.bio}</p>
                 </div>
-                <h3 className="text-xl font-semibold text-card-foreground">
-                  {member.name}
-                </h3>
-                <p className="text-primary font-medium">{member.role}</p>
-                <p className="mt-2 text-muted-foreground">{member.bio}</p>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </section>
