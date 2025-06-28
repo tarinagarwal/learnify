@@ -11,6 +11,7 @@ import {
   BookmarkCheck,
   Search,
   Plus,
+  X,
 } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import { generatePdfThumbnail } from "../utils/pdfThumbnail";
