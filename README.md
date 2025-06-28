@@ -122,6 +122,18 @@ test_dev_mail_password=your_gmail_app_password
 devs_mail_id=developer_recipient@gmail.com
 ```
 
+4. Start the local Supabase instance:
+
+```bash
+supabase start
+```
+
+5. Apply database migrations:
+
+```bash
+supabase db push
+```
+
 6. Start the development server:
 
 ```bash
